@@ -1,0 +1,522 @@
+@import url("https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 10.6% 64.9%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 94.1%;
+    --sidebar-primary-foreground: 240 5.9% 10%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 10.6% 64.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Prevenir scroll no deseado */
+  html,
+  body {
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  /* Horizontal scroll styles for mobile navigation */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+  }
+
+  /* LA ECONOMICA WARM COLOR COMPONENTS */
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-500 to-red-500 bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-md border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-gray-900/80 backdrop-blur-md border border-gray-800/20;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  /* PRIMARY BUTTONS - Naranja Principal */
+  .btn-primary {
+    @apply bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white shadow-lg shadow-brand-500/25 transition-all duration-200;
+  }
+
+  /* OFFER BUTTONS - Rojo Vibrante */
+  .btn-offer {
+    @apply bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg shadow-red-500/25 transition-all duration-200;
+  }
+
+  /* ENERGY BUTTONS - Amarillo Energético */
+  .btn-energy {
+    @apply bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white shadow-lg shadow-yellow-500/25 transition-all duration-200;
+  }
+
+  /* FRESH PRODUCTS - Verde Fresco */
+  .btn-fresh {
+    @apply bg-gradient-to-r from-fresh-500 to-fresh-600 hover:from-fresh-600 hover:to-fresh-700 text-white shadow-lg shadow-fresh-500/25 transition-all duration-200;
+  }
+
+  /* PREMIUM PRODUCTS - Dorado Premium */
+  .btn-premium {
+    @apply bg-gradient-to-r from-premium-500 to-premium-600 hover:from-premium-600 hover:to-premium-700 text-white shadow-lg shadow-premium-500/25 transition-all duration-200;
+  }
+
+  /* MEAT PRODUCTS - Naranja Cálido */
+  .btn-meat {
+    @apply bg-gradient-to-r from-meat-500 to-meat-600 hover:from-meat-600 hover:to-meat-700 text-white shadow-lg shadow-meat-500/25 transition-all duration-200;
+  }
+
+  /* CATEGORY BACKGROUNDS */
+  .bg-fresh-light {
+    @apply bg-fresh-100/30;
+  }
+
+  .bg-cold-light {
+    @apply bg-cold-50;
+  }
+
+  .bg-bakery-light {
+    @apply bg-bakery-100/40;
+  }
+
+  .bg-meat-light {
+    @apply bg-meat-100/30;
+  }
+
+  .bg-baby-light {
+    @apply bg-baby-100/30;
+  }
+
+  .bg-snacks-light {
+    @apply bg-snacks-100/30;
+  }
+
+  .bg-premium-light {
+    @apply bg-premium-100/30;
+  }
+
+  .bg-natural-light {
+    @apply bg-natural-100/30;
+  }
+
+  .bg-offer-light {
+    @apply bg-red-50;
+  }
+
+  .bg-energy-light {
+    @apply bg-yellow-50;
+  }
+
+  .bg-brand-light {
+    @apply bg-brand-50;
+  }
+
+  /* SECTION SHADOWS */
+  .shadow-fresh {
+    @apply shadow-lg shadow-fresh-500/15;
+  }
+
+  .shadow-brand {
+    @apply shadow-lg shadow-brand-500/15;
+  }
+
+  .shadow-offer {
+    @apply shadow-lg shadow-red-500/15;
+  }
+
+  .shadow-premium {
+    @apply shadow-lg shadow-premium-500/15;
+  }
+
+  .shadow-energy {
+    @apply shadow-lg shadow-yellow-500/15;
+  }
+
+  .shadow-meat {
+    @apply shadow-lg shadow-meat-500/15;
+  }
+
+  /* PRICE TAGS */
+  .price-offer {
+    @apply bg-red-500 text-white px-2 py-1 rounded-full text-sm font-bold;
+  }
+
+  .price-regular {
+    @apply text-neutral-500;
+  }
+
+  .price-energy {
+    @apply bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-sm font-bold;
+  }
+
+  /* CATEGORY TAGS */
+  .tag-fresh {
+    @apply bg-fresh-500 text-white;
+  }
+
+  .tag-organic {
+    @apply bg-natural-500 text-white;
+  }
+
+  .tag-premium {
+    @apply bg-premium-500 text-white;
+  }
+
+  .tag-offer {
+    @apply bg-red-500 text-white;
+  }
+
+  .tag-new {
+    @apply bg-yellow-400 text-yellow-900;
+  }
+
+  .tag-hot {
+    @apply bg-brand-500 text-white;
+  }
+
+  .tag-meat {
+    @apply bg-meat-500 text-white;
+  }
+
+  /* WARM GRADIENT BACKGROUNDS */
+  .bg-warm-gradient {
+    @apply bg-gradient-to-br from-yellow-100 via-orange-100 to-red-100;
+  }
+
+  .bg-sunset-gradient {
+    @apply bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500;
+  }
+
+  .bg-fire-gradient {
+    @apply bg-gradient-to-r from-red-400 via-orange-500 to-yellow-400;
+  }
+
+  /* HEADER GRADIENTS */
+  .header-warm {
+    @apply bg-gradient-to-r from-brand-500 via-orange-500 to-red-500;
+  }
+
+  .header-energy {
+    @apply bg-gradient-to-r from-yellow-400 to-orange-500;
+  }
+
+  /* CARD HOVER EFFECTS */
+  .card-warm-hover {
+    @apply hover:shadow-xl hover:shadow-brand-500/20 transition-all duration-300;
+  }
+
+  .card-offer-hover {
+    @apply hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300;
+  }
+
+  .card-energy-hover {
+    @apply hover:shadow-xl hover:shadow-yellow-500/20 transition-all duration-300;
+  }
+}
+
+/* Custom scrollbar with warm colors */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fef7ed;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ea580c;
+}
+
+/* Animation delays for staggered animations */
+.delay-0 {
+  animation-delay: 0ms;
+}
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* Responsive utilities for LA Economica */
+@media (max-width: 640px) {
+  .mobile-padding {
+    @apply px-4 py-3;
+  }
+
+  .mobile-text {
+    @apply text-sm;
+  }
+
+  /* Optimizaciones para móviles */
+  .container {
+    @apply px-3;
+  }
+
+  /* Cards más compactas en móvil */
+  .mobile-card {
+    @apply p-3 space-y-3;
+  }
+
+  /* Botones de altura apropiada para touch */
+  .mobile-btn {
+    @apply h-12 text-base;
+  }
+
+  /* Grids responsive */
+  .mobile-grid {
+    @apply grid-cols-1 gap-3;
+  }
+
+  /* Hero sections más compactas */
+  .mobile-hero {
+    @apply py-8 text-center;
+  }
+
+  /* Typography móvil */
+  .mobile-title {
+    @apply text-2xl leading-tight;
+  }
+
+  .mobile-subtitle {
+    @apply text-base;
+  }
+}
+
+@media (min-width: 768px) {
+  .desktop-padding {
+    @apply px-6 py-4;
+  }
+
+  .desktop-grid {
+    @apply grid-cols-2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-lg-grid {
+    @apply grid-cols-3;
+  }
+
+  .container {
+    @apply max-w-7xl;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  /* Botones más grandes para touch */
+  .btn-touch {
+    @apply min-h-12 px-6;
+  }
+
+  /* Eliminar hover effects en touch devices */
+  .no-touch-hover:hover {
+    @apply transform-none shadow-none;
+  }
+}
+
+/* Warm color selection styles */
+::selection {
+  background-color: #fed7aa;
+  color: #9a3412;
+}
+
+/* Focus ring with brand colors */
+:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+/* Font Size Control System */
+:root {
+  --font-scale: 1;
+}
+
+/* Font size classes */
+.font-size-small {
+  --font-scale: 0.85;
+}
+
+.font-size-normal {
+  --font-scale: 1;
+}
+
+.font-size-large {
+  --font-scale: 1.25;
+}
+
+.font-size-xl {
+  --font-scale: 1.5;
+}
+
+/* Apply font scaling to text elements */
+body {
+  font-size: calc(1rem * var(--font-scale));
+}
+
+h1 {
+  font-size: calc(2.25rem * var(--font-scale));
+}
+
+h2 {
+  font-size: calc(1.875rem * var(--font-scale));
+}
+
+h3 {
+  font-size: calc(1.5rem * var(--font-scale));
+}
+
+h4 {
+  font-size: calc(1.25rem * var(--font-scale));
+}
+
+h5 {
+  font-size: calc(1.125rem * var(--font-scale));
+}
+
+h6 {
+  font-size: calc(1rem * var(--font-scale));
+}
+
+p,
+div,
+span,
+label {
+  font-size: calc(1rem * var(--font-scale));
+}
+
+.text-xs {
+  font-size: calc(0.75rem * var(--font-scale));
+}
+
+.text-sm {
+  font-size: calc(0.875rem * var(--font-scale));
+}
+
+.text-lg {
+  font-size: calc(1.125rem * var(--font-scale));
+}
+
+.text-xl {
+  font-size: calc(1.25rem * var(--font-scale));
+}
+
+.text-2xl {
+  font-size: calc(1.5rem * var(--font-scale));
+}
+
+.text-3xl {
+  font-size: calc(1.875rem * var(--font-scale));
+}
+
+.text-4xl {
+  font-size: calc(2.25rem * var(--font-scale));
+}
+
+.text-5xl {
+  font-size: calc(3rem * var(--font-scale));
+}
