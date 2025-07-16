@@ -1,21 +1,111 @@
-[build]
-  publish = "dist"
-  command = "npm run build"
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
 
-[build.environment]
-  NODE_VERSION = "18"
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    target: "es2015",
+    minify: "terser",
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          ui: [
+            "@radix-ui/react-accordion",
+            "@radix-ui/react-alert-dialog",
+            "@radix-ui/react-avatar",
+            "@radix-ui/react-checkbox",
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-label",
+            "@radix-ui/react-select",
+            "@radix-ui/react-separator",
+            "@radix-ui/react-toast",
+            "lucide-react",
+          ],
+          charts: ["recharts"],
+          three: ["@react-three/fiber", "@react-three/drei", "three"],
+          utils: [
+            "clsx",
+            "tailwind-merge",
+            "class-variance-authority",
+            "date-fns",
+            "zod",
+          ],
+          services: [
+            "@stripe/stripe-js",
+            "@supabase/supabase-js",
+            "@tanstack/react-query",
+          ],
+        },
 
-[functions]
-  directory = "netlify/functions"
+        chunkFileNames: (chunkInfo) => {
+          const name = chunkInfo.facadeModuleId
+            ? path
+                .basename(chunkInfo.facadeModuleId)
+                .replace(/\.(ts|tsx|js|jsx)$/, "")
+            : "chunk";
+          return `js/${name}-[hash].js`;
+        },
 
-[[headers]]
-  for = "/api/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Headers = "Content-Type, Authorization"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+        entryFileNames: "js/[name]-[hash].js",
+
+        assetFileNames: (assetInfo) => {
+          const name = assetInfo.name || "asset";
+          const ext = name.split(".").pop();
+
+          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(name)) {
+            return `images/[name]-[hash].${ext}`;
+          }
+          if (/\.css$/i.test(name)) {
+            return `css/[name]-[hash].${ext}`;
+          }
+          if (/\.(woff|woff2|eot|ttf|otf)$/i.test(name)) {
+            return `fonts/[name]-[hash].${ext}`;
+          }
+
+          return `assets/[name]-[hash].${ext}`;
+        },
+      },
+    },
+
+    chunkSizeWarningLimit: 1000,
+    sourcemap: process.env.NODE_ENV === "development",
+  },
+
+  server: {
+    host: true,
+    port: 8080,
+    open: false,
+    hmr: {
+      overlay: true,
+    },
+  },
+
+  preview: {
+    port: 8080,
+    host: true,
+  },
+
+  css: {
+    devSourcemap: true,
+    modules: {
+      localsConvention: "camelCase",
+    },
+  },
+
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version || "0.0.0"),
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
+
+  optimizeDeps: {
+    include:
+

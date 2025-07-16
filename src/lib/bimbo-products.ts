@@ -2,7 +2,7 @@
 
 import { Product } from "./data";
 
-export const bimboProducts: Product[] = [
+export const bimboproducts: Product[] = [
   // Pan de caja (12 productos)
   {
     id: "pan-blanco-bimbo-grande",
