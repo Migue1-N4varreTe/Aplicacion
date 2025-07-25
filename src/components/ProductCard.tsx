@@ -172,16 +172,28 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
             )}
           </div>
 
-          {/* Price */}
+          {/* Price and Unit Info */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="font-bold text-lg text-gray-900">
                 ${product.price}
               </span>
               {product.unit && (
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                  /{product.unit}
-                </span>
+                <div className="flex items-center gap-1">
+                  {product.sellByWeight ? (
+                    <Scale className="h-3 w-3 text-green-600" />
+                  ) : (
+                    <Package className="h-3 w-3 text-blue-600" />
+                  )}
+                  <span className={cn(
+                    "text-xs px-2 py-1 rounded",
+                    product.sellByWeight
+                      ? "text-green-700 bg-green-100"
+                      : "text-blue-700 bg-blue-100"
+                  )}>
+                    por {product.unit}
+                  </span>
+                </div>
               )}
               {product.originalPrice && (
                 <span className="text-sm text-gray-500 line-through">
@@ -190,6 +202,18 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
               )}
             </div>
           </div>
+
+          {/* Weight/Unit Helper Text */}
+          {product.sellByWeight && (
+            <div className="mb-3 p-2 bg-green-50 border border-green-200 rounded-md">
+              <p className="text-xs text-green-700 flex items-center gap-1">
+                <Scale className="h-3 w-3" />
+                Producto vendido por peso
+                {product.unit === "kg" && " - Mínimo 100g"}
+                {product.unit === "gramo" && " - Cantidad personalizable"}
+              </p>
+            </div>
+          )}
 
           {/* Add to Cart Button */}
           <Button
@@ -212,12 +236,12 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
             ) : isInCart(product.id) ? (
               <>
                 <ShoppingCart className="h-4 w-4 mr-2" />
-                En carrito ({getItemQuantity(product.id)})
+                En carrito ({formatUnit(product, getItemQuantity(product.id))})
               </>
             ) : (
               <>
                 <ShoppingCart className="h-4 w-4 mr-2" />
-                Agregar al carrito
+                {product.sellByWeight ? "Agregar cantidad" : "Agregar al carrito"}
               </>
             )}
           </Button>
