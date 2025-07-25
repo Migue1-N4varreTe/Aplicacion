@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, ShoppingCart, Star, Clock, MapPin } from "lucide-react";
+import { Heart, ShoppingCart, Star, Clock, MapPin, Scale, Package } from "lucide-react";
 import { Product } from "@/lib/data";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
+import { formatUnit } from "@/lib/product-audit";
 import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
