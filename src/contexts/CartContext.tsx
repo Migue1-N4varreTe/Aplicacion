@@ -5,12 +5,18 @@ export interface CartItem {
   id: string;
   quantity: number;
   addedAt: Date;
+  unit?: string;
+  isWeightBased?: boolean;
 }
 
 export interface CartItemWithProduct extends Omit<Product, "id"> {
   id: string;
   quantity: number;
   addedAt: Date;
+  unit?: string;
+  isWeightBased?: boolean;
+  calculatedPrice?: number;
+  formattedQuantity?: string;
 }
 
 interface CartContextType {
