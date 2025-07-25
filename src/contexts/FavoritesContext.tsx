@@ -28,19 +28,19 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Load favorites from localStorage on mount
   useEffect(() => {
-    const savedFavorites = localStorage.getItem("quickgo_favorites");
+    const savedFavorites = localStorage.getItem("la_economica_favorites");
     if (savedFavorites) {
       try {
         setFavorites(JSON.parse(savedFavorites));
       } catch (error) {
-        localStorage.removeItem("quickgo_favorites");
+        localStorage.removeItem("la_economica_favorites");
       }
     }
   }, []);
 
   // Save favorites to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("quickgo_favorites", JSON.stringify(favorites));
+    localStorage.setItem("la_economica_favorites", JSON.stringify(favorites));
   }, [favorites]);
 
   const addToFavorites = (productId: string) => {
