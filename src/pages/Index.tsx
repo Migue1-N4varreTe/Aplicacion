@@ -265,46 +265,60 @@ const Index = () => {
       <section className="py-5 bg-white">
         <div className="container mx-auto">
           {/* Desktop view */}
-          <div className="hidden md:flex flex-row justify-center items-center gap-20 px-5">
+          <div className="hidden md:flex flex-wrap justify-center items-center gap-6 px-5">
             {quickCategories.map((cat, index) => (
               <Link
                 key={cat.name}
                 to="/shop"
-                className={`flex items-center ${index === 0 ? "px-6 pr-4" : index === 1 ? "px-7 pr-4" : index === 2 ? "px-4 pr-15" : "px-4"} py-4 rounded-xl transition-all hover:-translate-y-1 hover:shadow-md ${cat.color} text-white animate-slide-in text-xl`}
+                className={`flex items-center justify-center px-6 py-4 rounded-xl transition-all hover:-translate-y-1 hover:shadow-md ${cat.color} text-white animate-slide-in text-xl min-w-[180px] max-w-[220px] text-center`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <span className="text-2xl">{cat.icon}</span>
-                <span
-                  className={`font-medium ${index === 3 ? "text-xl" : "text-xl"} ml-3`}
-                >
-                  {cat.name === "Delivery rápido" ? (
-                    <p>Delivery rápido</p>
-                  ) : (
-                    cat.name
-                  )}
+                <span className="text-2xl mr-3">{cat.icon}</span>
+                <span className="font-medium text-lg leading-tight">
+                  {cat.name}
                 </span>
               </Link>
             ))}
           </div>
 
-          {/* Mobile view - horizontal scroll */}
+          {/* Mobile view - grid layout for better accessibility */}
           <div className="md:hidden">
-            <div className="flex overflow-x-auto scrollbar-hide gap-4 px-4 py-2">
-              {quickCategories.map((cat, index) => (
-                <Link
-                  key={`mobile-${cat.name}`}
-                  to="/shop"
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${cat.color} text-white text-sm font-medium whitespace-nowrap flex-shrink-0 min-w-fit`}
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <span className="text-lg">{cat.icon}</span>
-                  <span>
-                    {cat.name === "Delivery rápido"
-                      ? "Delivery rápido"
-                      : cat.name}
-                  </span>
-                </Link>
-              ))}
+            {/* Horizontal scroll option for smaller screens */}
+            <div className="sm:hidden">
+              <div className="flex overflow-x-auto scrollbar-hide gap-3 px-4 py-2">
+                {quickCategories.map((cat, index) => (
+                  <Link
+                    key={`mobile-scroll-${cat.name}`}
+                    to="/shop"
+                    className={`flex flex-col items-center gap-2 px-4 py-3 rounded-xl transition-all hover:scale-105 ${cat.color} text-white text-xs font-medium whitespace-nowrap flex-shrink-0 min-w-[80px] text-center`}
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <span className="text-xl">{cat.icon}</span>
+                    <span className="leading-tight">
+                      {cat.name === "Delivery rápido" ? "Delivery" : cat.name}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Grid layout for larger mobile screens */}
+            <div className="hidden sm:block md:hidden">
+              <div className="grid grid-cols-2 gap-3 px-4">
+                {quickCategories.map((cat, index) => (
+                  <Link
+                    key={`mobile-grid-${cat.name}`}
+                    to="/shop"
+                    className={`flex items-center gap-3 px-4 py-4 rounded-xl transition-all hover:scale-105 hover:shadow-lg ${cat.color} text-white text-sm font-medium animate-scale-in`}
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <span className="text-xl">{cat.icon}</span>
+                    <span className="leading-tight">
+                      {cat.name}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>

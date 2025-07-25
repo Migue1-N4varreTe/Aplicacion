@@ -33,6 +33,23 @@ export interface Product {
   sellByWeight?: boolean;
 }
 
+export interface QuickCategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  link: string;
+}
+
+export interface DeliveryOption {
+  id: string;
+  name: string;
+  description: string;
+  time: string;
+  price: number;
+  icon: string;
+}
+
 export interface Subcategory {
   id: string;
   name: string;
