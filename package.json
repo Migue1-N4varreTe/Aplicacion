@@ -6,7 +6,7 @@
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "vite",
     "dev:backend": "nodemon backend/server.js",
-    "build": "vite build",
+    "build": "npm run typecheck && vite build",
     "build:backend": "echo 'Backend build complete'",
     "test": "vitest --run",
     "test:e2e": "playwright test",
@@ -14,10 +14,12 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "vite preview",
     "start:backend": "node backend/server.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "netlify:build": "npm run build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
