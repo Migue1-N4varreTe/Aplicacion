@@ -386,7 +386,7 @@ const GestionarPerfil = () => {
                         <div>
                           {address.city}, {address.state} {address.postalCode}
                         </div>
-                        <div className="mt-1 italic">
+                        <div className="mt-1 text-gray-600">
                           Referencias: {address.references}
                         </div>
                       </div>
