@@ -117,14 +117,6 @@
     overflow-x: hidden;
   }
 
-  /* Optimización para fuentes personalizadas */
-  .font-sans {
-    font-feature-settings: "kern" 1, "liga" 1;
-    font-variant-ligatures: common-ligatures;
-    text-rendering: optimizeLegibility;
-    font-weight: 500;
-  }
-
   /* Clase general para botones con tipografía optimizada */
   .btn-text {
     @apply font-sans font-medium tracking-wide;
