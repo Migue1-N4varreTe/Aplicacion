@@ -368,11 +368,11 @@ export default {
         },
         "slide-in": {
           "0%": {
-            transform: "translateY(10px)",
+            transform: "translate3d(0, 10px, 0)",
             opacity: "0",
           },
           "100%": {
-            transform: "translateY(0)",
+            transform: "translate3d(0, 0, 0)",
             opacity: "1",
           },
         },
@@ -386,12 +386,20 @@ export default {
         },
         "scale-in": {
           "0%": {
-            transform: "scale(0.95)",
+            transform: "scale3d(0.95, 0.95, 1)",
             opacity: "0",
           },
           "100%": {
-            transform: "scale(1)",
+            transform: "scale3d(1, 1, 1)",
             opacity: "1",
+          },
+        },
+        "shimmer": {
+          "0%": {
+            transform: "translateX(-100%)",
+          },
+          "100%": {
+            transform: "translateX(100%)",
           },
         },
       },
