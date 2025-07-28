@@ -451,21 +451,44 @@
 
 @media (min-width: 768px) {
   .desktop-padding {
-    @apply px-6 py-4;
+    padding: calc(var(--base-padding) * 1.5) calc(var(--base-padding) * 1.25);
   }
 
   .desktop-grid {
-    @apply grid-cols-2;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--base-gap);
+  }
+
+  .adaptive-gap {
+    gap: var(--base-gap);
   }
 }
 
 @media (min-width: 1024px) {
   .desktop-lg-grid {
-    @apply grid-cols-3;
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--base-gap) * 1.25);
   }
 
   .container {
-    @apply max-w-7xl;
+    max-width: 80rem;
+    padding-left: var(--base-padding);
+    padding-right: var(--base-padding);
+  }
+
+  .adaptive-gap {
+    gap: calc(var(--base-gap) * 1.25);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 85rem;
+  }
+
+  .desktop-xl-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: calc(var(--base-gap) * 1.5);
   }
 }
 
