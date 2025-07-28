@@ -283,7 +283,7 @@ const Index = () => {
       <section className="py-5 bg-white">
         <div className="container mx-auto px-4">
           {/* Universal horizontal scroll layout for all devices */}
-          <div className="flex overflow-x-auto scrollbar-hide snap-scroll gap-3 py-2">
+          <div className="flex overflow-x-auto scrollbar-hide snap-scroll adaptive-gap py-2">
             {quickCategories.map((cat, index) => (
               <Link
                 key={cat.name}
