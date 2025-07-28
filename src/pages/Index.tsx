@@ -184,13 +184,15 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-brand-500 via-brand-600 to-fresh-600 overflow-hidden">
         <div className="absolute inset-0 bg-black/10" />
-        <div
-          className="absolute inset-0 opacity-10 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url(https://images.pexels.com/photos/2564460/pexels-photo-2564460.jpeg)",
-          }}
-        />
+        <div className="absolute inset-0 opacity-10">
+          <img
+            src="https://images.pexels.com/photos/2564460/pexels-photo-2564460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+            alt="Supermercado La Económica"
+            className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
         <div className="container relative px-0 py-20">
           <div className="max-w-4xl mx-auto text-center">
             {/* Hero Content */}
