@@ -485,6 +485,9 @@
 /* Font Size Control System */
 :root {
   --font-scale: 1;
+  --base-gap: 1rem;
+  --base-padding: 1rem;
+  --base-margin: 1rem;
 }
 
 /* Font size classes */
