@@ -211,12 +211,12 @@ const Index = () => {
             {/* Hero Content */}
             <div className="text-white space-y-6 animate-slide-in">
               <Badge className="bg-white/20 text-white border-white/20 w-fit mx-auto py-1.5">
-                <span className="font-happy text-xl">
+                <span className="font-sans text-xl">
                   🚀 Entrega en 15 minutos
                 </span>
               </Badge>
 
-              <h1 className="font-display font-bold text-4xl lg:text-6xl leading-tight">
+              <h1 className="font-sans font-bold text-4xl lg:text-6xl leading-tight">
                 Todo lo que necesitas,
                 <span className="block text-yellow-300 text-xl pb-1.5">
                   <br />
@@ -236,7 +236,7 @@ const Index = () => {
                   asChild
                 >
                   <Link to="/shop" target="_blank">
-                    <span className="font-happy text-xl">Explorar tienda</span>
+                    <span className="font-sans text-xl">Explorar tienda</span>
                     <ArrowRight className="ml-2 h-4 w-4 text-3xl" />
                   </Link>
                 </Button>
@@ -244,7 +244,7 @@ const Index = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="bg-transparent border-white text-white shadow-sm text-shadow font-happy text-xl p-0"
+                  className="bg-transparent border-white text-white shadow-sm text-shadow font-sans text-xl p-0"
                   style={{
                     boxShadow: "1px 1px 3px 0px rgba(0, 0, 0, 1)",
                     textShadow: "1px 1px 3px rgba(0, 0, 0, 1)",
@@ -300,7 +300,7 @@ const Index = () => {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <span className="text-base sm:text-lg md:text-xl lg:text-2xl flex-shrink-0">{cat.icon}</span>
-                <span className="leading-tight text-center font-happy text-ellipsis-safe">
+                <span className="leading-tight text-center font-sans text-ellipsis-safe">
                   {cat.name === "Delivery rápido" && window.innerWidth < 640 ? "Delivery" : cat.name}
                 </span>
               </Link>
@@ -322,7 +322,7 @@ const Index = () => {
       {/* Delivery Options */}
       <section className="pb-5">
         <div className="container px-4">
-          <h2 className="font-display font-bold text-3xl text-gray-900 self-stretch pb-5 pl-87.5">
+          <h2 className="font-sans font-bold text-3xl text-gray-900 self-stretch pb-5 pl-87.5">
             <br />
             ¿Cómo quieres recibir tu pedido?
           </h2>
@@ -364,7 +364,7 @@ const Index = () => {
         <div className="container px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="font-display font-bold text-3xl text-gray-900 mb-2">
+              <h2 className="font-sans font-bold text-3xl text-gray-900 mb-2">
                 Explora por categorías
               </h2>
               <p className="text-gray-600">
@@ -405,7 +405,7 @@ const Index = () => {
       <section className="py-12 bg-white">
         <div className="container px-4">
           <div className="text-center mb-12">
-            <h2 className="font-display font-bold text-3xl text-gray-900 mb-4">
+            <h2 className="font-sans font-bold text-3xl text-gray-900 mb-4">
               ¿Por qué elegir La Economica?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -461,7 +461,7 @@ const Index = () => {
       <section className="py-12 bg-gradient-to-r from-brand-50 to-yellow-50">
         <div className="container px-4">
           <div className="text-center mb-8">
-            <h2 className="font-display font-bold text-3xl text-gray-900 mb-2">
+            <h2 className="font-sans font-bold text-3xl text-gray-900 mb-2">
               Nuestro Inventario
             </h2>
             <p className="text-gray-600">
@@ -500,7 +500,7 @@ const Index = () => {
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-brand-500 to-fresh-500">
         <div className="container px-4 text-center">
-          <h2 className="font-display font-bold text-3xl lg:text-4xl text-white mb-4">
+          <h2 className="font-sans font-bold text-3xl lg:text-4xl text-white mb-4">
             ¿Listo para tu primer pedido?
           </h2>
           <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
@@ -530,7 +530,7 @@ const Index = () => {
                 <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-500 to-fresh-500 flex items-center justify-center">
                   <span className="text-white font-bold text-sm">LE</span>
                 </div>
-                <span className="font-display font-bold text-xl">
+                <span className="font-sans font-bold text-xl">
                   La Economica
                 </span>
               </div>

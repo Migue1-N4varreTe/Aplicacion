@@ -9,6 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
 import { formatUnit } from "@/lib/product-audit";
 import { cn } from "@/lib/utils";
+import QuantitySelector from "@/components/QuantitySelector";
 
 interface ProductCardProps {
   product: Product;
@@ -26,24 +27,35 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       return;
     }
 
-    setIsAddingToCart(true);
+    // For products that require quantity selection, let QuantitySelector handle it
+    // For simple products (by piece, not requiring special selection), add directly
+    const needsQuantitySelector = product.sellByWeight || product.unit === "gramo";
 
-    try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 300));
+    if (!needsQuantitySelector) {
+      setIsAddingToCart(true);
 
-      // Try to add to cart with validations
-      const success = addToCartWithNotification(product.id, 1, product.name);
+      try {
+        // Simulate API call delay
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
-      if (!success) {
-        // Error was already shown in the toast, just log for debugging
-        console.log(`Failed to add ${product.name} to cart`);
+        // Try to add to cart with validations
+        const success = addToCartWithNotification(product.id, 1, product.name);
+
+        if (!success) {
+          // Error was already shown in the toast, just log for debugging
+          console.log(`Failed to add ${product.name} to cart`);
+        }
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    } finally {
-      setIsAddingToCart(false);
     }
+  };
+
+  const handleQuantitySelected = (quantity: number) => {
+    // This callback is called when quantity is selected and added to cart
+    console.log(`Added ${quantity} ${product.unit} of ${product.name} to cart`);
   };
 
   const toggleFavorite = () => {
@@ -216,35 +228,66 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
           )}
 
           {/* Add to Cart Button */}
-          <Button
-            onClick={handleAddToCart}
-            disabled={!product.inStock || isAddingToCart}
-            className={cn(
-              "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
-              product.inStock
-                ? "btn-gradient hover:shadow-glow focus:shadow-glow"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed",
-            )}
-          >
-            {isAddingToCart ? (
-              <>
-                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Agregando...
-              </>
-            ) : !product.inStock ? (
-              <>Agotado</>
-            ) : isInCart(product.id) ? (
-              <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                En carrito ({formatUnit(product, getItemQuantity(product.id))})
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                {product.sellByWeight ? "Agregar cantidad" : "Agregar al carrito"}
-              </>
-            )}
-          </Button>
+          {(product.sellByWeight || product.unit === "gramo") ? (
+            <QuantitySelector
+              product={product}
+              onAddToCart={handleQuantitySelected}
+            >
+              <Button
+                disabled={!product.inStock}
+                className={cn(
+                  "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
+                  product.inStock
+                    ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                    : "bg-gray-200 text-gray-500 cursor-not-allowed",
+                )}
+              >
+                {!product.inStock ? (
+                  <>Agotado</>
+                ) : isInCart(product.id) ? (
+                  <>
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    En carrito ({formatUnit(product, getItemQuantity(product.id))})
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    Seleccionar cantidad
+                  </>
+                )}
+              </Button>
+            </QuantitySelector>
+          ) : (
+            <Button
+              onClick={handleAddToCart}
+              disabled={!product.inStock || isAddingToCart}
+              className={cn(
+                "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
+                product.inStock
+                  ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                  : "bg-gray-200 text-gray-500 cursor-not-allowed",
+              )}
+            >
+              {isAddingToCart ? (
+                <>
+                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Agregando...
+                </>
+              ) : !product.inStock ? (
+                <>Agotado</>
+              ) : isInCart(product.id) ? (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  En carrito ({formatUnit(product, getItemQuantity(product.id))})
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Agregar al carrito
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

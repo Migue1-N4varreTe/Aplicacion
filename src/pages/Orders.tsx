@@ -268,7 +268,7 @@ const Orders = () => {
       <div className="container px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="font-display font-bold text-2xl md:text-3xl text-gray-900 mb-2">
+          <h1 className="font-sans font-bold text-2xl md:text-3xl text-gray-900 mb-2">
             Mis pedidos
           </h1>
           <p className="text-gray-600">
