@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,8 +13,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
-import ProductCard from "@/components/ProductCard";
-import CategoryCard from "@/components/CategoryCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
+
+// Lazy load non-critical components
+const ProductCard = lazy(() => import("@/components/ProductCard"));
+const CategoryCard = lazy(() => import("@/components/CategoryCard"));
 import {
   Truck,
   Clock,
