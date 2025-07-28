@@ -332,7 +332,15 @@ export default {
           "Arial",
           "sans-serif",
         ],
-        happy: ["Happy Monkey", "cursive"],
+        happy: [
+          "Happy Monkey",
+          "Comic Sans MS",
+          "cursive",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "sans-serif"
+        ],
       },
       borderRadius: {
         lg: "var(--radius)",
