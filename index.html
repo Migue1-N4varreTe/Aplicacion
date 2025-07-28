@@ -40,6 +40,15 @@
     <!-- Preload Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+    <!-- Preload critical images -->
+    <link rel="preload" href="https://images.pexels.com/photos/2564460/pexels-photo-2564460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" as="image">
+
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//images.pexels.com">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
     <!-- Preload Service Worker -->
     <link rel="preload" href="/sw.js" as="script" />
