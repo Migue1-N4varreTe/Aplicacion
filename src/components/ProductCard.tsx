@@ -228,35 +228,66 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
           )}
 
           {/* Add to Cart Button */}
-          <Button
-            onClick={handleAddToCart}
-            disabled={!product.inStock || isAddingToCart}
-            className={cn(
-              "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
-              product.inStock
-                ? "btn-gradient hover:shadow-glow focus:shadow-glow"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed",
-            )}
-          >
-            {isAddingToCart ? (
-              <>
-                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Agregando...
-              </>
-            ) : !product.inStock ? (
-              <>Agotado</>
-            ) : isInCart(product.id) ? (
-              <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                En carrito ({formatUnit(product, getItemQuantity(product.id))})
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                {product.sellByWeight ? "Agregar cantidad" : "Agregar al carrito"}
-              </>
-            )}
-          </Button>
+          {(product.sellByWeight || product.unit === "gramo") ? (
+            <QuantitySelector
+              product={product}
+              onAddToCart={handleQuantitySelected}
+            >
+              <Button
+                disabled={!product.inStock}
+                className={cn(
+                  "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
+                  product.inStock
+                    ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                    : "bg-gray-200 text-gray-500 cursor-not-allowed",
+                )}
+              >
+                {!product.inStock ? (
+                  <>Agotado</>
+                ) : isInCart(product.id) ? (
+                  <>
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    En carrito ({formatUnit(product, getItemQuantity(product.id))})
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    Seleccionar cantidad
+                  </>
+                )}
+              </Button>
+            </QuantitySelector>
+          ) : (
+            <Button
+              onClick={handleAddToCart}
+              disabled={!product.inStock || isAddingToCart}
+              className={cn(
+                "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
+                product.inStock
+                  ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                  : "bg-gray-200 text-gray-500 cursor-not-allowed",
+              )}
+            >
+              {isAddingToCart ? (
+                <>
+                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Agregando...
+                </>
+              ) : !product.inStock ? (
+                <>Agotado</>
+              ) : isInCart(product.id) ? (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  En carrito ({formatUnit(product, getItemQuantity(product.id))})
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Agregar al carrito
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
