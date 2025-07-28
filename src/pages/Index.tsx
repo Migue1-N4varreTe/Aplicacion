@@ -277,7 +277,7 @@ const Index = () => {
               <Link
                 key={cat.name}
                 to="/shop"
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all hover:scale-105 hover:shadow-md ${cat.color} text-white font-medium whitespace-nowrap flex-shrink-0 snap-start btn-text
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all hover:scale-105 hover:shadow-md ${cat.color} text-white font-medium whitespace-nowrap flex-shrink-0 snap-item btn-text
                   xs:px-3 xs:py-2 xs:text-xs
                   sm:px-4 sm:py-3 sm:text-sm
                   md:px-5 md:py-4 md:text-base
