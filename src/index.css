@@ -104,6 +104,14 @@
     font-feature-settings: "kern" 1, "liga" 1;
     font-variant-ligatures: common-ligatures;
     text-rendering: optimizeLegibility;
+    font-weight: 500;
+  }
+
+  /* Clase general para botones con tipografía optimizada */
+  .btn-text {
+    @apply font-happy font-medium tracking-wide;
+    letter-spacing: 0.025em;
+    text-rendering: optimizeLegibility;
   }
 }
 
