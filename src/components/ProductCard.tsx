@@ -220,7 +220,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
             onClick={handleAddToCart}
             disabled={!product.inStock || isAddingToCart}
             className={cn(
-              "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto",
+              "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
               product.inStock
                 ? "btn-gradient hover:shadow-glow focus:shadow-glow"
                 : "bg-gray-200 text-gray-500 cursor-not-allowed",
