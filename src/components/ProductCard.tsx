@@ -133,13 +133,13 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
         <div className="p-3 sm:p-4">
           {/* Brand */}
           {product.brand && (
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1 text-ellipsis-safe">
               {product.brand}
             </p>
           )}
 
           {/* Name */}
-          <h3 className="font-medium text-sm sm:text-base text-gray-900 line-clamp-2 mb-2 leading-tight">
+          <h3 className="font-medium text-sm sm:text-base text-gray-900 text-clamp-2 mb-2 leading-tight text-safe">
             {product.name}
           </h3>
 
