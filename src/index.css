@@ -1,11 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Happy+Monkey:wght@400&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%20¡¿ñáéíóúü");
-
-/* Fallback font face para Happy Monkey */
-@font-face {
-  font-family: "Happy Monkey Fallback";
-  src: local("Comic Sans MS"), local("Chalkboard SE"), local("Bradley Hand"), local("Brush Script MT"), local("cursive");
-  font-display: swap;
-}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
