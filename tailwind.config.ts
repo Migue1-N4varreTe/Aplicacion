@@ -333,12 +333,14 @@ export default {
           "sans-serif",
         ],
         happy: [
-          "Happy Monkey",
-          "Comic Sans MS",
-          "cursive",
+          "Inter",
           "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
+          "'Segoe UI'",
+          "Roboto",
+          "'Helvetica Neue'",
+          "Arial",
           "sans-serif"
         ],
       },
