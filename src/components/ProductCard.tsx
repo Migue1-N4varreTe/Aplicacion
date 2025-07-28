@@ -64,7 +64,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
     <Card
       className={cn(
         "group relative overflow-hidden border-0 shadow-sm hover:shadow-md transition-all duration-200 sm:hover:-translate-y-1",
-        "mobile-card sm:p-4",
+        "mobile-card sm:p-4 container-safe",
         !product.inStock && "opacity-75",
         className,
       )}
