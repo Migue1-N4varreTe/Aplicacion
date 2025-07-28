@@ -211,7 +211,7 @@ const Index = () => {
             {/* Hero Content */}
             <div className="text-white space-y-6 animate-slide-in">
               <Badge className="bg-white/20 text-white border-white/20 w-fit mx-auto py-1.5">
-                <span className="font-happy text-xl">
+                <span className="font-sans text-xl">
                   🚀 Entrega en 15 minutos
                 </span>
               </Badge>
@@ -236,7 +236,7 @@ const Index = () => {
                   asChild
                 >
                   <Link to="/shop" target="_blank">
-                    <span className="font-happy text-xl">Explorar tienda</span>
+                    <span className="font-sans text-xl">Explorar tienda</span>
                     <ArrowRight className="ml-2 h-4 w-4 text-3xl" />
                   </Link>
                 </Button>
@@ -244,7 +244,7 @@ const Index = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="bg-transparent border-white text-white shadow-sm text-shadow font-happy text-xl p-0"
+                  className="bg-transparent border-white text-white shadow-sm text-shadow font-sans text-xl p-0"
                   style={{
                     boxShadow: "1px 1px 3px 0px rgba(0, 0, 0, 1)",
                     textShadow: "1px 1px 3px rgba(0, 0, 0, 1)",
@@ -300,7 +300,7 @@ const Index = () => {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <span className="text-base sm:text-lg md:text-xl lg:text-2xl flex-shrink-0">{cat.icon}</span>
-                <span className="leading-tight text-center font-happy text-ellipsis-safe">
+                <span className="leading-tight text-center font-sans text-ellipsis-safe">
                   {cat.name === "Delivery rápido" && window.innerWidth < 640 ? "Delivery" : cat.name}
                 </span>
               </Link>

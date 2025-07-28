@@ -118,7 +118,7 @@
   }
 
   /* Optimización para fuentes personalizadas */
-  .font-happy {
+  .font-sans {
     font-feature-settings: "kern" 1, "liga" 1;
     font-variant-ligatures: common-ligatures;
     text-rendering: optimizeLegibility;
@@ -127,7 +127,7 @@
 
   /* Clase general para botones con tipografía optimizada */
   .btn-text {
-    @apply font-happy font-medium tracking-wide;
+    @apply font-sans font-medium tracking-wide;
     letter-spacing: 0.025em;
     text-rendering: optimizeLegibility;
   }
