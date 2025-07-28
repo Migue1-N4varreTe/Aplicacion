@@ -116,14 +116,28 @@
 }
 
 @layer components {
-  /* Horizontal scroll styles for mobile navigation */
+  /* Optimized horizontal scroll styles */
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+    overscroll-behavior-x: contain; /* Prevent overscroll */
+    scroll-behavior: smooth; /* Smooth scrolling */
   }
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari, and Opera */
+  }
+
+  /* Optimize scroll snap for better UX */
+  .snap-scroll {
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+  }
+
+  .snap-item {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
   /* LA ECONOMICA WARM COLOR COMPONENTS */
