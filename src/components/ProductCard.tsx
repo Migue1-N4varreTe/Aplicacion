@@ -27,24 +27,35 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       return;
     }
 
-    setIsAddingToCart(true);
+    // For products that require quantity selection, let QuantitySelector handle it
+    // For simple products (by piece, not requiring special selection), add directly
+    const needsQuantitySelector = product.sellByWeight || product.unit === "gramo";
 
-    try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 300));
+    if (!needsQuantitySelector) {
+      setIsAddingToCart(true);
 
-      // Try to add to cart with validations
-      const success = addToCartWithNotification(product.id, 1, product.name);
+      try {
+        // Simulate API call delay
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
-      if (!success) {
-        // Error was already shown in the toast, just log for debugging
-        console.log(`Failed to add ${product.name} to cart`);
+        // Try to add to cart with validations
+        const success = addToCartWithNotification(product.id, 1, product.name);
+
+        if (!success) {
+          // Error was already shown in the toast, just log for debugging
+          console.log(`Failed to add ${product.name} to cart`);
+        }
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    } finally {
-      setIsAddingToCart(false);
     }
+  };
+
+  const handleQuantitySelected = (quantity: number) => {
+    // This callback is called when quantity is selected and added to cart
+    console.log(`Added ${quantity} ${product.unit} of ${product.name} to cart`);
   };
 
   const toggleFavorite = () => {
