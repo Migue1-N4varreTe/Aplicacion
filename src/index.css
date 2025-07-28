@@ -87,6 +87,24 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Performance optimizations */
+    will-change: auto;
+    transform: translateZ(0); /* Force GPU layer */
+  }
+
+  /* Hardware acceleration for animations */
+  .animate-slide-in,
+  .animate-scale-in,
+  .animate-fade-in {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+
+  /* Remove will-change after animations */
+  .animate-slide-in.animation-complete,
+  .animate-scale-in.animation-complete,
+  .animate-fade-in.animation-complete {
+    will-change: auto;
   }
 
   html {
