@@ -586,3 +586,70 @@ label {
 .text-5xl {
   font-size: calc(3rem * var(--font-scale));
 }
+
+/* Consistent spacing utilities */
+.adaptive-gap {
+  gap: var(--base-gap);
+}
+
+.adaptive-padding {
+  padding: var(--base-padding);
+}
+
+.adaptive-margin {
+  margin: var(--base-margin);
+}
+
+/* Text overflow prevention */
+.text-safe {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+.text-ellipsis-safe {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.text-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+/* Container utilities */
+.container-safe {
+  max-width: 100%;
+  overflow-x: hidden;
+  word-wrap: break-word;
+}
+
+/* Button spacing consistency */
+.btn-spacing {
+  gap: calc(var(--base-gap) * 0.5);
+  padding: calc(var(--base-padding) * 0.75) var(--base-padding);
+}
+
+/* Grid with consistent gaps */
+.grid-adaptive {
+  gap: var(--base-gap);
+}
+
+/* Flex with consistent gaps */
+.flex-adaptive {
+  gap: var(--base-gap);
+}
