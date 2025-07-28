@@ -142,7 +142,7 @@ const Offers = () => {
             <Badge className="bg-white/20 text-white border-white/20 w-fit mx-auto mb-4">
               🏷️ ¡Ofertas especiales!
             </Badge>
-            <h1 className="font-display font-bold text-4xl lg:text-5xl mb-4">
+            <h1 className="font-sans font-bold text-4xl lg:text-5xl mb-4">
               Las mejores ofertas y descuentos
             </h1>
             <p className="text-lg text-white/90 mb-8">
@@ -389,7 +389,7 @@ const Offers = () => {
 
         {/* More Offers CTA */}
         <div className="mt-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl p-8 text-center text-white">
-          <h2 className="font-display font-bold text-2xl lg:text-3xl mb-4">
+          <h2 className="font-sans font-bold text-2xl lg:text-3xl mb-4">
             ¿Quieres ver más productos?
           </h2>
           <p className="text-white/90 mb-6 max-w-2xl mx-auto">
@@ -413,7 +413,7 @@ const Offers = () => {
       <section className="py-12 bg-white">
         <div className="container px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-display font-bold text-2xl text-gray-900 mb-4">
+            <h2 className="font-sans font-bold text-2xl text-gray-900 mb-4">
               No te pierdas nuestras ofertas
             </h2>
             <p className="text-gray-600 mb-6">

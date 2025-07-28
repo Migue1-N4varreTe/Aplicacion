@@ -3334,7 +3334,7 @@ export const deliveryOptions = [
     time: "10-15 min",
     price: 0,
     icon: "🏪",
-    description: "Sin costo de envío",
+    description: "Sin costo de envío • Pago únicamente por app",
   },
 ];
 

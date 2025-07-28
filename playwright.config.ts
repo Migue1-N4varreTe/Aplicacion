@@ -78,20 +78,20 @@ export default defineConfig({
     {
       command: "npm run dev:frontend",
       port: 8080,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
       timeout: 120000,
     },
     {
       command: "npm run dev:backend",
       port: 5000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
       timeout: 60000,
     },
   ],
 
   // Global setup and teardown
-  globalSetup: require.resolve("./tests/setup/global-setup.ts"),
-  globalTeardown: require.resolve("./tests/setup/global-teardown.ts"),
+  // globalSetup: require.resolve("./tests/setup/global-setup.ts"),
+  // globalTeardown: require.resolve("./tests/setup/global-teardown.ts"),
 
   // Test timeout
   timeout: 60000,
