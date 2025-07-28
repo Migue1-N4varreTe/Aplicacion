@@ -300,7 +300,7 @@ const Index = () => {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <span className="text-base sm:text-lg md:text-xl lg:text-2xl flex-shrink-0">{cat.icon}</span>
-                <span className="leading-tight text-center font-happy">
+                <span className="leading-tight text-center font-happy text-ellipsis-safe">
                   {cat.name === "Delivery rápido" && window.innerWidth < 640 ? "Delivery" : cat.name}
                 </span>
               </Link>
