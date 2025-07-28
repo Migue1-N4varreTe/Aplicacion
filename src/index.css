@@ -143,27 +143,27 @@
 
   /* OFFER BUTTONS - Rojo Vibrante */
   .btn-offer {
-    @apply bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg shadow-red-500/25 transition-all duration-200;
+    @apply bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg shadow-red-500/25 transition-all duration-200 font-medium tracking-wide;
   }
 
   /* ENERGY BUTTONS - Amarillo Energético */
   .btn-energy {
-    @apply bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white shadow-lg shadow-yellow-500/25 transition-all duration-200;
+    @apply bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white shadow-lg shadow-yellow-500/25 transition-all duration-200 font-medium tracking-wide;
   }
 
   /* FRESH PRODUCTS - Verde Fresco */
   .btn-fresh {
-    @apply bg-gradient-to-r from-fresh-500 to-fresh-600 hover:from-fresh-600 hover:to-fresh-700 text-white shadow-lg shadow-fresh-500/25 transition-all duration-200;
+    @apply bg-gradient-to-r from-fresh-500 to-fresh-600 hover:from-fresh-600 hover:to-fresh-700 text-white shadow-lg shadow-fresh-500/25 transition-all duration-200 font-medium tracking-wide;
   }
 
   /* PREMIUM PRODUCTS - Dorado Premium */
   .btn-premium {
-    @apply bg-gradient-to-r from-premium-500 to-premium-600 hover:from-premium-600 hover:to-premium-700 text-white shadow-lg shadow-premium-500/25 transition-all duration-200;
+    @apply bg-gradient-to-r from-premium-500 to-premium-600 hover:from-premium-600 hover:to-premium-700 text-white shadow-lg shadow-premium-500/25 transition-all duration-200 font-medium tracking-wide;
   }
 
   /* MEAT PRODUCTS - Naranja Cálido */
   .btn-meat {
-    @apply bg-gradient-to-r from-meat-500 to-meat-600 hover:from-meat-600 hover:to-meat-700 text-white shadow-lg shadow-meat-500/25 transition-all duration-200;
+    @apply bg-gradient-to-r from-meat-500 to-meat-600 hover:from-meat-600 hover:to-meat-700 text-white shadow-lg shadow-meat-500/25 transition-all duration-200 font-medium tracking-wide;
   }
 
   /* CATEGORY BACKGROUNDS */
