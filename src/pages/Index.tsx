@@ -288,7 +288,7 @@ const Index = () => {
               <Link
                 key={cat.name}
                 to="/shop"
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all hover:scale-105 hover:shadow-md ${cat.color} text-white font-medium whitespace-nowrap flex-shrink-0 snap-item btn-text
+                className={`flex items-center justify-center adaptive-gap btn-spacing rounded-xl transition-all hover:scale-105 hover:shadow-md ${cat.color} text-white font-medium whitespace-nowrap flex-shrink-0 snap-item btn-text text-safe
                   xs:px-3 xs:py-2 xs:text-xs
                   sm:px-4 sm:py-3 sm:text-sm
                   md:px-5 md:py-4 md:text-base
@@ -296,7 +296,7 @@ const Index = () => {
                   xl:px-7 xl:py-4 xl:text-xl
                   min-w-[100px] sm:min-w-[120px] md:min-w-[140px] lg:min-w-[160px] xl:min-w-[180px]
                   max-w-[120px] sm:max-w-[140px] md:max-w-[160px] lg:max-w-[200px] xl:max-w-[220px]
-                  animate-slide-in`}
+                  animate-slide-in container-safe`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <span className="text-base sm:text-lg md:text-xl lg:text-2xl flex-shrink-0">{cat.icon}</span>
