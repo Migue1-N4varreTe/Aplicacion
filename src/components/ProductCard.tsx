@@ -130,7 +130,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
         </div>
 
         {/* Product Info */}
-        <div className="p-3 sm:p-4">
+        <div className="adaptive-padding container-safe">
           {/* Brand */}
           {product.brand && (
             <p className="text-xs text-gray-500 uppercase tracking-wide mb-1 text-ellipsis-safe">
