@@ -199,7 +199,7 @@ const Contact = () => {
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
-            <h1 className="font-display font-bold text-3xl text-gray-900 mb-4">
+            <h1 className="font-sans font-bold text-3xl text-gray-900 mb-4">
               ¡Mensaje enviado con éxito!
             </h1>
             <p className="text-gray-600 mb-8">
@@ -255,7 +255,7 @@ const Contact = () => {
       <section className="bg-gradient-to-r from-brand-500 to-fresh-500 text-white py-16">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="font-display font-bold text-4xl lg:text-5xl mb-4">
+            <h1 className="font-sans font-bold text-4xl lg:text-5xl mb-4">
               Contáctanos
             </h1>
             <p className="text-lg text-white/90">
@@ -586,7 +586,7 @@ const Contact = () => {
         {/* Help Center Section */}
         <div className="mt-16">
           <div className="text-center mb-12">
-            <h2 className="font-display font-bold text-3xl text-gray-900 mb-4">
+            <h2 className="font-sans font-bold text-3xl text-gray-900 mb-4">
               Centro de Ayuda
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">

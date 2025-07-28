@@ -277,7 +277,7 @@ const Checkout = () => {
             Volver al carrito
           </Button>
           <div>
-            <h1 className="font-display font-bold text-2xl md:text-3xl text-gray-900">
+            <h1 className="font-sans font-bold text-2xl md:text-3xl text-gray-900">
               Finalizar pedido
             </h1>
             <p className="text-gray-600">
