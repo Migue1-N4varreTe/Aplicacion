@@ -367,13 +367,23 @@ const Index = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {categories.slice(0, 8).map((category, index) => (
-              <CategoryCard
-                key={category.id}
-                category={category}
-                className={`animate-slide-in delay-${index * 100}`}
-              />
-            ))}
+            <Suspense fallback={
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+                {Array.from({ length: 8 }).map((_, index) => (
+                  <div key={`skeleton-${index}`} className="animate-pulse">
+                    <div className="bg-gray-200 rounded-lg h-32 w-full"></div>
+                  </div>
+                ))}
+              </div>
+            }>
+              {categories.slice(0, 8).map((category, index) => (
+                <CategoryCard
+                  key={category.id}
+                  category={category}
+                  className={`animate-slide-in delay-${index * 100}`}
+                />
+              ))}
+            </Suspense>
           </div>
         </div>
       </section>
