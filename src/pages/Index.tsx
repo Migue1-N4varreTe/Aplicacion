@@ -97,6 +97,7 @@ const Index = () => {
   );
   return (
     <div className="min-h-screen bg-gray-50">
+      <ResourcePreloader priority="high" />
       <Navbar />
 
       {/* Current Location Bar */}
