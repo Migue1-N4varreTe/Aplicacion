@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import ResourcePreloader from "@/components/ResourcePreloader";
 
 // Lazy load non-critical components
 const ProductCard = lazy(() => import("@/components/ProductCard"));
