@@ -46,14 +46,14 @@ const Index = () => {
   const [locationSearch, setLocationSearch] = useState("");
   const { toast } = useToast();
 
-  const suggestedLocations = [
+  const suggestedLocations = useMemo(() => [
     "Centro, Ciudad de México",
     "Roma Norte, Ciudad de México",
     "Condesa, Ciudad de México",
     "Polanco, Ciudad de México",
     "Santa Fe, Ciudad de México",
     "Coyoacán, Ciudad de México",
-  ];
+  ], []);
 
   const handleLocationChange = (newLocation: string) => {
     setCurrentLocation(newLocation);
