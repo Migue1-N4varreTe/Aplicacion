@@ -395,45 +395,57 @@
 /* Responsive utilities for LA Economica */
 @media (max-width: 640px) {
   .mobile-padding {
-    @apply px-4 py-3;
+    padding: calc(var(--base-padding) * 0.75) var(--base-padding);
   }
 
   .mobile-text {
-    @apply text-sm;
+    font-size: calc(0.875rem * var(--font-scale));
   }
 
   /* Optimizaciones para móviles */
   .container {
-    @apply px-3;
+    padding-left: calc(var(--base-padding) * 0.75);
+    padding-right: calc(var(--base-padding) * 0.75);
   }
 
   /* Cards más compactas en móvil */
   .mobile-card {
-    @apply p-3 space-y-3;
+    padding: calc(var(--base-padding) * 0.75);
+    gap: calc(var(--base-gap) * 0.75);
   }
 
   /* Botones de altura apropiada para touch */
   .mobile-btn {
-    @apply h-12 text-base;
+    height: calc(3rem * var(--font-scale));
+    font-size: calc(1rem * var(--font-scale));
+    padding: calc(var(--base-padding) * 0.5) var(--base-padding);
   }
 
   /* Grids responsive */
   .mobile-grid {
-    @apply grid-cols-1 gap-3;
+    grid-template-columns: 1fr;
+    gap: calc(var(--base-gap) * 0.75);
   }
 
   /* Hero sections más compactas */
   .mobile-hero {
-    @apply py-8 text-center;
+    padding: calc(var(--base-padding) * 2) 0;
+    text-align: center;
   }
 
   /* Typography móvil */
   .mobile-title {
-    @apply text-2xl leading-tight;
+    font-size: calc(2rem * var(--font-scale));
+    line-height: 1.2;
   }
 
   .mobile-subtitle {
-    @apply text-base;
+    font-size: calc(1rem * var(--font-scale));
+  }
+
+  /* Adaptive scrolling */
+  .adaptive-gap {
+    gap: calc(var(--base-gap) * 0.5);
   }
 }
 
