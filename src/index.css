@@ -90,6 +90,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Optimización de renderizado de fuentes */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   html {
@@ -100,6 +104,13 @@
   html,
   body {
     overflow-x: hidden;
+  }
+
+  /* Optimización para fuentes personalizadas */
+  .font-happy {
+    font-feature-settings: "kern" 1, "liga" 1;
+    font-variant-ligatures: common-ligatures;
+    text-rendering: optimizeLegibility;
   }
 }
 
