@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo, Suspense, lazy } from "react";
 import Navbar from "@/components/Navbar";
 import GuestShoppingBanner from "@/components/GuestShoppingBanner";
-import ProductCard from "@/components/ProductCard";
+import ProductCardOptimized from "@/components/ProductCardOptimized";
+import { useVirtualizedProducts, useIntersectionObserver } from "@/hooks/use-virtualized-products";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +55,28 @@ const Shop = () => {
     hasActiveFilters,
     resultCount,
   } = useProductFilters();
+
+  // Virtualización para mejorar rendimiento
+  const {
+    visibleProducts,
+    loadMoreProducts,
+    isLoading: isLoadingMore,
+    shouldLoadMore,
+    metrics,
+  } = useVirtualizedProducts(filteredProducts, {
+    pageSize: 20,
+    preloadPages: 1,
+  });
+
+  // Intersection observer para lazy loading
+  const loadMoreRef = useIntersectionObserver(
+    () => {
+      if (shouldLoadMore && !isLoadingMore) {
+        loadMoreProducts();
+      }
+    },
+    { rootMargin: '200px' }
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -247,23 +271,61 @@ const Shop = () => {
         </div>
 
         {/* Products Grid/List */}
-        {filteredProducts.length > 0 ? (
-          <div
-            className={cn(
-              "gap-6",
-              viewMode === "grid"
-                ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-                : "space-y-4",
+        {visibleProducts.length > 0 ? (
+          <>
+            <div
+              className={cn(
+                "gap-6",
+                viewMode === "grid"
+                  ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                  : "space-y-4",
+              )}
+            >
+              {visibleProducts.map((product, index) => (
+                <ProductCardOptimized
+                  key={product.id}
+                  product={product}
+                  className={viewMode === "list" ? "flex" : ""}
+                  priority={index < 8} // Prioridad para los primeros 8 productos
+                />
+              ))}
+            </div>
+
+            {/* Load More Trigger */}
+            {shouldLoadMore && (
+              <div
+                ref={loadMoreRef}
+                className="flex justify-center py-8"
+              >
+                {isLoadingMore ? (
+                  <div className="flex items-center gap-2">
+                    <LoadingSpinner size="sm" />
+                    <span className="text-gray-600">Cargando más productos...</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={loadMoreProducts}
+                    className="px-6 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors"
+                  >
+                    Cargar más productos
+                  </button>
+                )}
+              </div>
             )}
-          >
-            {filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                className={viewMode === "list" ? "flex" : ""}
-              />
-            ))}
-          </div>
+
+            {/* Loading Progress */}
+            {metrics.totalProducts > metrics.loadedProducts && (
+              <div className="mt-4 text-center text-sm text-gray-600">
+                Mostrando {metrics.loadedProducts} de {metrics.totalProducts} productos
+                <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                  <div
+                    className="bg-brand-500 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${metrics.loadingProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           /* Empty State */
           <div className="text-center py-16">
@@ -281,14 +343,7 @@ const Shop = () => {
           </div>
         )}
 
-        {/* Load More (if needed) */}
-        {filteredProducts.length > 20 && (
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg">
-              Cargar más productos
-            </Button>
-          </div>
-        )}
+        {/* Removed - now handled by virtualization */}
       </div>
 
       {/* Diagnostic component for development */}
