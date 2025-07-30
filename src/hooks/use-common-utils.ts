@@ -1,5 +1,16 @@
 import { useCallback, useMemo, useRef, useEffect } from 'react';
-import { debounce } from 'lodash-es';
+
+// Simple debounce implementation
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
 
 // Hook para debouncing optimizado
 export const useDebounce = <T extends (...args: any[]) => any>(
