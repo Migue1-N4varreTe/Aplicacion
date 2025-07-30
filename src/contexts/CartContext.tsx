@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Product, allProducts } from "@/lib/data";
 import { calculatePrice, formatUnit } from "@/lib/product-audit";
+import { logger } from "@/lib/logger";
 
 export interface CartItem {
   id: string;
@@ -62,7 +63,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         }));
         setCartItems(cartWithDates);
       } catch (error) {
-        console.error("Error loading cart from localStorage:", error);
+        logger.error("Failed to load cart from localStorage", error as Error, {
+          savedCartData: savedCart
+        });
         localStorage.removeItem("la_economica_cart");
       }
     }
@@ -107,12 +110,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     const product = allProducts.find((p) => p.id === productId);
 
     if (!product) {
-      console.error(`Product with id ${productId} not found`);
+      logger.error(`Product not found in catalog`, undefined, {
+        productId,
+        availableProducts: allProducts.length
+      });
       return;
     }
 
     if (!product.inStock) {
-      console.error(`Product ${productId} is out of stock`);
+      logger.warn(`Attempted to add out-of-stock product to cart`, {
+        productId,
+        productName: product.name,
+        stock: product.stock
+      });
       return;
     }
 
@@ -137,9 +147,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // Check if new quantity exceeds available stock
         if (product.stock && newQuantity > product.stock) {
-          console.error(
-            `Cannot add ${validQuantity} more of ${productId}. Stock: ${product.stock}, Current in cart: ${existingItem.quantity}`,
-          );
+          logger.warn(`Stock limit exceeded when updating cart item`, {
+            productId,
+            productName: product.name,
+            requestedQuantity: validQuantity,
+            currentInCart: existingItem.quantity,
+            availableStock: product.stock,
+            totalRequested: newQuantity
+          });
           return prev;
         }
 
@@ -155,9 +170,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       } else {
         // Check if initial quantity exceeds stock
         if (product.stock && validQuantity > product.stock) {
-          console.error(
-            `Cannot add ${validQuantity} of ${productId}. Available stock: ${product.stock}`,
-          );
+          logger.warn(`Stock limit exceeded when adding new cart item`, {
+            productId,
+            productName: product.name,
+            requestedQuantity: validQuantity,
+            availableStock: product.stock
+          });
           return prev;
         }
 
