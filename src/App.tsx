@@ -52,6 +52,18 @@ const GestionarPerfil = lazy(() => import("./pages/GestionarPerfil"));
 const SeguimientoPedidos = lazy(() => import("./pages/SeguimientoPedidos"));
 const ProgramaLealtad = lazy(() => import("./pages/ProgramaLealtad"));
 
+// New feature pages (lazy loaded)
+const ShoppingList = lazy(() => import("./pages/ShoppingList"));
+const Addresses = lazy(() => import("./pages/Addresses"));
+const Reviews = lazy(() => import("./pages/Reviews"));
+const Pickup = lazy(() => import("./pages/Pickup"));
+const FlashSales = lazy(() => import("./pages/FlashSales"));
+const Returns = lazy(() => import("./pages/Returns"));
+const LiveTracking = lazy(() => import("./pages/LiveTracking"));
+const DeliveryRoutes = lazy(() => import("./pages/DeliveryRoutes"));
+const RecurringOrders = lazy(() => import("./pages/RecurringOrders"));
+const Compare = lazy(() => import("./pages/Compare"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
