@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { memo, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,67 +9,62 @@ import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
 import { formatUnit } from "@/lib/product-audit";
 import { cn } from "@/lib/utils";
-import QuantitySelector from "@/components/QuantitySelector";
+import OptimizedImage from "@/components/OptimizedImage";
 
-interface ProductCardProps {
+// Lazy load del selector de cantidad
+const QuantitySelector = React.lazy(() => import("@/components/QuantitySelector"));
+
+interface ProductCardOptimizedProps {
   product: Product;
   className?: string;
+  priority?: boolean; // Para above-the-fold content
 }
 
-const ProductCard = ({ product, className }: ProductCardProps) => {
+const ProductCardOptimized = memo(({ 
+  product, 
+  className, 
+  priority = false 
+}: ProductCardOptimizedProps) => {
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { isInCart, getItemQuantity } = useCart();
   const { addToCartWithNotification } = useCartActions();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [showQuantitySelector, setShowQuantitySelector] = useState(false);
 
-  const handleAddToCart = async () => {
-    if (!product.inStock) {
-      return;
-    }
+  const handleAddToCart = useCallback(async () => {
+    if (!product.inStock) return;
 
-    // For products that require quantity selection, let QuantitySelector handle it
-    // For simple products (by piece, not requiring special selection), add directly
     const needsQuantitySelector = product.sellByWeight || product.unit === "gramo";
 
     if (!needsQuantitySelector) {
       setIsAddingToCart(true);
-
+      
       try {
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 300));
-
-        // Try to add to cart with validations
-        const success = addToCartWithNotification(product.id, 1, product.name);
-
-        if (!success) {
-          // Error was already shown in the toast, just log for debugging
-          console.log(`Failed to add ${product.name} to cart`);
-        }
-      } catch (error) {
-        console.error("Error adding to cart:", error);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        addToCartWithNotification(product.id, 1, product.name);
       } finally {
         setIsAddingToCart(false);
       }
+    } else {
+      setShowQuantitySelector(true);
     }
-  };
+  }, [product, addToCartWithNotification]);
 
-  const handleQuantitySelected = (quantity: number) => {
-    // This callback is called when quantity is selected and added to cart
-    console.log(`Added ${quantity} ${product.unit} of ${product.name} to cart`);
-  };
+  const handleQuantitySelected = useCallback(() => {
+    setShowQuantitySelector(false);
+  }, []);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = useCallback(() => {
     if (isFavorite(product.id)) {
       removeFromFavorites(product.id);
     } else {
       addToFavorites(product.id);
     }
-  };
+  }, [product.id, isFavorite, addToFavorites, removeFromFavorites]);
 
   const discountPercentage = product.originalPrice
-    ? Math.round(
-        ((product.originalPrice - product.price) / product.originalPrice) * 100,
-      )
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
   return (
@@ -82,12 +77,16 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       )}
     >
       <CardContent className="p-0">
-        {/* Image Container */}
+        {/* Image Container con lazy loading optimizado */}
         <div className="relative aspect-square overflow-hidden bg-gray-50">
-          <img
+          <OptimizedImage
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            priority={priority}
+            placeholder="skeleton"
+            aspectRatio="square"
+            className="transition-transform duration-300 group-hover:scale-105"
+            onLoadingComplete={() => setImageLoaded(true)}
           />
 
           {/* Badges */}
@@ -228,35 +227,41 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
           )}
 
           {/* Add to Cart Button */}
-          {(product.sellByWeight || product.unit === "gramo") ? (
-            <QuantitySelector
-              product={product}
-              onAddToCart={handleQuantitySelected}
-            >
-              <Button
-                disabled={!product.inStock}
-                className={cn(
-                  "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
-                  product.inStock
-                    ? "btn-gradient hover:shadow-glow focus:shadow-glow"
-                    : "bg-gray-200 text-gray-500 cursor-not-allowed",
-                )}
-              >
-                {!product.inStock ? (
-                  <>Agotado</>
-                ) : isInCart(product.id) ? (
-                  <>
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    En carrito ({formatUnit(product, getItemQuantity(product.id))})
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Seleccionar cantidad
-                  </>
-                )}
+          {(product.sellByWeight || product.unit === "gramo") && showQuantitySelector ? (
+            <React.Suspense fallback={
+              <Button disabled className="w-full h-10 sm:h-9">
+                Cargando...
               </Button>
-            </QuantitySelector>
+            }>
+              <QuantitySelector
+                product={product}
+                onAddToCart={handleQuantitySelected}
+              >
+                <Button
+                  disabled={!product.inStock}
+                  className={cn(
+                    "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200",
+                    product.inStock
+                      ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                      : "bg-gray-200 text-gray-500 cursor-not-allowed",
+                  )}
+                >
+                  {!product.inStock ? (
+                    <>Agotado</>
+                  ) : isInCart(product.id) ? (
+                    <>
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      En carrito ({formatUnit(product, getItemQuantity(product.id))})
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Seleccionar cantidad
+                    </>
+                  )}
+                </Button>
+              </QuantitySelector>
+            </React.Suspense>
           ) : (
             <Button
               onClick={handleAddToCart}
@@ -292,6 +297,8 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       </CardContent>
     </Card>
   );
-};
+});
 
-export default ProductCard;
+ProductCardOptimized.displayName = "ProductCardOptimized";
+
+export default ProductCardOptimized;

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Product, allProducts } from "@/lib/data";
 import { calculatePrice, formatUnit } from "@/lib/product-audit";
+import { logger } from "@/lib/logger";
 
 export interface CartItem {
   id: string;
@@ -62,7 +63,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         }));
         setCartItems(cartWithDates);
       } catch (error) {
-        console.error("Error loading cart from localStorage:", error);
+        logger.error("Failed to load cart from localStorage", error as Error, {
+          savedCartData: savedCart
+        });
         localStorage.removeItem("la_economica_cart");
       }
     }
@@ -84,7 +87,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     .filter(Boolean) as CartItemWithProduct[];
 
   // Calculate cart metrics with weight-based pricing
-  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCount = cartItems.reduce((sum, item) => {
+    const product = allProducts.find(p => p.id === item.id);
+    if (product?.sellByWeight && product.unit === "gramo") {
+      // Para productos en gramos, contar como fracción de kg
+      return sum + (item.quantity / 1000);
+    }
+    return sum + item.quantity;
+  }, 0);
+
   const cartSubtotal = cartProducts.reduce((sum, item) => {
     const product = allProducts.find(p => p.id === item.id);
     if (product) {
@@ -99,17 +110,33 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     const product = allProducts.find((p) => p.id === productId);
 
     if (!product) {
-      console.error(`Product with id ${productId} not found`);
+      logger.error(`Product not found in catalog`, undefined, {
+        productId,
+        availableProducts: allProducts.length
+      });
       return;
     }
 
     if (!product.inStock) {
-      console.error(`Product ${productId} is out of stock`);
+      logger.warn(`Attempted to add out-of-stock product to cart`, {
+        productId,
+        productName: product.name,
+        stock: product.stock
+      });
       return;
     }
 
     // Set minimum quantity for weight-based products
-    const minQuantity = product.sellByWeight ? 0.1 : 1;
+    let minQuantity = 1;
+    if (product.sellByWeight) {
+      if (product.unit === "kg") {
+        minQuantity = 0.1;
+      } else if (product.unit === "gramo") {
+        minQuantity = 100;
+      } else {
+        minQuantity = 0.1;
+      }
+    }
     const validQuantity = Math.max(quantity, minQuantity);
 
     setCartItems((prev) => {
@@ -120,9 +147,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // Check if new quantity exceeds available stock
         if (product.stock && newQuantity > product.stock) {
-          console.error(
-            `Cannot add ${validQuantity} more of ${productId}. Stock: ${product.stock}, Current in cart: ${existingItem.quantity}`,
-          );
+          logger.warn(`Stock limit exceeded when updating cart item`, {
+            productId,
+            productName: product.name,
+            requestedQuantity: validQuantity,
+            currentInCart: existingItem.quantity,
+            availableStock: product.stock,
+            totalRequested: newQuantity
+          });
           return prev;
         }
 
@@ -138,9 +170,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       } else {
         // Check if initial quantity exceeds stock
         if (product.stock && validQuantity > product.stock) {
-          console.error(
-            `Cannot add ${validQuantity} of ${productId}. Available stock: ${product.stock}`,
-          );
+          logger.warn(`Stock limit exceeded when adding new cart item`, {
+            productId,
+            productName: product.name,
+            requestedQuantity: validQuantity,
+            availableStock: product.stock
+          });
           return prev;
         }
 

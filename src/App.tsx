@@ -6,10 +6,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { PageLoader } from "@/components/LoadingSpinner";
+import PerformanceOptimizer from "@/components/PerformanceOptimizer";
+import { preloadCriticalResources } from "@/hooks/use-smart-prefetch";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { SafeWebSocketProvider } from "@/contexts/SafeWebSocketContext";
+import { ShoppingListProvider } from "@/contexts/ShoppingListContext";
+import { AddressProvider } from "@/contexts/AddressContext";
+import { ReviewsProvider } from "@/contexts/ReviewsContext";
+import { PickupProvider } from "@/contexts/PickupContext";
+import { FlashSalesProvider } from "@/contexts/FlashSalesContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
 
@@ -51,16 +58,38 @@ const GestionarPerfil = lazy(() => import("./pages/GestionarPerfil"));
 const SeguimientoPedidos = lazy(() => import("./pages/SeguimientoPedidos"));
 const ProgramaLealtad = lazy(() => import("./pages/ProgramaLealtad"));
 
+// New feature pages (lazy loaded)
+const ShoppingList = lazy(() => import("./pages/ShoppingList"));
+const Addresses = lazy(() => import("./pages/Addresses"));
+const Reviews = lazy(() => import("./pages/Reviews"));
+const Pickup = lazy(() => import("./pages/Pickup"));
+const FlashSales = lazy(() => import("./pages/FlashSales"));
+const Returns = lazy(() => import("./pages/Returns"));
+const LiveTracking = lazy(() => import("./pages/LiveTracking"));
+const DeliveryRoutes = lazy(() => import("./pages/DeliveryRoutes"));
+const RecurringOrders = lazy(() => import("./pages/RecurringOrders"));
+const Compare = lazy(() => import("./pages/Compare"));
+const ControlCenter = lazy(() => import("./pages/ControlCenter"));
+
 const queryClient = new QueryClient();
+
+// Precargar recursos críticos
+preloadCriticalResources();
 
 const App = () => (
   <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+    <PerformanceOptimizer>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
         <AuthProvider>
           <FavoritesProvider>
             <CartProvider>
-              <SafeWebSocketProvider>
+              <ShoppingListProvider>
+                <AddressProvider>
+                  <ReviewsProvider>
+                    <PickupProvider>
+                      <FlashSalesProvider>
+                        <SafeWebSocketProvider>
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
@@ -103,6 +132,17 @@ const App = () => (
                       />
                       <Route path="/terms" element={<Terms />} />
                       <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/shopping-list" element={<ShoppingList />} />
+                      <Route path="/addresses" element={<Addresses />} />
+                      <Route path="/reviews" element={<Reviews />} />
+                      <Route path="/pickup" element={<Pickup />} />
+                      <Route path="/flash-sales" element={<FlashSales />} />
+                      <Route path="/returns" element={<Returns />} />
+                      <Route path="/live-tracking" element={<LiveTracking />} />
+                      <Route path="/delivery-routes" element={<DeliveryRoutes />} />
+                      <Route path="/recurring-orders" element={<RecurringOrders />} />
+                      <Route path="/compare" element={<Compare />} />
+                      <Route path="/control-center" element={<ControlCenter />} />
                       <Route
                         path="/admin"
                         element={
@@ -199,12 +239,18 @@ const App = () => (
                     </Routes>
                   </Suspense>
                 </BrowserRouter>
-              </SafeWebSocketProvider>
+                        </SafeWebSocketProvider>
+                      </FlashSalesProvider>
+                    </PickupProvider>
+                  </ReviewsProvider>
+                </AddressProvider>
+              </ShoppingListProvider>
             </CartProvider>
           </FavoritesProvider>
         </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </PerformanceOptimizer>
   </ErrorBoundary>
 );
 
