@@ -7,6 +7,7 @@ import { Suspense, lazy } from "react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { PageLoader } from "@/components/LoadingSpinner";
 import PerformanceOptimizer from "@/components/PerformanceOptimizer";
+import { preloadCriticalResources } from "@/hooks/use-smart-prefetch";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { CartProvider } from "@/contexts/CartContext";
@@ -71,6 +72,9 @@ const Compare = lazy(() => import("./pages/Compare"));
 const ControlCenter = lazy(() => import("./pages/ControlCenter"));
 
 const queryClient = new QueryClient();
+
+// Precargar recursos críticos
+preloadCriticalResources();
 
 const App = () => (
   <ErrorBoundary>
