@@ -1,3 +1,4 @@
+import React from 'react';
 import { logger } from './logger';
 import { performanceCache } from './performance-cache';
 
