@@ -353,7 +353,7 @@ export const usePWAIntegration = () => {
     
     // Services access
     pwaService,
-    notificationService,
+    notificationsService,
   };
 };
 
