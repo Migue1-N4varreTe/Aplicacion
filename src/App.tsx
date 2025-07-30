@@ -12,6 +12,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import { SafeWebSocketProvider } from "@/contexts/SafeWebSocketContext";
 import { ShoppingListProvider } from "@/contexts/ShoppingListContext";
 import { AddressProvider } from "@/contexts/AddressContext";
+import { ReviewsProvider } from "@/contexts/ReviewsContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
 
@@ -76,7 +77,8 @@ const App = () => (
             <CartProvider>
               <ShoppingListProvider>
                 <AddressProvider>
-                  <SafeWebSocketProvider>
+                  <ReviewsProvider>
+                    <SafeWebSocketProvider>
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
@@ -225,7 +227,8 @@ const App = () => (
                     </Routes>
                   </Suspense>
                 </BrowserRouter>
-                  </SafeWebSocketProvider>
+                    </SafeWebSocketProvider>
+                  </ReviewsProvider>
                 </AddressProvider>
               </ShoppingListProvider>
             </CartProvider>
