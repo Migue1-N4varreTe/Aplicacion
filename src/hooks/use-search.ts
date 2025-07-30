@@ -425,14 +425,14 @@ export function useProductFilters() {
 
   // Add to recent searches when search is performed
   useEffect(() => {
-    if (searchQuery.trim() && searchResults.length > 0) {
+    if (searchQuery.trim() && filteredProducts.length > 0) {
       const timeoutId = setTimeout(() => {
         addToRecentSearches(searchQuery);
       }, 2000); // Add after 2 seconds to avoid spam
 
       return () => clearTimeout(timeoutId);
     }
-  }, [searchQuery, searchResults.length, addToRecentSearches]);
+  }, [searchQuery, filteredProducts.length, addToRecentSearches]);
 
   // Active filters count
   const activeFiltersCount = [
