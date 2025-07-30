@@ -212,7 +212,7 @@ const PickupPage = () => {
   const getFeatureIcon = (feature: string) => {
     switch (feature) {
       case "parking": return <Car className="h-4 w-4" />;
-      case "wheelchair_accessible": return <Wheelchair className="h-4 w-4" />;
+      case "wheelchair_accessible": return <UserCheck className="h-4 w-4" />;
       case "pharmacy": return <Package className="h-4 w-4" />;
       case "bakery": return <Coffee className="h-4 w-4" />;
       case "drive_through": return <Car className="h-4 w-4" />;
