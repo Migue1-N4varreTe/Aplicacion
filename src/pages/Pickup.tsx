@@ -16,7 +16,7 @@ import {
   Clock,
   Phone,
   Car,
-  Wheelchair,
+  UserCheck,
   ShoppingBag,
   Calendar,
   Navigation,
