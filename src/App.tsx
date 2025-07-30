@@ -73,7 +73,8 @@ const App = () => (
         <AuthProvider>
           <FavoritesProvider>
             <CartProvider>
-              <SafeWebSocketProvider>
+              <ShoppingListProvider>
+                <SafeWebSocketProvider>
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
@@ -116,6 +117,16 @@ const App = () => (
                       />
                       <Route path="/terms" element={<Terms />} />
                       <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/shopping-list" element={<ShoppingList />} />
+                      <Route path="/addresses" element={<Addresses />} />
+                      <Route path="/reviews" element={<Reviews />} />
+                      <Route path="/pickup" element={<Pickup />} />
+                      <Route path="/flash-sales" element={<FlashSales />} />
+                      <Route path="/returns" element={<Returns />} />
+                      <Route path="/live-tracking" element={<LiveTracking />} />
+                      <Route path="/delivery-routes" element={<DeliveryRoutes />} />
+                      <Route path="/recurring-orders" element={<RecurringOrders />} />
+                      <Route path="/compare" element={<Compare />} />
                       <Route
                         path="/admin"
                         element={
@@ -212,7 +223,8 @@ const App = () => (
                     </Routes>
                   </Suspense>
                 </BrowserRouter>
-              </SafeWebSocketProvider>
+                </SafeWebSocketProvider>
+              </ShoppingListProvider>
             </CartProvider>
           </FavoritesProvider>
         </AuthProvider>
