@@ -32,16 +32,72 @@ interface AppNotifications {
 export const useAppState = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-  
-  // Contexts
-  const { cartCount } = useCart();
-  const { favorites } = useFavorites();
-  const { user } = useAuth();
-  const { lists } = useShoppingList();
-  const { addresses } = useAddresses();
-  const { reviews } = useReviews();
-  const { orders: pickupOrders } = usePickup();
-  const { sales: flashSales } = useFlashSales();
+
+  // Contexts with safe fallbacks
+  let cartCount = 0;
+  let favorites: any[] = [];
+  let user = null;
+  let lists: any[] = [];
+  let addresses: any[] = [];
+  let reviews: any[] = [];
+  let pickupOrders: any[] = [];
+  let flashSales: any[] = [];
+
+  try {
+    const cartContext = useCart();
+    cartCount = cartContext?.cartCount || 0;
+  } catch (error) {
+    logger.warn('Cart context not available', { error });
+  }
+
+  try {
+    const favoritesContext = useFavorites();
+    favorites = favoritesContext?.favorites || [];
+  } catch (error) {
+    logger.warn('Favorites context not available', { error });
+  }
+
+  try {
+    const authContext = useAuth();
+    user = authContext?.user || null;
+  } catch (error) {
+    logger.warn('Auth context not available', { error });
+  }
+
+  try {
+    const shoppingListContext = useShoppingList();
+    lists = shoppingListContext?.lists || [];
+  } catch (error) {
+    logger.warn('ShoppingList context not available', { error });
+  }
+
+  try {
+    const addressContext = useAddresses();
+    addresses = addressContext?.addresses || [];
+  } catch (error) {
+    logger.warn('Address context not available', { error });
+  }
+
+  try {
+    const reviewsContext = useReviews();
+    reviews = reviewsContext?.reviews || [];
+  } catch (error) {
+    logger.warn('Reviews context not available', { error });
+  }
+
+  try {
+    const pickupContext = usePickup();
+    pickupOrders = pickupContext?.orders || [];
+  } catch (error) {
+    logger.warn('Pickup context not available', { error });
+  }
+
+  try {
+    const flashSalesContext = useFlashSales();
+    flashSales = flashSalesContext?.sales || [];
+  } catch (error) {
+    logger.warn('FlashSales context not available', { error });
+  }
 
   // Calculate app statistics
   const appStats: AppStats = {
