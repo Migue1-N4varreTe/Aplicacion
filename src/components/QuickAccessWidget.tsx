@@ -18,8 +18,8 @@ import {
   Plus,
   ChevronRight
 } from 'lucide-react';
-import { useAppState } from '@/hooks/use-app-state-simple';
-import { usePWAIntegration } from '@/hooks/use-pwa-integration-simple';
+import { useAppState } from '@/hooks/use-app-state';
+import { usePWAIntegration } from '@/hooks/use-pwa-integration';
 import IntegratedDashboard from './IntegratedDashboard';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
