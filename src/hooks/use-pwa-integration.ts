@@ -48,11 +48,25 @@ export const usePWAIntegration = () => {
       try {
         logger.info('Initializing PWA and notification services');
 
-        // Initialize PWA service
-        const pwaStatus = await pwaService.initialize();
-        
-        // Initialize notification service
-        const notificationStatus = await notificationService.initialize();
+        // Initialize PWA service safely
+        let pwaStatus = { updateAvailable: false, installPrompt: null };
+        try {
+          pwaStatus = await pwaService.initialize();
+        } catch (error) {
+          logger.warn('PWA service initialization failed', { error });
+        }
+
+        // Initialize notification service safely
+        let notificationStatus = {
+          permission: 'default' as NotificationPermission,
+          supported: false,
+          subscribed: false
+        };
+        try {
+          notificationStatus = await notificationService.initialize();
+        } catch (error) {
+          logger.warn('Notification service initialization failed', { error });
+        }
 
         setState(prev => ({
           ...prev,
@@ -150,7 +164,13 @@ export const usePWAIntegration = () => {
   // PWA installation
   const installApp = useCallback(async () => {
     try {
-      const success = await pwaService.installApp();
+      let success = false;
+      try {
+        success = await pwaService.installApp();
+      } catch (error) {
+        logger.warn('PWA install failed', { error });
+        return false;
+      }
       if (success) {
         setState(prev => ({
           ...prev,
@@ -184,7 +204,13 @@ export const usePWAIntegration = () => {
   // Notification permission request
   const requestNotificationPermission = useCallback(async () => {
     try {
-      const permission = await notificationService.requestPermission();
+      let permission: NotificationPermission = 'default';
+      try {
+        permission = await notificationService.requestPermission();
+      } catch (error) {
+        logger.warn('Notification permission request failed', { error });
+        return false;
+      }
       
       setState(prev => ({
         ...prev,
@@ -225,10 +251,15 @@ export const usePWAIntegration = () => {
         if (!granted) return false;
       }
 
-      await notificationService.showNotification('test', {
-        title: 'Notificación de prueba',
-        message: 'Las notificaciones están funcionando correctamente',
-      });
+      try {
+        await notificationService.showNotification('test', {
+          title: 'Notificación de prueba',
+          message: 'Las notificaciones están funcionando correctamente',
+        });
+      } catch (error) {
+        logger.warn('Test notification failed', { error });
+        return false;
+      }
 
       logger.userAction('test_notification_sent');
       return true;
