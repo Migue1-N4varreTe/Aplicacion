@@ -4,6 +4,8 @@ import GuestShoppingBanner from "@/components/GuestShoppingBanner";
 import ProductCardOptimized from "@/components/ProductCardOptimized";
 import { useVirtualizedProducts, useIntersectionObserver } from "@/hooks/use-virtualized-products";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { ProductGridSkeleton, PageSkeleton } from "@/components/OptimizedSkeleton";
+import { useSmartPrefetch } from "@/hooks/use-smart-prefetch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +40,19 @@ const Shop = () => {
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Smart prefetch para mejor rendimiento
+  const { usePrefetchOnHover } = useSmartPrefetch();
+  const prefetchCartProps = usePrefetchOnHover();
+
+  // Simular carga inicial
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Use the custom hook for product filtering
   const {
@@ -271,7 +286,9 @@ const Shop = () => {
         </div>
 
         {/* Products Grid/List */}
-        {visibleProducts.length > 0 ? (
+        {isInitialLoading ? (
+          <ProductGridSkeleton count={20} />
+        ) : visibleProducts.length > 0 ? (
           <>
             <div
               className={cn(
@@ -298,10 +315,7 @@ const Shop = () => {
                 className="flex justify-center py-8"
               >
                 {isLoadingMore ? (
-                  <div className="flex items-center gap-2">
-                    <LoadingSpinner size="sm" />
-                    <span className="text-gray-600">Cargando más productos...</span>
-                  </div>
+                  <ProductGridSkeleton count={8} />
                 ) : (
                   <button
                     onClick={loadMoreProducts}
