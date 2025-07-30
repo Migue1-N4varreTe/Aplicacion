@@ -38,17 +38,34 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
       if (currentQuantity > 0) {
         setQuantity(currentQuantity);
       } else {
-        setQuantity(product.sellByWeight ? 0.5 : 1);
+        if (product.sellByWeight) {
+          if (product.unit === "kg") {
+            setQuantity(0.5);
+          } else if (product.unit === "gramo") {
+            setQuantity(250);
+          } else {
+            setQuantity(0.5);
+          }
+        } else {
+          setQuantity(1);
+        }
       }
     }
-  }, [open, product.id, product.sellByWeight, getItemQuantity]);
+  }, [open, product.id, product.sellByWeight, product.unit, getItemQuantity]);
 
   const handleQuantityChange = (value: string) => {
     const numValue = parseFloat(value);
     if (!isNaN(numValue) && numValue >= 0) {
       if (product.sellByWeight) {
-        // Para productos por peso, permitir decimales con hasta 3 decimales
-        setQuantity(Math.max(0.1, Math.round(numValue * 1000) / 1000));
+        if (product.unit === "kg") {
+          // Para productos por kg, permitir decimales con hasta 1 decimal
+          setQuantity(Math.max(0.1, Math.round(numValue * 10) / 10));
+        } else if (product.unit === "gramo") {
+          // Para productos por gramo, solo números enteros
+          setQuantity(Math.max(100, Math.round(numValue)));
+        } else {
+          setQuantity(Math.max(0.1, Math.round(numValue * 1000) / 1000));
+        }
       } else {
         // Para productos por pieza, solo enteros
         setQuantity(Math.max(1, Math.floor(numValue)));
@@ -58,7 +75,13 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
 
   const incrementQuantity = () => {
     if (product.sellByWeight) {
-      setQuantity(prev => Math.round((prev + 0.1) * 10) / 10);
+      if (product.unit === "kg") {
+        setQuantity(prev => Math.round((prev + 0.1) * 10) / 10);
+      } else if (product.unit === "gramo") {
+        setQuantity(prev => prev + 50);
+      } else {
+        setQuantity(prev => Math.round((prev + 0.1) * 10) / 10);
+      }
     } else {
       setQuantity(prev => prev + 1);
     }
@@ -66,7 +89,13 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
 
   const decrementQuantity = () => {
     if (product.sellByWeight) {
-      setQuantity(prev => Math.max(0.1, Math.round((prev - 0.1) * 10) / 10));
+      if (product.unit === "kg") {
+        setQuantity(prev => Math.max(0.1, Math.round((prev - 0.1) * 10) / 10));
+      } else if (product.unit === "gramo") {
+        setQuantity(prev => Math.max(100, prev - 50));
+      } else {
+        setQuantity(prev => Math.max(0.1, Math.round((prev - 0.1) * 10) / 10));
+      }
     } else {
       setQuantity(prev => Math.max(1, prev - 1));
     }
@@ -97,13 +126,21 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
   };
 
   const calculatePrice = () => {
+    if (product.sellByWeight) {
+      if (product.unit === "gramo") {
+        // El precio está por kg, convertir gramos a kg
+        return (product.price * quantity) / 1000;
+      } else if (product.unit === "kg") {
+        return product.price * quantity;
+      }
+    }
     return product.price * quantity;
   };
 
   const getStepValue = () => {
     if (product.sellByWeight) {
       if (product.unit === "kg") return "0.1";
-      if (product.unit === "gramo") return "1";
+      if (product.unit === "gramo") return "50";
       return "0.1";
     }
     return "1";
@@ -112,7 +149,7 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
   const getMinValue = () => {
     if (product.sellByWeight) {
       if (product.unit === "kg") return "0.1";
-      if (product.unit === "gramo") return "1";
+      if (product.unit === "gramo") return "100";
       return "0.1";
     }
     return "1";
@@ -121,10 +158,13 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
   const formatQuantityDisplay = () => {
     if (product.sellByWeight) {
       if (product.unit === "kg") {
-        return quantity < 1 ? `${(quantity * 1000).toFixed(0)}g` : `${quantity.toFixed(1)}kg`;
+        return quantity < 1 ? `${Math.round(quantity * 1000)}g` : `${quantity.toFixed(1)}kg`;
       }
       if (product.unit === "gramo") {
-        return `${quantity.toFixed(0)}g`;
+        if (quantity >= 1000) {
+          return `${(quantity / 1000).toFixed(1)}kg`;
+        }
+        return `${Math.round(quantity)}g`;
       }
       return `${quantity.toFixed(1)} ${product.unit}`;
     }
@@ -188,7 +228,8 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
           {/* Quantity Selector */}
           <div className="space-y-3">
             <Label htmlFor="quantity" className="text-sm font-medium">
-              Cantidad {product.sellByWeight && "(en " + product.unit + ")"}
+              Cantidad {product.sellByWeight && product.unit === "kg" && "(en kg/gramos)"}
+              {product.sellByWeight && product.unit === "gramo" && "(en gramos)"}
             </Label>
             
             <div className="flex items-center gap-2">
@@ -197,7 +238,7 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
                 variant="outline"
                 size="sm"
                 onClick={decrementQuantity}
-                disabled={quantity <= (product.sellByWeight ? 0.1 : 1)}
+                disabled={quantity <= (product.sellByWeight ? (product.unit === "gramo" ? 100 : 0.1) : 1)}
                 className="h-10 w-10 p-0"
               >
                 <Minus className="h-4 w-4" />
@@ -227,44 +268,88 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
             </div>
 
             {/* Quick quantity buttons for weight products */}
-            {product.sellByWeight && product.unit === "kg" && (
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(0.25)}
-                  className="text-xs"
-                >
-                  250g
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(0.5)}
-                  className="text-xs"
-                >
-                  500g
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(1)}
-                  className="text-xs"
-                >
-                  1kg
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(2)}
-                  className="text-xs"
-                >
-                  2kg
-                </Button>
+            {product.sellByWeight && (
+              <div className="flex gap-2 flex-wrap">
+                {product.unit === "kg" && (
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(0.25)}
+                      className="text-xs"
+                    >
+                      250g
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(0.5)}
+                      className="text-xs"
+                    >
+                      500g
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(1)}
+                      className="text-xs"
+                    >
+                      1kg
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(2)}
+                      className="text-xs"
+                    >
+                      2kg
+                    </Button>
+                  </>
+                )}
+                {product.unit === "gramo" && (
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(100)}
+                      className="text-xs"
+                    >
+                      100g
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(250)}
+                      className="text-xs"
+                    >
+                      250g
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(500)}
+                      className="text-xs"
+                    >
+                      500g
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(1000)}
+                      className="text-xs"
+                    >
+                      1kg
+                    </Button>
+                  </>
+                )}
               </div>
             )}
 
