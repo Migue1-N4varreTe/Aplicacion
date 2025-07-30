@@ -10,6 +10,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { SafeWebSocketProvider } from "@/contexts/SafeWebSocketContext";
+import { ShoppingListProvider } from "@/contexts/ShoppingListContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
 
