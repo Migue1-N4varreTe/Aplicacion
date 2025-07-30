@@ -84,7 +84,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     .filter(Boolean) as CartItemWithProduct[];
 
   // Calculate cart metrics with weight-based pricing
-  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCount = cartItems.reduce((sum, item) => {
+    const product = allProducts.find(p => p.id === item.id);
+    if (product?.sellByWeight && product.unit === "gramo") {
+      // Para productos en gramos, contar como fracción de kg
+      return sum + (item.quantity / 1000);
+    }
+    return sum + item.quantity;
+  }, 0);
+
   const cartSubtotal = cartProducts.reduce((sum, item) => {
     const product = allProducts.find(p => p.id === item.id);
     if (product) {
@@ -109,7 +117,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     // Set minimum quantity for weight-based products
-    const minQuantity = product.sellByWeight ? 0.1 : 1;
+    let minQuantity = 1;
+    if (product.sellByWeight) {
+      if (product.unit === "kg") {
+        minQuantity = 0.1;
+      } else if (product.unit === "gramo") {
+        minQuantity = 100;
+      } else {
+        minQuantity = 0.1;
+      }
+    }
     const validQuantity = Math.max(quantity, minQuantity);
 
     setCartItems((prev) => {
