@@ -48,15 +48,13 @@ export const usePWAIntegration = () => {
       try {
         logger.info('Initializing PWA and notification services');
 
-        // Initialize PWA service safely
-        let pwaStatus = { updateAvailable: false, installPrompt: null };
-        try {
-          pwaStatus = await pwaService.initialize();
-        } catch (error) {
-          logger.warn('PWA service initialization failed', { error });
-        }
+        // Get PWA status
+        const pwaStatus = {
+          updateAvailable: false,
+          installPrompt: pwaService.canInstall(),
+        };
 
-        // Initialize notification service safely
+        // Get notification status safely
         let notificationStatus = {
           permission: 'default' as NotificationPermission,
           supported: false,
@@ -66,12 +64,17 @@ export const usePWAIntegration = () => {
           notificationStatus = await notificationService.initialize();
         } catch (error) {
           logger.warn('Notification service initialization failed', { error });
+          notificationStatus = {
+            permission: 'Notification' in window ? Notification.permission : 'denied',
+            supported: 'Notification' in window,
+            subscribed: false
+          };
         }
 
         setState(prev => ({
           ...prev,
           pwa: {
-            isInstalled: pwaService.isInstalled(),
+            isInstalled: pwaService.isAppInstalled(),
             canInstall: pwaService.canInstall(),
             isOffline: !navigator.onLine,
             isUpdateAvailable: pwaStatus.updateAvailable || false,
