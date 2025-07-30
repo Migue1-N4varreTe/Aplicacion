@@ -14,6 +14,7 @@ import { ShoppingListProvider } from "@/contexts/ShoppingListContext";
 import { AddressProvider } from "@/contexts/AddressContext";
 import { ReviewsProvider } from "@/contexts/ReviewsContext";
 import { PickupProvider } from "@/contexts/PickupContext";
+import { FlashSalesProvider } from "@/contexts/FlashSalesContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
 
@@ -80,7 +81,8 @@ const App = () => (
                 <AddressProvider>
                   <ReviewsProvider>
                     <PickupProvider>
-                      <SafeWebSocketProvider>
+                      <FlashSalesProvider>
+                        <SafeWebSocketProvider>
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
@@ -229,7 +231,8 @@ const App = () => (
                     </Routes>
                   </Suspense>
                 </BrowserRouter>
-                      </SafeWebSocketProvider>
+                        </SafeWebSocketProvider>
+                      </FlashSalesProvider>
                     </PickupProvider>
                   </ReviewsProvider>
                 </AddressProvider>
