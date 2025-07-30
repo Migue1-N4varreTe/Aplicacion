@@ -432,9 +432,13 @@ export const calculatePrice = (product: Product, quantity: number): number => {
   if (product.sellByWeight) {
     // Para productos por peso, quantity representa kg o gramos
     if (product.unit === "gramo") {
-      return (product.price * quantity) / 1000; // precio por gramo
+      // El precio está definido por kg, convertir gramos a kg
+      return (product.price * quantity) / 1000;
+    } else if (product.unit === "kg") {
+      // El precio ya está por kg
+      return product.price * quantity;
     }
-    return product.price * quantity; // precio por kg
+    return product.price * quantity;
   }
   return product.price * quantity; // precio por pieza/paquete
 };
@@ -442,8 +446,16 @@ export const calculatePrice = (product: Product, quantity: number): number => {
 // Función para formatear unidad de venta
 export const formatUnit = (product: Product, quantity: number): string => {
   if (product.sellByWeight) {
-    if (product.unit === "gramo" && quantity >= 1000) {
-      return `${(quantity / 1000).toFixed(1)} kg`;
+    if (product.unit === "gramo") {
+      if (quantity >= 1000) {
+        return `${(quantity / 1000).toFixed(1)} kg`;
+      }
+      return `${Math.round(quantity)}g`;
+    } else if (product.unit === "kg") {
+      if (quantity < 1) {
+        return `${Math.round(quantity * 1000)}g`;
+      }
+      return `${quantity.toFixed(1)}kg`;
     }
     return `${quantity} ${product.unit}`;
   }
