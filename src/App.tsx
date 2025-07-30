@@ -75,7 +75,8 @@ const App = () => (
           <FavoritesProvider>
             <CartProvider>
               <ShoppingListProvider>
-                <SafeWebSocketProvider>
+                <AddressProvider>
+                  <SafeWebSocketProvider>
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
@@ -224,7 +225,8 @@ const App = () => (
                     </Routes>
                   </Suspense>
                 </BrowserRouter>
-                </SafeWebSocketProvider>
+                  </SafeWebSocketProvider>
+                </AddressProvider>
               </ShoppingListProvider>
             </CartProvider>
           </FavoritesProvider>
