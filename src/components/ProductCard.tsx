@@ -222,7 +222,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                 <Scale className="h-3 w-3" />
                 Producto vendido por peso
                 {product.unit === "kg" && " - Mínimo 100g"}
-                {product.unit === "gramo" && " - Cantidad personalizable"}
+                {product.unit === "gramo" && " - Mínimo 100g"}
               </p>
             </div>
           )}
