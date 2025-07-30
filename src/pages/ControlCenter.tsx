@@ -27,7 +27,7 @@ import IntegratedDashboard from '@/components/IntegratedDashboard';
 import { useAppState, useAppPerformance } from '@/hooks/use-app-state-simple';
 import { usePWAIntegration } from '@/hooks/use-pwa-integration-simple';
 import { useSearch } from '@/hooks/use-search';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/logger-simple';
 import { Link } from 'react-router-dom';
 
 const ControlCenter = () => {
