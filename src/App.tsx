@@ -67,6 +67,7 @@ const LiveTracking = lazy(() => import("./pages/LiveTracking"));
 const DeliveryRoutes = lazy(() => import("./pages/DeliveryRoutes"));
 const RecurringOrders = lazy(() => import("./pages/RecurringOrders"));
 const Compare = lazy(() => import("./pages/Compare"));
+const ControlCenter = lazy(() => import("./pages/ControlCenter"));
 
 const queryClient = new QueryClient();
 
@@ -135,6 +136,7 @@ const App = () => (
                       <Route path="/delivery-routes" element={<DeliveryRoutes />} />
                       <Route path="/recurring-orders" element={<RecurringOrders />} />
                       <Route path="/compare" element={<Compare />} />
+                      <Route path="/control-center" element={<ControlCenter />} />
                       <Route
                         path="/admin"
                         element={
