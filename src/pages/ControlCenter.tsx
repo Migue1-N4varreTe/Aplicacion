@@ -24,10 +24,9 @@ import {
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import IntegratedDashboard from '@/components/IntegratedDashboard';
-import { useAppState, useAppPerformance } from '@/hooks/use-app-state';
-import { usePWAIntegration } from '@/hooks/use-pwa-integration';
+import { useAppState, useAppPerformance } from '@/hooks/use-app-state-simple';
+import { usePWAIntegration } from '@/hooks/use-pwa-integration-simple';
 import { useSearch } from '@/hooks/use-search';
-import { useErrorHandler } from '@/hooks/use-error-handler';
 import { logger } from '@/lib/logger';
 import { Link } from 'react-router-dom';
 
@@ -39,20 +38,16 @@ const ControlCenter = () => {
   const { appStats, notifications, quickActions, refreshAppState } = useAppState();
   const metrics = useAppPerformance();
   const { pwa, notifications: pwaNotifications, getAppCapabilities } = usePWAIntegration();
-  const { searchSuggestions, recentSearches, clearRecentSearches } = useSearch();
-  const { handleError } = useErrorHandler();
+  const { searchSuggestions } = useSearch();
+  const recentSearches: string[] = [];
+  const clearRecentSearches = () => {};
 
   // Get app capabilities
   const capabilities = getAppCapabilities();
 
   // Handle refresh
   const handleRefresh = () => {
-    try {
-      refreshAppState();
-      logger.userAction('control_center_refresh');
-    } catch (error) {
-      handleError(error, 'Error al actualizar el centro de control');
-    }
+    refreshAppState();
   };
 
   // Quick stats for overview
