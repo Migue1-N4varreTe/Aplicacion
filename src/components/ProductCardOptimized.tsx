@@ -9,6 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
 import { formatUnit } from "@/lib/product-audit";
 import { cn } from "@/lib/utils";
+import OptimizedImage from "@/components/OptimizedImage";
 
 // Lazy load del selector de cantidad
 const QuantitySelector = React.lazy(() => import("@/components/QuantitySelector"));
@@ -78,23 +79,14 @@ const ProductCardOptimized = memo(({
       <CardContent className="p-0">
         {/* Image Container con lazy loading optimizado */}
         <div className="relative aspect-square overflow-hidden bg-gray-50">
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-gray-200 animate-pulse" />
-          )}
-          <img
+          <OptimizedImage
             src={product.image}
             alt={product.name}
-            loading={priority ? "eager" : "lazy"}
-            decoding="async"
-            className={cn(
-              "h-full w-full object-cover transition-all duration-300 group-hover:scale-105",
-              imageLoaded ? "opacity-100" : "opacity-0"
-            )}
-            onLoad={() => setImageLoaded(true)}
-            style={{
-              contentVisibility: 'auto',
-              containIntrinsicSize: '300px 300px'
-            }}
+            priority={priority}
+            placeholder="skeleton"
+            aspectRatio="square"
+            className="transition-transform duration-300 group-hover:scale-105"
+            onLoadingComplete={() => setImageLoaded(true)}
           />
 
           {/* Badges */}
