@@ -24,9 +24,11 @@ import {
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import IntegratedDashboard from '@/components/IntegratedDashboard';
-import { useAppState, useAppPerformance } from '@/hooks/use-app-state-simple';
-import { usePWAIntegration } from '@/hooks/use-pwa-integration-simple';
-import { logger } from '@/lib/logger-simple';
+import { useAppState, useAppPerformance } from '@/hooks/use-app-state';
+import { usePWAIntegration } from '@/hooks/use-pwa-integration';
+import { useSearch } from '@/hooks/use-search';
+import { useErrorHandler } from '@/hooks/use-error-handler';
+import { logger } from '@/lib/logger';
 import { Link } from 'react-router-dom';
 
 const ControlCenter = () => {
@@ -37,17 +39,31 @@ const ControlCenter = () => {
   const { appStats, notifications, quickActions, refreshAppState } = useAppState();
   const metrics = useAppPerformance();
   const { pwa, notifications: pwaNotifications, getAppCapabilities } = usePWAIntegration();
-  // Simplified search for now
-  const searchSuggestions: string[] = [];
-  const recentSearches: string[] = [];
-  const clearRecentSearches = () => {};
+  // Search functionality
+  let searchSuggestions: string[] = [];
+  let recentSearches: string[] = [];
+  let clearRecentSearches = () => {};
+
+  try {
+    const searchHook = useSearch();
+    searchSuggestions = searchHook.searchSuggestions || [];
+  } catch (error) {
+    logger.warn('Search hook not available', { error });
+  }
+
+  const { handleError } = useErrorHandler();
 
   // Get app capabilities
   const capabilities = getAppCapabilities();
 
   // Handle refresh
   const handleRefresh = () => {
-    refreshAppState();
+    try {
+      refreshAppState();
+      logger.userAction('control_center_refresh');
+    } catch (error) {
+      handleError(error, 'Error al actualizar el centro de control');
+    }
   };
 
   // Quick stats for overview
