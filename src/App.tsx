@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { PageLoader } from "@/components/LoadingSpinner";
+import PerformanceOptimizer from "@/components/PerformanceOptimizer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { CartProvider } from "@/contexts/CartContext";
@@ -73,8 +74,9 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+    <PerformanceOptimizer>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
         <AuthProvider>
           <FavoritesProvider>
             <CartProvider>
@@ -242,8 +244,9 @@ const App = () => (
             </CartProvider>
           </FavoritesProvider>
         </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </PerformanceOptimizer>
   </ErrorBoundary>
 );
 
