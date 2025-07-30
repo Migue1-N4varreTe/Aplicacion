@@ -174,7 +174,7 @@ const Shop = () => {
                 <Badge variant="secondary" className="gap-1">
                   {categories.find((c) => c.id === selectedCategory)?.name}
                   <button
-                    onClick={() => setSelectedCategory("")}
+                    onClick={() => updateCategory("")}
                     className="ml-1 hover:bg-gray-300 rounded-full"
                   >
                     <X className="h-3 w-3" />
@@ -201,7 +201,7 @@ const Shop = () => {
                 <Badge variant="secondary" className="gap-1">
                   "{searchQuery}"
                   <button
-                    onClick={() => setSearchQuery("")}
+                    onClick={() => updateSearchQuery("")}
                     className="ml-1 hover:bg-gray-300 rounded-full"
                   >
                     <X className="h-3 w-3" />
