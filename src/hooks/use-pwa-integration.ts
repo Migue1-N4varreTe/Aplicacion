@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { pwaService } from '@/services/pwa';
-import { notificationService } from '@/services/notifications';
+import { notificationsService } from '@/services/notifications';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from '@/lib/logger';
 
