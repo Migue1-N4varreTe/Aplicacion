@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense, lazy } from "react";
+import React, { useState, useMemo, Suspense, lazy } from "react";
 import Navbar from "@/components/Navbar";
 import GuestShoppingBanner from "@/components/GuestShoppingBanner";
 import ProductCardOptimized from "@/components/ProductCardOptimized";
