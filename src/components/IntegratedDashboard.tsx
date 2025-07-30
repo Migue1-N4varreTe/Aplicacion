@@ -20,8 +20,8 @@ import {
   Wifi,
   WifiOff
 } from 'lucide-react';
-import { useAppState } from '@/hooks/use-app-state';
-import { usePWAIntegration } from '@/hooks/use-pwa-integration';
+import { useAppState } from '@/hooks/use-app-state-simple';
+import { usePWAIntegration } from '@/hooks/use-pwa-integration-simple';
 import { useCart } from '@/contexts/CartContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { useShoppingList } from '@/contexts/ShoppingListContext';
@@ -48,14 +48,14 @@ export const IntegratedDashboard = ({
   const { appStats, notifications, quickActions, appHealth, featureUsage } = useAppState();
   const { pwa, notifications: pwaNotifications, installApp, requestNotificationPermission } = usePWAIntegration();
   
-  // Context data
-  const { cartTotal } = useCart();
-  const { favorites } = useFavorites();
-  const { lists } = useShoppingList();
-  const { addresses } = useAddresses();
-  const { reviews } = useReviews();
-  const { orders: pickupOrders } = usePickup();
-  const { sales: flashSales } = useFlashSales();
+  // Mock context data for now
+  const cartTotal = 0;
+  const favorites: any[] = [];
+  const lists: any[] = [];
+  const addresses: any[] = [];
+  const reviews: any[] = [];
+  const pickupOrders: any[] = [];
+  const flashSales: any[] = [];
 
   const [activeTab, setActiveTab] = useState('overview');
 
