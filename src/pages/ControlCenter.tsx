@@ -27,7 +27,7 @@ import IntegratedDashboard from '@/components/IntegratedDashboard';
 import { useAppState, useAppPerformance } from '@/hooks/use-app-state';
 import { usePWAIntegration } from '@/hooks/use-pwa-integration';
 import { useSearch } from '@/hooks/use-search';
-import { useErrorHandler } from '@/hooks/use-error-handler';
+import { useErrorHandler } from '@/hooks/use-error-handler-simple';
 import { logger } from '@/lib/logger';
 import { Link } from 'react-router-dom';
 
