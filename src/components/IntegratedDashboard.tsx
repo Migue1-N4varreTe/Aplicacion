@@ -129,17 +129,17 @@ export const IntegratedDashboard = ({
 
   if (variant === 'minimal') {
     return (
-      <div className=\"grid grid-cols-2 md:grid-cols-4 gap-4\">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {statsCards.slice(0, 4).map((stat) => (
-          <Card key={stat.title} className={cn(\"hover:shadow-md transition-shadow\", !stat.enabled && \"opacity-50\")}>
-            <CardContent className=\"p-4\">
-              <div className=\"flex items-center gap-3\">
-                <div className={cn(\"p-2 rounded-lg\", stat.bgColor)}>
-                  <stat.icon className={cn(\"h-4 w-4\", stat.color)} />
+          <Card key={stat.title} className={cn("hover:shadow-md transition-shadow", !stat.enabled && "opacity-50")}>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className={cn("p-2 rounded-lg", stat.bgColor)}>
+                  <stat.icon className={cn("h-4 w-4", stat.color)} />
                 </div>
                 <div>
-                  <p className=\"text-sm font-medium\">{stat.title}</p>
-                  <p className=\"text-2xl font-bold\">{stat.value}</p>
+                  <p className="text-sm font-medium">{stat.title}</p>
+                  <p className="text-2xl font-bold">{stat.value}</p>
                 </div>
               </div>
             </CardContent>
@@ -151,21 +151,21 @@ export const IntegratedDashboard = ({
 
   if (variant === 'compact') {
     return (
-      <div className=\"space-y-6\">
+      <div className="space-y-6">
         {/* Quick Stats */}
-        <div className=\"grid grid-cols-2 md:grid-cols-4 gap-4\">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {statsCards.filter(stat => stat.enabled).slice(0, 4).map((stat) => (
             <Link key={stat.title} to={stat.link}>
-              <Card className=\"hover:shadow-md transition-shadow cursor-pointer\">
-                <CardContent className=\"p-4\">
-                  <div className=\"flex items-center gap-3\">
-                    <div className={cn(\"p-2 rounded-lg\", stat.bgColor)}>
-                      <stat.icon className={cn(\"h-4 w-4\", stat.color)} />
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className={cn("p-2 rounded-lg", stat.bgColor)}>
+                      <stat.icon className={cn("h-4 w-4", stat.color)} />
                     </div>
                     <div>
-                      <p className=\"text-sm font-medium\">{stat.title}</p>
-                      <p className=\"text-xl font-bold\">{stat.value}</p>
-                      {stat.total && <p className=\"text-xs text-gray-500\">${stat.total.toFixed(2)}</p>}
+                      <p className="text-sm font-medium">{stat.title}</p>
+                      <p className="text-xl font-bold">{stat.value}</p>
+                      {stat.total && <p className="text-xs text-gray-500">${stat.total.toFixed(2)}</p>}
                     </div>
                   </div>
                 </CardContent>
@@ -177,17 +177,17 @@ export const IntegratedDashboard = ({
         {/* Quick Actions */}
         {showQuickActions && quickActions.length > 0 && (
           <Card>
-            <CardHeader className=\"pb-3\">
-              <CardTitle className=\"text-lg\">Acciones Rápidas</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Acciones Rápidas</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className=\"flex flex-wrap gap-2\">
+              <div className="flex flex-wrap gap-2">
                 {quickActions.slice(0, 3).map((action) => (
                   <Link key={action.id} to={action.path}>
-                    <Button variant=\"outline\" size=\"sm\" className=\"gap-2\">
+                    <Button variant="outline" size="sm" className="gap-2">
                       {action.label}
                       {action.count > 0 && (
-                        <Badge variant=\"secondary\" className=\"ml-1\">{action.count}</Badge>
+                        <Badge variant="secondary" className="ml-1">{action.count}</Badge>
                       )}
                     </Button>
                   </Link>
@@ -202,33 +202,33 @@ export const IntegratedDashboard = ({
 
   // Full dashboard
   return (
-    <div className=\"space-y-6\">
+    <div className="space-y-6">
       {/* App Health & PWA Status */}
-      <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
-          <CardHeader className=\"pb-3\">
-            <CardTitle className=\"text-lg flex items-center gap-2\">
-              <TrendingUp className=\"h-5 w-5\" />
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
               Estado de la App
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className=\"space-y-3\">
-              <div className=\"flex items-center justify-between\">
-                <span className=\"text-sm font-medium\">Funciones Activas</span>
-                <Badge variant={appStats.totalActiveFeatures > 0 ? \"default\" : \"secondary\"}>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Funciones Activas</span>
+                <Badge variant={appStats.totalActiveFeatures > 0 ? "default" : "secondary"}>
                   {appStats.totalActiveFeatures}/7
                 </Badge>
               </div>
-              <Progress value={(appStats.totalActiveFeatures / 7) * 100} className=\"h-2\" />
+              <Progress value={(appStats.totalActiveFeatures / 7) * 100} className="h-2" />
               
-              <div className=\"flex items-center justify-between\">
-                <span className=\"text-sm font-medium\">Engagement Score</span>
-                <span className=\"text-sm font-bold\">{featureUsage.engagementScore}%</span>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Engagement Score</span>
+                <span className="text-sm font-bold">{featureUsage.engagementScore}%</span>
               </div>
               
-              <div className=\"flex items-center gap-2 text-sm\">
-                <div className={cn(\"w-2 h-2 rounded-full\", appHealth.status === 'healthy' ? 'bg-green-500' : 'bg-yellow-500')} />
+              <div className="flex items-center gap-2 text-sm">
+                <div className={cn("w-2 h-2 rounded-full", appHealth.status === 'healthy' ? 'bg-green-500' : 'bg-yellow-500')} />
                 {appHealth.status === 'healthy' ? 'Funcionando bien' : 'Necesita atención'}
               </div>
             </div>
@@ -236,44 +236,44 @@ export const IntegratedDashboard = ({
         </Card>
 
         <Card>
-          <CardHeader className=\"pb-3\">
-            <CardTitle className=\"text-lg flex items-center gap-2\">
-              <Smartphone className=\"h-5 w-5\" />
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Smartphone className="h-5 w-5" />
               Estado PWA
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className=\"space-y-3\">
-              <div className=\"flex items-center justify-between\">
-                <span className=\"text-sm font-medium\">App Instalada</span>
-                <Badge variant={pwa.isInstalled ? \"default\" : \"secondary\"}>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">App Instalada</span>
+                <Badge variant={pwa.isInstalled ? "default" : "secondary"}>
                   {pwa.isInstalled ? 'Sí' : 'No'}
                 </Badge>
               </div>
               
-              <div className=\"flex items-center justify-between\">
-                <span className=\"text-sm font-medium\">Conexión</span>
-                <div className=\"flex items-center gap-1\">
-                  {pwa.isOffline ? <WifiOff className=\"h-4 w-4 text-red-500\" /> : <Wifi className=\"h-4 w-4 text-green-500\" />}
-                  <span className=\"text-sm\">{pwa.isOffline ? 'Offline' : 'Online'}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Conexión</span>
+                <div className="flex items-center gap-1">
+                  {pwa.isOffline ? <WifiOff className="h-4 w-4 text-red-500" /> : <Wifi className="h-4 w-4 text-green-500" />}
+                  <span className="text-sm">{pwa.isOffline ? 'Offline' : 'Online'}</span>
                 </div>
               </div>
               
-              <div className=\"flex items-center justify-between\">
-                <span className=\"text-sm font-medium\">Notificaciones</span>
-                <Badge variant={pwaNotifications.permission === 'granted' ? \"default\" : \"secondary\"}>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Notificaciones</span>
+                <Badge variant={pwaNotifications.permission === 'granted' ? "default" : "secondary"}>
                   {pwaNotifications.permission}
                 </Badge>
               </div>
               
               {!pwa.isInstalled && pwa.canInstall && (
-                <Button onClick={installApp} size=\"sm\" className=\"w-full\">
+                <Button onClick={installApp} size="sm" className="w-full">
                   Instalar App
                 </Button>
               )}
               
               {pwaNotifications.permission !== 'granted' && (
-                <Button onClick={requestNotificationPermission} variant=\"outline\" size=\"sm\" className=\"w-full\">
+                <Button onClick={requestNotificationPermission} variant="outline" size="sm" className="w-full">
                   Activar Notificaciones
                 </Button>
               )}
@@ -285,32 +285,32 @@ export const IntegratedDashboard = ({
       {/* Notifications */}
       {showNotifications && notifications.total > 0 && (
         <Card>
-          <CardHeader className=\"pb-3\">
-            <CardTitle className=\"text-lg flex items-center gap-2\">
-              <Bell className=\"h-5 w-5\" />
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Bell className="h-5 w-5" />
               Notificaciones
-              <Badge variant=\"destructive\">{notifications.total}</Badge>
+              <Badge variant="destructive">{notifications.total}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className=\"space-y-2\">
+            <div className="space-y-2">
               {notifications.pickupReady > 0 && (
-                <div className=\"flex items-center justify-between p-3 bg-green-50 rounded-lg\">
-                  <div className=\"flex items-center gap-2\">
-                    <Package className=\"h-4 w-4 text-green-600\" />
-                    <span className=\"text-sm font-medium\">Órdenes listas para pickup</span>
+                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Package className="h-4 w-4 text-green-600" />
+                    <span className="text-sm font-medium">Órdenes listas para pickup</span>
                   </div>
-                  <Badge variant=\"default\">{notifications.pickupReady}</Badge>
+                  <Badge variant="default">{notifications.pickupReady}</Badge>
                 </div>
               )}
               
               {notifications.flashSaleEnding > 0 && (
-                <div className=\"flex items-center justify-between p-3 bg-orange-50 rounded-lg\">
-                  <div className=\"flex items-center gap-2\">
-                    <Zap className=\"h-4 w-4 text-orange-600\" />
-                    <span className=\"text-sm font-medium\">Flash sales terminando pronto</span>
+                <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-orange-600" />
+                    <span className="text-sm font-medium">Flash sales terminando pronto</span>
                   </div>
-                  <Badge variant=\"default\">{notifications.flashSaleEnding}</Badge>
+                  <Badge variant="default">{notifications.flashSaleEnding}</Badge>
                 </div>
               )}
             </div>
@@ -319,27 +319,27 @@ export const IntegratedDashboard = ({
       )}
 
       {/* Tabs for detailed view */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className=\"w-full\">
-        <TabsList className=\"grid w-full grid-cols-3\">
-          <TabsTrigger value=\"overview\">General</TabsTrigger>
-          <TabsTrigger value=\"features\">Funciones</TabsTrigger>
-          <TabsTrigger value=\"actions\">Acciones</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="overview">General</TabsTrigger>
+          <TabsTrigger value="features">Funciones</TabsTrigger>
+          <TabsTrigger value="actions">Acciones</TabsTrigger>
         </TabsList>
         
-        <TabsContent value=\"overview\" className=\"space-y-4\">
-          <div className=\"grid grid-cols-2 md:grid-cols-4 gap-4\">
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {statsCards.map((stat) => (
               <Link key={stat.title} to={stat.link}>
-                <Card className={cn(\"hover:shadow-md transition-shadow cursor-pointer\", !stat.enabled && \"opacity-50\")}>
-                  <CardContent className=\"p-4\">
-                    <div className=\"flex items-center gap-3\">
-                      <div className={cn(\"p-2 rounded-lg\", stat.bgColor)}>
-                        <stat.icon className={cn(\"h-5 w-5\", stat.color)} />
+                <Card className={cn("hover:shadow-md transition-shadow cursor-pointer", !stat.enabled && "opacity-50")}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className={cn("p-2 rounded-lg", stat.bgColor)}>
+                        <stat.icon className={cn("h-5 w-5", stat.color)} />
                       </div>
                       <div>
-                        <p className=\"text-sm font-medium\">{stat.title}</p>
-                        <p className=\"text-2xl font-bold\">{stat.value}</p>
-                        {stat.total && <p className=\"text-xs text-gray-500\">${stat.total.toFixed(2)}</p>}
+                        <p className="text-sm font-medium">{stat.title}</p>
+                        <p className="text-2xl font-bold">{stat.value}</p>
+                        {stat.total && <p className="text-xs text-gray-500">${stat.total.toFixed(2)}</p>}
                       </div>
                     </div>
                   </CardContent>
@@ -349,17 +349,17 @@ export const IntegratedDashboard = ({
           </div>
         </TabsContent>
         
-        <TabsContent value=\"features\" className=\"space-y-4\">
-          <div className=\"grid gap-4\">
+        <TabsContent value="features" className="space-y-4">
+          <div className="grid gap-4">
             {Object.entries(featureUsage.usage).map(([feature, isActive]) => (
               <Card key={feature}>
-                <CardContent className=\"p-4\">
-                  <div className=\"flex items-center justify-between\">
-                    <div className=\"flex items-center gap-3\">
-                      <div className={cn(\"w-3 h-3 rounded-full\", isActive ? 'bg-green-500' : 'bg-gray-300')} />
-                      <span className=\"font-medium capitalize\">{feature.replace(/([A-Z])/g, ' $1')}</span>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={cn("w-3 h-3 rounded-full", isActive ? 'bg-green-500' : 'bg-gray-300')} />
+                      <span className="font-medium capitalize">{feature.replace(/([A-Z])/g, ' $1')}</span>
                     </div>
-                    <Badge variant={isActive ? \"default\" : \"secondary\"}>
+                    <Badge variant={isActive ? "default" : "secondary"}>
                       {isActive ? 'Activo' : 'Inactivo'}
                     </Badge>
                   </div>
@@ -369,18 +369,18 @@ export const IntegratedDashboard = ({
           </div>
         </TabsContent>
         
-        <TabsContent value=\"actions\" className=\"space-y-4\">
+        <TabsContent value="actions" className="space-y-4">
           {quickActions.length > 0 ? (
-            <div className=\"grid gap-3\">
+            <div className="grid gap-3">
               {quickActions.map((action) => (
                 <Link key={action.id} to={action.path}>
-                  <Card className=\"hover:shadow-md transition-shadow cursor-pointer\">
-                    <CardContent className=\"p-4\">
-                      <div className=\"flex items-center justify-between\">
-                        <span className=\"font-medium\">{action.label}</span>
-                        <div className=\"flex items-center gap-2\">
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{action.label}</span>
+                        <div className="flex items-center gap-2">
                           {action.count > 0 && (
-                            <Badge variant=\"secondary\">{action.count}</Badge>
+                            <Badge variant="secondary">{action.count}</Badge>
                           )}
                           <Badge variant={action.priority === 'high' ? 'destructive' : action.priority === 'medium' ? 'default' : 'secondary'}>
                             {action.priority}
@@ -394,10 +394,10 @@ export const IntegratedDashboard = ({
             </div>
           ) : (
             <Card>
-              <CardContent className=\"p-8 text-center\">
-                <Clock className=\"h-12 w-12 text-gray-400 mx-auto mb-4\" />
-                <h3 className=\"font-medium text-gray-900 mb-2\">No hay acciones pendientes</h3>
-                <p className=\"text-gray-500\">¡Perfecto! No tienes tareas urgentes por completar.</p>
+              <CardContent className="p-8 text-center">
+                <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="font-medium text-gray-900 mb-2">No hay acciones pendientes</h3>
+                <p className="text-gray-500">¡Perfecto! No tienes tareas urgentes por completar.</p>
               </CardContent>
             </Card>
           )}
