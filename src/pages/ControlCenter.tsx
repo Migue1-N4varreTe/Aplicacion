@@ -38,7 +38,8 @@ const ControlCenter = () => {
   const { appStats, notifications, quickActions, refreshAppState } = useAppState();
   const metrics = useAppPerformance();
   const { pwa, notifications: pwaNotifications, getAppCapabilities } = usePWAIntegration();
-  const { searchSuggestions } = useSearch();
+  // Simplified search for now
+  const searchSuggestions: string[] = [];
   const recentSearches: string[] = [];
   const clearRecentSearches = () => {};
 
