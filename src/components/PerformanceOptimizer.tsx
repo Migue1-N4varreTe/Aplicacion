@@ -1,205 +1,197 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState, ReactNode } from 'react';
+import { useSmartPrefetch } from '@/hooks/use-smart-prefetch';
+import { performanceCache } from '@/lib/performance-cache';
 import { logger } from '@/lib/logger';
 
 interface PerformanceOptimizerProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const PerformanceOptimizer = ({ children }: PerformanceOptimizerProps) => {
+const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children }) => {
+  const [isOptimized, setIsOptimized] = useState(false);
+  const { stats } = useSmartPrefetch();
+
   useEffect(() => {
-    // Preload critical resources
-    const preloadCriticalResources = () => {
-      // Preload critical CSS
-      const criticalStyles = [
-        '/src/index.css',
-        '/src/App.css'
-      ];
-
-      criticalStyles.forEach(href => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'style';
-        link.href = href;
-        document.head.appendChild(link);
-      });
-
-      // Preload critical fonts
-      const criticalFonts = [
-        'Inter',
-        'system-ui'
-      ];
-
-      criticalFonts.forEach(fontFamily => {
-        const link = document.createElement('link');
-        link.rel = 'preconnect';
-        link.href = 'https://fonts.googleapis.com';
-        document.head.appendChild(link);
-      });
-
-      // Preload critical images
-      const criticalImages = [
-        'https://via.placeholder.com/400x300', // placeholder base
-      ];
-
-      criticalImages.forEach(src => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = src;
-        document.head.appendChild(link);
-      });
-    };
-
-    // DNS prefetch for external domains
-    const prefetchDomains = () => {
-      const domains = [
-        'https://via.placeholder.com',
-        'https://fonts.googleapis.com',
-        'https://fonts.gstatic.com'
-      ];
-
-      domains.forEach(domain => {
-        const link = document.createElement('link');
-        link.rel = 'dns-prefetch';
-        link.href = domain;
-        document.head.appendChild(link);
-      });
-    };
-
-    // Optimize images
-    const optimizeImages = () => {
-      // Set loading="lazy" for all images not marked as priority
-      const images = document.querySelectorAll('img:not([loading])');
-      images.forEach((img, index) => {
-        if (index > 8) { // First 8 images load eagerly
-          img.setAttribute('loading', 'lazy');
-          img.setAttribute('decoding', 'async');
-        }
-      });
-    };
-
-    // Performance monitoring
-    const monitorPerformance = () => {
-      // Web Vitals monitoring
-      if ('performance' in window) {
-        // Monitor LCP (Largest Contentful Paint)
-        new PerformanceObserver((entryList) => {
-          const entries = entryList.getEntries();
-          const lastEntry = entries[entries.length - 1];
-          logger.performanceMetric('LCP', lastEntry.startTime);
-        }).observe({ entryTypes: ['largest-contentful-paint'] });
-
-        // Monitor FID (First Input Delay)
-        new PerformanceObserver((entryList) => {
-          const entries = entryList.getEntries();
-          entries.forEach((entry) => {
-            logger.performanceMetric('FID', entry.processingStart - entry.startTime);
+    const initializeOptimizations = async () => {
+      try {
+        // 1. Registrar Service Worker optimizado
+        if ('serviceWorker' in navigator) {
+          const registration = await navigator.serviceWorker.register('/sw.js', {
+            scope: '/',
+            updateViaCache: 'none'
           });
-        }).observe({ entryTypes: ['first-input'] });
 
-        // Monitor CLS (Cumulative Layout Shift)
-        new PerformanceObserver((entryList) => {
+          // Actualizar SW inmediatamente si hay uno nuevo
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+
+          // Escuchar actualizaciones del SW
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // Nuevo SW instalado, recargar para activar
+                  window.location.reload();
+                }
+              });
+            }
+          });
+
+          logger.info('Service Worker registered successfully');
+        }
+
+        // 2. Optimizaciones de CSS
+        optimizeCSS();
+
+        // 3. Configurar Web Vitals monitoring
+        setupWebVitalsMonitoring();
+
+        // 4. Optimizar carga de fuentes
+        optimizeFonts();
+
+        // 5. Configurar prefetch de DNS
+        setupDNSPrefetch();
+
+        setIsOptimized(true);
+        logger.info('Performance optimizations initialized');
+
+      } catch (error) {
+        logger.error('Failed to initialize performance optimizations:', error);
+      }
+    };
+
+    initializeOptimizations();
+  }, []);
+
+  // Optimizar CSS crítico
+  const optimizeCSS = () => {
+    // Precargar CSS crítico
+    const criticalCSS = document.querySelector('style[data-critical]');
+    if (!criticalCSS) {
+      const style = document.createElement('style');
+      style.setAttribute('data-critical', 'true');
+      style.textContent = `
+        /* CSS crítico para FCP mejorado */
+        .mobile-card { transform: translateZ(0); }
+        .btn-gradient { will-change: transform; }
+        .group:hover .group-hover\\:scale-105 { transform: scale(1.05); }
+        img[loading="lazy"] { content-visibility: auto; }
+      `;
+      document.head.appendChild(style);
+    }
+  };
+
+  // Configurar monitoreo de Web Vitals
+  const setupWebVitalsMonitoring = () => {
+    // Configurar PerformanceObserver para métricas
+    if ('PerformanceObserver' in window) {
+      try {
+        // Largest Contentful Paint
+        const lcpObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const lastEntry = entries[entries.length - 1];
+          logger.performance('LCP', lastEntry.startTime);
+        });
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+
+        // First Input Delay
+        const fidObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry) => {
+            logger.performance('FID', entry.processingStart - entry.startTime);
+          });
+        });
+        fidObserver.observe({ type: 'first-input', buffered: true });
+
+        // Cumulative Layout Shift
+        const clsObserver = new PerformanceObserver((list) => {
           let clsValue = 0;
-          const entries = entryList.getEntries();
+          const entries = list.getEntries();
           entries.forEach((entry) => {
             if (!entry.hadRecentInput) {
               clsValue += entry.value;
             }
           });
-          logger.performanceMetric('CLS', clsValue);
-        }).observe({ entryTypes: ['layout-shift'] });
-
-        // Monitor page load time
-        window.addEventListener('load', () => {
-          const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-          logger.performanceMetric('Page Load Time', loadTime);
-          
-          if (loadTime > 3000) {
-            logger.warn('Page load time exceeded 3 seconds', { loadTime });
-          }
+          logger.performance('CLS', clsValue);
         });
+        clsObserver.observe({ type: 'layout-shift', buffered: true });
+
+      } catch (error) {
+        logger.warn('Performance Observer setup failed:', error);
       }
-    };
-
-    // Critical Path Optimization
-    const optimizeCriticalPath = () => {
-      // Defer non-critical JavaScript
-      const scripts = document.querySelectorAll('script[src]:not([defer]):not([async])');
-      scripts.forEach(script => {
-        if (!script.src.includes('critical')) {
-          script.setAttribute('defer', 'true');
-        }
-      });
-
-      // Optimize CSS delivery
-      const stylesheets = document.querySelectorAll('link[rel="stylesheet"]:not([media])');
-      stylesheets.forEach((link, index) => {
-        if (index > 1) { // First 2 stylesheets are critical
-          link.setAttribute('media', 'print');
-          link.setAttribute('onload', "this.media='all'");
-        }
-      });
-    };
-
-    // Content visibility optimization
-    const optimizeContentVisibility = () => {
-      // Apply content-visibility to off-screen elements
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          const target = entry.target as HTMLElement;
-          if (entry.isIntersecting) {
-            target.style.contentVisibility = 'visible';
-          } else {
-            target.style.contentVisibility = 'auto';
-          }
-        });
-      }, {
-        rootMargin: '50px'
-      });
-
-      // Observe product cards
-      setTimeout(() => {
-        const productCards = document.querySelectorAll('[data-product-card]');
-        productCards.forEach(card => observer.observe(card));
-      }, 100);
-    };
-
-    // Execute optimizations
-    requestIdleCallback(() => {
-      preloadCriticalResources();
-      prefetchDomains();
-      optimizeImages();
-      monitorPerformance();
-      optimizeCriticalPath();
-      optimizeContentVisibility();
-    });
-
-    // Cleanup
-    return () => {
-      // Remove preloaded resources if needed
-    };
-  }, []);
-
-  // Service Worker optimization
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', {
-        scope: '/',
-        updateViaCache: 'imports'
-      }).then((registration) => {
-        logger.info('SW registered', { scope: registration.scope });
-        
-        // Check for updates every 5 minutes
-        setInterval(() => {
-          registration.update();
-        }, 5 * 60 * 1000);
-      }).catch((error) => {
-        logger.error('SW registration failed', error);
-      });
     }
-  }, []);
+  };
 
-  return <>{children}</>;
+  // Optimizar carga de fuentes
+  const optimizeFonts = () => {
+    // Precargar fuentes críticas
+    const fontPreloads = [
+      'Inter, system-ui, sans-serif'
+    ];
+
+    fontPreloads.forEach(font => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'font';
+      link.type = 'font/woff2';
+      link.crossOrigin = 'anonymous';
+      // En producción, esto sería el URL real de las fuentes
+      document.head.appendChild(link);
+    });
+  };
+
+  // Configurar DNS prefetch para recursos externos
+  const setupDNSPrefetch = () => {
+    const domains = [
+      'https://via.placeholder.com',
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com'
+    ];
+
+    domains.forEach(domain => {
+      const link = document.createElement('link');
+      link.rel = 'dns-prefetch';
+      link.href = domain;
+      document.head.appendChild(link);
+    });
+  };
+
+  // Monitorear rendimiento en tiempo real
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const cacheStats = performanceCache.getStats();
+      
+      // Log estadísticas de rendimiento cada 30 segundos
+      logger.performance('Cache Stats', {
+        entries: cacheStats.totalEntries,
+        utilization: `${cacheStats.utilizationPercent.toFixed(1)}%`,
+        prefetchActive: stats.activePrefetch,
+        queueSize: stats.queueSize
+      });
+
+      // Limpiar caché si está muy lleno
+      if (cacheStats.utilizationPercent > 90) {
+        logger.warn('Cache near full, triggering cleanup');
+        // El sistema de limpieza automática se encarga de esto
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [stats]);
+
+  return (
+    <>
+      {children}
+      {/* Indicador de optimización (solo en desarrollo) */}
+      {process.env.NODE_ENV === 'development' && isOptimized && (
+        <div className="fixed bottom-4 right-4 z-50 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium opacity-75">
+          ⚡ Optimizado
+        </div>
+      )}
+    </>
+  );
 };
 
 export default PerformanceOptimizer;
