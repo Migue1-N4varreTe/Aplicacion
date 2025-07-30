@@ -11,6 +11,7 @@ import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { SafeWebSocketProvider } from "@/contexts/SafeWebSocketContext";
 import { ShoppingListProvider } from "@/contexts/ShoppingListContext";
+import { AddressProvider } from "@/contexts/AddressContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
 
