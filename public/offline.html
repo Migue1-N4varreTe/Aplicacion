@@ -1,196 +1,174 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sin Conexión - La Económica</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .container {
-            text-align: center;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-        }
-        
-        h1 {
-            font-size: 24px;
-            margin-bottom: 16px;
-            font-weight: 600;
-        }
-        
-        p {
-            font-size: 16px;
-            opacity: 0.9;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-        
-        .features {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .features h3 {
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        
-        .features ul {
-            list-style: none;
-            text-align: left;
-        }
-        
-        .features li {
-            padding: 4px 0;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .features li:before {
-            content: "✓ ";
-            color: #4ade80;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .button {
-            background: white;
-            color: #f97316;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .status {
-            margin-top: 20px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .online {
-            background: rgba(34, 197, 94, 0.2);
-        }
-        
-        .offline {
-            background: rgba(239, 68, 68, 0.2);
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 20px;
-            }
-            
-            p {
-                font-size: 14px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sin conexión - La Económica</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 30px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .status {
+      margin-top: 20px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="icon">📱</div>
-        <h1>Sin Conexión</h1>
-        <p>No tienes conexión a internet, pero puedes seguir usando La Económica con las funciones disponibles offline.</p>
-        
-        <div class="features">
-            <h3>Disponible sin internet:</h3>
-            <ul>
-                <li>Ver tu carrito de compras</li>
-                <li>Consultar favoritos</li>
-                <li>Revisar listas de compras</li>
-                <li>Ver direcciones guardadas</li>
-                <li>Explorar productos en caché</li>
-            </ul>
-        </div>
-        
-        <a href="/" class="button" onclick="window.location.reload()">
-            Reintentar Conexión
-        </a>
-        
-        <div class="status" id="status">
-            <span id="status-text">Verificando conexión...</span>
-        </div>
+  <div class="container">
+    <div class="icon pulse">
+      📡
     </div>
+    <h1>Sin conexión a internet</h1>
+    <p>Parece que no tienes conexión a internet. Algunos productos y funciones pueden no estar disponibles.</p>
+    
+    <button class="button" onclick="tryReconnect()">
+      🔄 Intentar de nuevo
+    </button>
+    
+    <div class="status" id="status">
+      Verificando conexión...
+    </div>
+  </div>
 
-    <script>
-        // Check connection status
-        function updateConnectionStatus() {
-            const statusEl = document.getElementById('status');
-            const statusTextEl = document.getElementById('status-text');
-            
-            if (navigator.onLine) {
-                statusEl.className = 'status online';
-                statusTextEl.textContent = '✓ Conexión restaurada - Puedes recargar la página';
-            } else {
-                statusEl.className = 'status offline';
-                statusTextEl.textContent = '✗ Sin conexión a internet';
-            }
+  <script>
+    let reconnectAttempts = 0;
+    const maxAttempts = 5;
+    
+    function updateStatus(message) {
+      document.getElementById('status').textContent = message;
+    }
+    
+    function checkConnection() {
+      return fetch('/', { 
+        method: 'HEAD',
+        cache: 'no-cache'
+      }).then(() => {
+        return true;
+      }).catch(() => {
+        return false;
+      });
+    }
+    
+    async function tryReconnect() {
+      reconnectAttempts++;
+      updateStatus(`Intento ${reconnectAttempts}/${maxAttempts}...`);
+      
+      const isConnected = await checkConnection();
+      
+      if (isConnected) {
+        updateStatus('¡Conexión restaurada! Redirigiendo...');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+      } else {
+        if (reconnectAttempts >= maxAttempts) {
+          updateStatus('No se pudo restablecer la conexión. Inténtalo más tarde.');
+        } else {
+          updateStatus(`Sin conexión. Intento ${reconnectAttempts}/${maxAttempts} fallido.`);
+          setTimeout(tryReconnect, 3000);
         }
-        
-        // Update status on page load
-        updateConnectionStatus();
-        
-        // Listen for connection changes
-        window.addEventListener('online', updateConnectionStatus);
-        window.addEventListener('offline', updateConnectionStatus);
-        
-        // Auto-reload when connection is restored
-        window.addEventListener('online', () => {
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        });
-    </script>
+      }
+    }
+    
+    // Auto-check connection every 10 seconds
+    function autoCheck() {
+      checkConnection().then(isConnected => {
+        if (isConnected) {
+          updateStatus('Conexión detectada. Redirigiendo...');
+          window.location.href = '/';
+        } else {
+          updateStatus('Sin conexión - Verificando automáticamente...');
+        }
+      });
+    }
+    
+    // Start auto-checking after 5 seconds
+    setTimeout(() => {
+      setInterval(autoCheck, 10000);
+      autoCheck();
+    }, 5000);
+    
+    // Initial status
+    updateStatus('Página sin conexión cargada. Verificando cada 10 segundos...');
+  </script>
 </body>
 </html>
