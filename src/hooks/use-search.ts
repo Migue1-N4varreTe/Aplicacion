@@ -397,42 +397,7 @@ export function useProductFilters() {
     });
   }, []);
 
-  // Recent searches storage
-  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
-    try {
-      const stored = localStorage.getItem('la_economica_recent_searches');
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
 
-  const addToRecentSearches = useCallback((query: string) => {
-    if (!query.trim() || query.length < 2) return;
-
-    setRecentSearches(prev => {
-      const updated = [query, ...prev.filter(q => q !== query)].slice(0, 10);
-      localStorage.setItem('la_economica_recent_searches', JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
-  const clearRecentSearches = useCallback(() => {
-    setRecentSearches([]);
-    localStorage.removeItem('la_economica_recent_searches');
-    logger.userAction('recent_searches_cleared');
-  }, []);
-
-  // Add to recent searches when search is performed
-  useEffect(() => {
-    if (searchQuery.trim() && filteredProducts.length > 0) {
-      const timeoutId = setTimeout(() => {
-        addToRecentSearches(searchQuery);
-      }, 2000); // Add after 2 seconds to avoid spam
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [searchQuery, filteredProducts.length, addToRecentSearches]);
 
   // Active filters count
   const activeFiltersCount = [
@@ -449,15 +414,12 @@ export function useProductFilters() {
     priceFilter,
     filteredProducts,
     activeFiltersCount,
-    recentSearches,
-
     // Actions
     updateSearchQuery,
     updateCategory,
     setSortBy,
     setPriceFilter,
     clearFilters,
-    clearRecentSearches,
     performAdvancedSearch,
     smartSort,
 
