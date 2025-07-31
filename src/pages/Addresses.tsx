@@ -605,6 +605,7 @@ const AddressesPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+      <ConfirmDialog />
     </div>
   );
 };
