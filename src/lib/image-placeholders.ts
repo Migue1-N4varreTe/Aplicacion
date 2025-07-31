@@ -53,7 +53,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Panadería',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/f59e0b/ffffff?text=🍞+Pan'
+      'https://picsum.photos/400/400?random=4'
     ]
   },
   'bebidas': {
@@ -63,7 +63,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Bebidas',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/0ea5e9/ffffff?text=🥤+Bebidas'
+      'https://picsum.photos/400/400?random=5&blur=1'
     ]
   },
   'snacks': {
@@ -73,7 +73,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Snacks y Botanas',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1621447504864-d8686e12698c?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/f97316/ffffff?text=🍿+Snacks'
+      'https://picsum.photos/400/400?random=6'
     ]
   },
   'congelados': {
@@ -83,7 +83,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Productos Congelados',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/0284c7/ffffff?text=🧊+Congelados'
+      'https://picsum.photos/400/400?random=7&grayscale'
     ]
   },
   'limpieza': {
@@ -93,7 +93,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Limpieza del Hogar',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/7c3aed/ffffff?text=🧽+Limpieza'
+      'https://picsum.photos/400/400?random=8'
     ]
   },
   'hogar': {
@@ -103,7 +103,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Artículos del Hogar',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/059669/ffffff?text=🏠+Hogar'
+      'https://picsum.photos/400/400?random=9'
     ]
   },
   'farmacia': {
@@ -113,7 +113,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Farmacia y Salud',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/be123c/ffffff?text=💊+Farmacia'
+      'https://picsum.photos/400/400?random=10&blur=1'
     ]
   },
   'mascotas': {
@@ -123,7 +123,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Productos para Mascotas',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/7c2d12/ffffff?text=🐕+Mascotas'
+      'https://picsum.photos/400/400?random=11'
     ]
   },
   // Placeholder genérico
@@ -134,7 +134,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Producto',
     fallbackUrls: [
       'https://picsum.photos/400/400?grayscale&blur=1',
-      'https://via.placeholder.com/400x400/6b7280/ffffff?text=📦+Producto'
+      'https://picsum.photos/400/400?random=99&grayscale&blur=1'
     ]
   }
 };
