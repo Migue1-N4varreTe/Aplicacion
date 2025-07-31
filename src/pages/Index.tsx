@@ -235,7 +235,7 @@ const Index = () => {
                   className="bg-yellow-500 text-gray-900 hover:bg-yellow-400 shadow-lg font-semibold"
                   asChild
                 >
-                  <Link to="/shop" target="_blank">
+                  <Link to="/shop" target="_blank" rel="noopener noreferrer">
                     <span className="font-sans text-xl">Explorar tienda</span>
                     <ArrowRight className="ml-2 h-4 w-4 text-3xl" />
                   </Link>
