@@ -27,6 +27,7 @@ import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAuth } from "@/contexts/AuthContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import FontSizeController from "@/components/FontSizeController";
+import { logger } from "@/lib/logger";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
