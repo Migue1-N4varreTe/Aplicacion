@@ -202,9 +202,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         try {
           await refreshUser();
         } catch (error) {
-          console.error("Auth initialization failed:", error);
+          logger.error("Auth initialization failed", error);
           // Don't remove token on initialization failure - might be network issue
-          console.warn("Keeping auth token - will retry on next request");
+          logger.warn("Keeping auth token - will retry on next request");
         }
       }
       setLoading(false);
