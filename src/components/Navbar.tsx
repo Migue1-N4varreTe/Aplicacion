@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
       await logout();
       navigate("/");
     } catch (error) {
-      console.error("Logout failed:", error);
+      logger.error("Logout failed", error);
     }
   };
 
