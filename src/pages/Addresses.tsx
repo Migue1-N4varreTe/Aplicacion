@@ -54,6 +54,7 @@ const AddressesPage = () => {
   } = useAddresses();
 
   const { toast } = useToast();
+  const { showConfirm, ConfirmDialog } = useConfirmDialog();
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
