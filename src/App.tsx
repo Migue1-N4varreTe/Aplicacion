@@ -78,21 +78,21 @@ preloadCriticalResources();
 
 const App = () => (
   <ErrorBoundary>
-    <PerformanceOptimizer>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-        <AuthProvider>
-          <FavoritesProvider>
-            <CartProvider>
-              <ShoppingListProvider>
-                <AddressProvider>
-                  <ReviewsProvider>
-                    <PickupProvider>
-                      <FlashSalesProvider>
-                        <SafeWebSocketProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+      <AuthProvider>
+        <FavoritesProvider>
+          <CartProvider>
+            <ShoppingListProvider>
+              <AddressProvider>
+                <ReviewsProvider>
+                  <PickupProvider>
+                    <FlashSalesProvider>
+                      <SafeWebSocketProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <PerformanceOptimizer>
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
                       <Route path="/" element={<Index />} />
@@ -238,19 +238,19 @@ const App = () => (
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
-                </BrowserRouter>
-                        </SafeWebSocketProvider>
-                      </FlashSalesProvider>
-                    </PickupProvider>
-                  </ReviewsProvider>
-                </AddressProvider>
-              </ShoppingListProvider>
-            </CartProvider>
-          </FavoritesProvider>
-        </AuthProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </PerformanceOptimizer>
+                </PerformanceOptimizer>
+              </BrowserRouter>
+                      </SafeWebSocketProvider>
+                    </FlashSalesProvider>
+                  </PickupProvider>
+                </ReviewsProvider>
+              </AddressProvider>
+            </ShoppingListProvider>
+          </CartProvider>
+        </FavoritesProvider>
+      </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
   </ErrorBoundary>
 );
 
