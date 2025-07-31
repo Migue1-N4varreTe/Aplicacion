@@ -10,6 +10,7 @@ import { useCartActions } from "@/hooks/use-cart-actions";
 import { formatUnit } from "@/lib/product-audit";
 import { cn } from "@/lib/utils";
 import QuantitySelector from "@/components/QuantitySelector";
+import { ProductImage } from "@/components/ui/smart-image";
 
 interface ProductCardProps {
   product: Product;
