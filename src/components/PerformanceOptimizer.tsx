@@ -100,7 +100,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry) => {
-            logger.performance('FID', entry.processingStart - entry.startTime);
+            logger.performanceMetric('FID', entry.processingStart - entry.startTime);
           });
         });
         fidObserver.observe({ type: 'first-input', buffered: true });
