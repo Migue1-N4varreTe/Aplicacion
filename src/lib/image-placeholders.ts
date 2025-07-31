@@ -23,7 +23,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Lácteos y Huevos',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/3b82f6/ffffff?text=🥛+Lácteos'
+      'https://picsum.photos/400/400?random=1&blur=1'
     ]
   },
   'carniceria-cremeria': {
