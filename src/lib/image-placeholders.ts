@@ -33,7 +33,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Carnicería y Cremería',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/dc2626/ffffff?text=🥩+Carnes'
+      'https://picsum.photos/400/400?random=2&grayscale'
     ]
   },
   'frutas-verduras': {
@@ -43,7 +43,7 @@ export const CATEGORY_PLACEHOLDERS: Record<string, PlaceholderConfig> = {
     description: 'Frutas y Verduras',
     fallbackUrls: [
       'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=400&fit=crop',
-      'https://via.placeholder.com/400x400/16a34a/ffffff?text=🥬+Frutas'
+      'https://picsum.photos/400/400?random=3'
     ]
   },
   'panaderia': {
