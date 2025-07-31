@@ -367,6 +367,8 @@ const Navbar: React.FC = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={isMenuOpen}
               >
                 {isMenuOpen ? (
                   <X className="h-6 w-6" />
