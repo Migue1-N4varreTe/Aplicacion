@@ -157,13 +157,19 @@ const AddressesPage = () => {
   };
 
   const handleDelete = (address: Address) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta dirección?")) {
-      deleteAddress(address.id);
-      toast({
-        title: "Dirección eliminada",
-        description: "La dirección se eliminó correctamente",
-      });
-    }
+    showConfirm({
+      title: "Eliminar dirección",
+      description: "¿Estás seguro de que deseas eliminar esta dirección? Esta acción no se puede deshacer.",
+      confirmText: "Eliminar",
+      variant: "destructive",
+      onConfirm: () => {
+        deleteAddress(address.id);
+        toast({
+          title: "Dirección eliminada",
+          description: "La dirección se eliminó correctamente",
+        });
+      },
+    });
   };
 
   const handleSetDefault = (address: Address) => {
