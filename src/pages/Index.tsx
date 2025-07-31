@@ -47,6 +47,7 @@ const Index = () => {
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const suggestedLocations = useMemo(() => [
     "Centro, Ciudad de México",
@@ -302,7 +303,7 @@ const Index = () => {
               >
                 <span className="text-base sm:text-lg md:text-xl lg:text-2xl flex-shrink-0">{cat.icon}</span>
                 <span className="leading-tight text-center font-sans text-ellipsis-safe">
-                  {cat.name === "Delivery rápido" && window.innerWidth < 640 ? "Delivery" : cat.name}
+                  {cat.name === "Delivery rápido" && isMobile ? "Delivery" : cat.name}
                 </span>
               </Link>
             ))}
