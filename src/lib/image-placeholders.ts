@@ -215,20 +215,15 @@ export const generateFallbackUrls = (
   // 2. Imagen SVG generada
   fallbacks.push(generateSVGPlaceholder(category || 'default', size.width, size.height));
   
-  // 3. Placeholder.com con información del producto
+  // 3. Picsum con diferentes efectos
   if (productName) {
-    const encodedName = encodeURIComponent(productName.substring(0, 20));
-    fallbacks.push(
-      `https://via.placeholder.com/${size.width}x${size.height}/${config.bgColor.substring(1)}/ffffff?text=${encodedName}`
-    );
+    fallbacks.push(`https://picsum.photos/${size.width}/${size.height}?random=${productName.length}`);
   }
-  
-  // 4. Placeholder.com básico
-  fallbacks.push(
-    `https://via.placeholder.com/${size.width}x${size.height}/${config.bgColor.substring(1)}/ffffff?text=Sin+Imagen`
-  );
-  
-  // 5. Picsum (siempre funciona)
+
+  // 4. Picsum con blur para indicar que falta imagen
+  fallbacks.push(`https://picsum.photos/${size.width}/${size.height}?random=404&blur=2&grayscale`);
+
+  // 5. Picsum básico (siempre funciona)
   fallbacks.push(`https://picsum.photos/${size.width}/${size.height}?random=${Date.now()}`);
   
   return fallbacks;
