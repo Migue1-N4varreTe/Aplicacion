@@ -17,6 +17,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
 import { formatUnit } from "@/lib/product-audit";
 import { cn } from "@/lib/utils";
+import { ProductImage } from "@/components/ui/smart-image";
 
 interface QuantitySelectorProps {
   product: Product;
