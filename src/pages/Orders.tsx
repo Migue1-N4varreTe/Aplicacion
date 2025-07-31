@@ -413,10 +413,11 @@ const Orders = () => {
                         {/* Products Preview */}
                         <div className="flex items-center gap-2 mt-4">
                           {order.items.slice(0, 3).map((item) => (
-                            <img
+                            <ProductImage
                               key={item.id}
                               src={item.image}
-                              alt={item.name}
+                              productName={item.name}
+                              category={item.category}
                               className="w-10 h-10 rounded-lg object-cover bg-gray-100"
                             />
                           ))}
