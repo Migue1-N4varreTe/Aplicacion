@@ -200,9 +200,10 @@ const QuantitySelector = ({ product, onAddToCart, children }: QuantitySelectorPr
         <div className="space-y-6">
           {/* Product Info */}
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-            <img
+            <ProductImage
               src={product.image}
-              alt={product.name}
+              productName={product.name}
+              category={product.category}
               className="w-12 h-12 object-cover rounded"
             />
             <div className="flex-1">
