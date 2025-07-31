@@ -672,6 +672,7 @@ const Settings = () => {
           </CardContent>
         </Card>
       </div>
+      <ConfirmDialog />
     </div>
   );
 };
