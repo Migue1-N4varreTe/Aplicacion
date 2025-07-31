@@ -114,7 +114,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
               clsValue += entry.value;
             }
           });
-          logger.performance('CLS', clsValue);
+          logger.performanceMetric('CLS', clsValue);
         });
         clsObserver.observe({ type: 'layout-shift', buffered: true });
 
