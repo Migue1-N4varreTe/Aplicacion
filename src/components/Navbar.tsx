@@ -184,6 +184,7 @@ const Navbar: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-8 py-2 w-full ml-2.5"
+                  aria-label="Buscar productos"
                 />
               </div>
             </form>
