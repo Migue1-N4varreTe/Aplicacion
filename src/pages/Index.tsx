@@ -1,4 +1,5 @@
 import { useState, lazy, Suspense, useMemo } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,6 +47,7 @@ const Index = () => {
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const suggestedLocations = useMemo(() => [
     "Centro, Ciudad de México",
@@ -235,7 +237,7 @@ const Index = () => {
                   className="bg-yellow-500 text-gray-900 hover:bg-yellow-400 shadow-lg font-semibold"
                   asChild
                 >
-                  <Link to="/shop" target="_blank">
+                  <Link to="/shop" target="_blank" rel="noopener noreferrer">
                     <span className="font-sans text-xl">Explorar tienda</span>
                     <ArrowRight className="ml-2 h-4 w-4 text-3xl" />
                   </Link>
@@ -301,7 +303,7 @@ const Index = () => {
               >
                 <span className="text-base sm:text-lg md:text-xl lg:text-2xl flex-shrink-0">{cat.icon}</span>
                 <span className="leading-tight text-center font-sans text-ellipsis-safe">
-                  {cat.name === "Delivery rápido" && window.innerWidth < 640 ? "Delivery" : cat.name}
+                  {cat.name === "Delivery rápido" && isMobile ? "Delivery" : cat.name}
                 </span>
               </Link>
             ))}

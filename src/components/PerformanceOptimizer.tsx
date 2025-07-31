@@ -92,7 +92,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
         const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
-          logger.performance('LCP', lastEntry.startTime);
+          logger.performanceMetric('LCP', lastEntry.startTime);
         });
         lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
@@ -100,7 +100,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry) => {
-            logger.performance('FID', entry.processingStart - entry.startTime);
+            logger.performanceMetric('FID', entry.processingStart - entry.startTime);
           });
         });
         fidObserver.observe({ type: 'first-input', buffered: true });
@@ -114,7 +114,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
               clsValue += entry.value;
             }
           });
-          logger.performance('CLS', clsValue);
+          logger.performanceMetric('CLS', clsValue);
         });
         clsObserver.observe({ type: 'layout-shift', buffered: true });
 
@@ -164,7 +164,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
       const cacheStats = performanceCache.getStats();
       
       // Log estadísticas de rendimiento cada 30 segundos
-      logger.performance('Cache Stats', {
+      logger.info('Cache Stats', {
         entries: cacheStats.totalEntries,
         utilization: `${cacheStats.utilizationPercent.toFixed(1)}%`,
         prefetchActive: stats.activePrefetch,

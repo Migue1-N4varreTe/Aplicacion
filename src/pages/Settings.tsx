@@ -18,6 +18,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Settings as SettingsIcon,
   Bell,
@@ -39,6 +40,7 @@ const Settings = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { showConfirm, ConfirmDialog } = useConfirmDialog();
 
   const [isSaving, setIsSaving] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -138,27 +140,29 @@ const Settings = () => {
     }
   };
 
-  const handleDeleteAccount = async () => {
-    if (
-      window.confirm(
-        "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
-      )
-    ) {
-      try {
-        await logout();
-        navigate("/");
-        toast({
-          title: "Cuenta eliminada",
-          description: "Tu cuenta ha sido eliminada exitosamente",
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "No se pudo eliminar la cuenta",
-          variant: "destructive",
-        });
-      }
-    }
+  const handleDeleteAccount = () => {
+    showConfirm({
+      title: "Eliminar cuenta",
+      description: "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y perderás todos tus datos.",
+      confirmText: "Eliminar cuenta",
+      variant: "destructive",
+      onConfirm: async () => {
+        try {
+          await logout();
+          navigate("/");
+          toast({
+            title: "Cuenta eliminada",
+            description: "Tu cuenta ha sido eliminada exitosamente",
+          });
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "No se pudo eliminar la cuenta",
+            variant: "destructive",
+          });
+        }
+      },
+    });
   };
 
   // Handle navigation when user is not authenticated
@@ -668,6 +672,7 @@ const Settings = () => {
           </CardContent>
         </Card>
       </div>
+      <ConfirmDialog />
     </div>
   );
 };

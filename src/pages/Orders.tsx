@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { ProductImage } from "@/components/ui/smart-image";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -412,10 +413,11 @@ const Orders = () => {
                         {/* Products Preview */}
                         <div className="flex items-center gap-2 mt-4">
                           {order.items.slice(0, 3).map((item) => (
-                            <img
+                            <ProductImage
                               key={item.id}
                               src={item.image}
-                              alt={item.name}
+                              productName={item.name}
+                              category={item.category}
                               className="w-10 h-10 rounded-lg object-cover bg-gray-100"
                             />
                           ))}
@@ -512,9 +514,10 @@ const Orders = () => {
                                         key={item.id}
                                         className="flex items-center gap-3 p-3 border rounded-lg"
                                       >
-                                        <img
+                                        <ProductImage
                                           src={item.image}
-                                          alt={item.name}
+                                          productName={item.name}
+                                          category={item.category}
                                           className="w-12 h-12 rounded-lg object-cover"
                                         />
                                         <div className="flex-1">

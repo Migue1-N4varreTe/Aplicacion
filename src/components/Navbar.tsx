@@ -27,6 +27,7 @@ import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAuth } from "@/contexts/AuthContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import FontSizeController from "@/components/FontSizeController";
+import { logger } from "@/lib/logger";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,7 +51,7 @@ const Navbar: React.FC = () => {
       await logout();
       navigate("/");
     } catch (error) {
-      console.error("Logout failed:", error);
+      logger.error("Logout failed", error);
     }
   };
 
@@ -184,6 +185,7 @@ const Navbar: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-8 py-2 w-full ml-2.5"
+                  aria-label="Buscar productos"
                 />
               </div>
             </form>
@@ -367,6 +369,8 @@ const Navbar: React.FC = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={isMenuOpen}
               >
                 {isMenuOpen ? (
                   <X className="h-6 w-6" />
@@ -395,6 +399,7 @@ const Navbar: React.FC = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10 pr-4 py-2 w-full"
+                      aria-label="Buscar productos"
                     />
                   </div>
                 </form>

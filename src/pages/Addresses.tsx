@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Plus,
   MapPin,
@@ -53,6 +54,7 @@ const AddressesPage = () => {
   } = useAddresses();
 
   const { toast } = useToast();
+  const { showConfirm, ConfirmDialog } = useConfirmDialog();
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
@@ -155,13 +157,19 @@ const AddressesPage = () => {
   };
 
   const handleDelete = (address: Address) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta dirección?")) {
-      deleteAddress(address.id);
-      toast({
-        title: "Dirección eliminada",
-        description: "La dirección se eliminó correctamente",
-      });
-    }
+    showConfirm({
+      title: "Eliminar dirección",
+      description: "¿Estás seguro de que deseas eliminar esta dirección? Esta acción no se puede deshacer.",
+      confirmText: "Eliminar",
+      variant: "destructive",
+      onConfirm: () => {
+        deleteAddress(address.id);
+        toast({
+          title: "Dirección eliminada",
+          description: "La dirección se eliminó correctamente",
+        });
+      },
+    });
   };
 
   const handleSetDefault = (address: Address) => {
@@ -597,6 +605,7 @@ const AddressesPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+      <ConfirmDialog />
     </div>
   );
 };

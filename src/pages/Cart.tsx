@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
 import { useState } from "react";
+import { ProductImage } from "@/components/ui/smart-image";
 
 const Cart = () => {
   const { cartItems, cartProducts, cartCount, cartSubtotal } = useCart();
@@ -143,9 +144,10 @@ const Cart = () => {
                     <div className="flex gap-4">
                       {/* Product Image */}
                       <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                        <img
+                        <ProductImage
                           src={item.image}
-                          alt={item.name}
+                          productName={item.name}
+                          category={item.category}
                           className="w-full h-full object-cover"
                         />
                       </div>

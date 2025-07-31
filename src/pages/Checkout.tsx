@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ProductImage } from "@/components/ui/smart-image";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -822,9 +823,10 @@ const Checkout = () => {
                     if (!item) return null;
                     return (
                       <div key={item.id} className="flex gap-3">
-                        <img
+                        <ProductImage
                           src={item.image}
-                          alt={item.name}
+                          productName={item.name}
+                          category={item.category}
                           className="w-12 h-12 object-cover rounded-lg bg-gray-100"
                         />
                         <div className="flex-1 min-w-0">
