@@ -514,9 +514,10 @@ const Orders = () => {
                                         key={item.id}
                                         className="flex items-center gap-3 p-3 border rounded-lg"
                                       >
-                                        <img
+                                        <ProductImage
                                           src={item.image}
-                                          alt={item.name}
+                                          productName={item.name}
+                                          category={item.category}
                                           className="w-12 h-12 rounded-lg object-cover"
                                         />
                                         <div className="flex-1">
