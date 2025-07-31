@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
 import { useState } from "react";
+import { ProductImage } from "@/components/ui/smart-image";
 
 const Cart = () => {
   const { cartItems, cartProducts, cartCount, cartSubtotal } = useCart();
