@@ -164,7 +164,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
       const cacheStats = performanceCache.getStats();
       
       // Log estadísticas de rendimiento cada 30 segundos
-      logger.performance('Cache Stats', {
+      logger.info('Cache Stats', {
         entries: cacheStats.totalEntries,
         utilization: `${cacheStats.utilizationPercent.toFixed(1)}%`,
         prefetchActive: stats.activePrefetch,
