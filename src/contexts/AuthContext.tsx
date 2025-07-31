@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { apiService } from "../services/api";
+import { logger } from "@/lib/logger";
 
 export interface User {
   id: string;
