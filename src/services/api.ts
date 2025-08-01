@@ -7,6 +7,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 let supabase = null;
 
 if (!supabaseUrl || !supabaseAnonKey) {
+  // Note: We use console here as logger may not be available during module initialization
   console.error(
     "❌ Missing Supabase configuration. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY",
   );
