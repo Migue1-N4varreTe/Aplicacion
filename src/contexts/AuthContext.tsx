@@ -165,7 +165,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const userData = await apiService.getMe();
       setUser(userData);
     } catch (error) {
-      console.error("Failed to refresh user:", error);
+      logger.error("Failed to refresh user", error as Error);
       setUser(null);
     }
   };
