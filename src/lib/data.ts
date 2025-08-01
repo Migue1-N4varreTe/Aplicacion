@@ -1903,7 +1903,7 @@ export const products: Product[] = [
     aisle: "Pasillo 1",
     image:
       "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
-    description: "Br��coli orgánico rico en antioxidantes",
+    description: "Brócoli orgánico rico en antioxidantes",
     inStock: true,
     stock: 10,
     brand: "Orgánicos Natural",
