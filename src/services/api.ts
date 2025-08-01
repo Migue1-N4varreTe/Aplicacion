@@ -94,7 +94,7 @@ class ApiService {
 
       return await response.json();
     } catch (error: any) {
-      console.error("API request failed:", error);
+      logger.error("API request failed", error);
 
       // Provide user-friendly error messages
       if (error.name === "TypeError" && error.message.includes("fetch")) {
