@@ -2094,7 +2094,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Jugo de naranja 100% natural recién exprimido",
     inStock: true,
     stock: 24,
@@ -2112,7 +2112,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Jugo verde con espinaca, apio, pepino y manzana",
     inStock: true,
     stock: 18,
@@ -2130,7 +2130,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Jugo de zanahoria natural rico en vitamina A",
     inStock: true,
     stock: 20,
@@ -2148,7 +2148,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Jugo de betabel natural energizante",
     inStock: true,
     stock: 15,
@@ -2166,7 +2166,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Jugo de apio puro depurativo",
     inStock: true,
     stock: 12,
@@ -2184,7 +2184,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Mezcla de jugo de naranja, toronja y limón",
     inStock: true,
     stock: 16,
@@ -2202,7 +2202,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Jugo de manzana 100% natural sin azúcar añadida",
     inStock: true,
     stock: 22,
@@ -2220,7 +2220,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Agua fresca de jamaica natural sin azúcar",
     inStock: true,
     stock: 18,
@@ -2241,7 +2241,7 @@ export const products: Product[] = [
     subcategory: "pan-de-caja",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Pan dulce tradicional mexicano",
     inStock: true,
     stock: 12,
@@ -2259,7 +2259,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Pan dulce sabor elote muy mexicano",
     inStock: true,
     stock: 10,
@@ -2277,7 +2277,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Concha mexicana con cobertura de chocolate",
     inStock: true,
     stock: 24,
@@ -2295,7 +2295,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Concha mexicana tradicional de vainilla",
     inStock: true,
     stock: 24,
@@ -2313,7 +2313,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Cuerno dulce esponjoso con mantequilla",
     inStock: true,
     stock: 18,
@@ -2331,7 +2331,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Dona esponjosa cubierta de azúcar",
     inStock: true,
     stock: 20,
@@ -2362,7 +2362,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Dona con glaseado de chocolate",
     inStock: true,
     stock: 16,
@@ -2380,7 +2380,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Pan dulce tradicional mexicano",
     inStock: true,
     stock: 12,
@@ -2398,7 +2398,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Pan dulce sabor elote muy mexicano",
     inStock: true,
     stock: 10,
@@ -2416,7 +2416,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Polvorón tradicional que se deshace en la boca",
     inStock: true,
     stock: 14,
@@ -2434,7 +2434,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Empanada rellena de dulce de leche",
     inStock: true,
     stock: 12,
@@ -2452,7 +2452,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     description: "Pan dulce en forma de gusano con azúcar",
     inStock: true,
     stock: 8,
@@ -2470,7 +2470,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
     inStock: true,
     stock: 8,
     brand: "Panadería Local",
