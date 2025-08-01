@@ -154,7 +154,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       await apiService.logout();
     } catch (error) {
-      console.error("Logout error:", error);
+      logger.error("Logout error", error as Error);
     } finally {
       setUser(null);
     }
