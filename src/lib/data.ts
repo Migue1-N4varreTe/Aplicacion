@@ -782,7 +782,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=400&q=80",
     description:
       "Manzanas rojas frescas y crujientes, ideales para snacks saludables",
     inStock: true,
@@ -804,7 +804,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
     description: "Plátanos frescos y dulces, ricos en potasio",
     inStock: true,
     stock: 30,
@@ -822,7 +822,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=400&q=80",
     description: "Naranjas jugosas valencia, perfectas para jugo",
     inStock: true,
     stock: 40,
@@ -840,7 +840,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=400&q=80",
     description: "Fresas dulces y frescas de temporada",
     inStock: true,
     stock: 15,
@@ -858,7 +858,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=400&q=80",
     description: "Uvas verdes sin semilla, dulces y refrescantes",
     inStock: true,
     stock: 25,
