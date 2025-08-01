@@ -184,7 +184,7 @@ export const categories: Category[] = [
     name: "Lácteos y Huevos",
     image:
       "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80",
-    icon: "🥛",
+    icon: "���",
     color: "bg-orange-400",
     productCount: 42,
     aisle: 4,
@@ -1056,7 +1056,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=400&q=80",
     description: "Mandarinas dulces fáciles de pelar",
     inStock: true,
     stock: 30,
@@ -1074,7 +1074,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1459181215473-0a9dd180d6d5?auto=format&fit=crop&w=400&q=80",
     description: "Coco fresco para agua y pulpa",
     inStock: true,
     stock: 12,
@@ -1094,7 +1094,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1580905367936-e6ea9afdd1b4?auto=format&fit=crop&w=400&q=80",
     description: "Granada roja rica en antioxidantes",
     inStock: true,
     stock: 8,
@@ -1112,7 +1112,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=400&q=80",
     description: "Ciruelas rojas dulces y jugosas",
     inStock: true,
     stock: 14,
@@ -1903,7 +1903,7 @@ export const products: Product[] = [
     aisle: "Pasillo 1",
     image:
       "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
-    description: "Br��coli orgánico rico en antioxidantes",
+    description: "Brócoli orgánico rico en antioxidantes",
     inStock: true,
     stock: 10,
     brand: "Orgánicos Natural",
