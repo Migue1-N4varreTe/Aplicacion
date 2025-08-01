@@ -26,8 +26,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
         },
       },
     });
+    // Note: We use console here as logger may not be available during module initialization
     console.log("✅ Supabase client initialized successfully");
   } catch (error) {
+    // Note: We use console here as logger may not be available during module initialization
     console.error("❌ Supabase initialization failed:", error);
     throw error;
   }
