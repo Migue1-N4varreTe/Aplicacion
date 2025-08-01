@@ -876,7 +876,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1490885578174-acda8905c2c6?auto=format&fit=crop&w=400&q=80",
     description: "Piña madura y dulce, perfecta para postres",
     inStock: true,
     stock: 20,
@@ -894,7 +894,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1605664515962-8f671a34e051?auto=format&fit=crop&w=400&q=80",
     description: "Mango ataulfo maduro, cremoso y dulce",
     inStock: true,
     stock: 18,
@@ -912,7 +912,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1617112848923-cc2234396a7d?auto=format&fit=crop&w=400&q=80",
     description: "Papaya madura, ideal para digestión",
     inStock: true,
     stock: 12,
@@ -930,7 +930,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1587049633312-d628ae50a8ae?auto=format&fit=crop&w=400&q=80",
     description: "Sandía dulce y refrescante para el calor",
     inStock: true,
     stock: 8,
@@ -1020,7 +1020,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1590502593747-42a4e6dc7bb2?auto=format&fit=crop&w=400&q=80",
     description: "Limones verdes mexicanos, muy jugosos",
     inStock: true,
     stock: 35,
@@ -2511,7 +2511,7 @@ export const products: Product[] = [
     description: "Delicioso pastel tres leches individual",
     inStock: true,
     stock: 12,
-    brand: "Repostería Dulce",
+    brand: "Reposter��a Dulce",
     tags: ["tres leches", "individual", "cremoso", "tradicional"],
     rating: 4.9,
     reviewCount: 145,
