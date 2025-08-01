@@ -948,7 +948,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=400&q=80",
     description: "Melón cantaloupe maduro y aromático",
     inStock: true,
     stock: 15,
@@ -966,7 +966,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=400&q=80",
     description: "Peras anjou maduras y jugosas",
     inStock: true,
     stock: 22,
@@ -984,7 +984,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1629828874514-d59ee3580d3f?auto=format&fit=crop&w=400&q=80",
     description: "Duraznos maduros de temporada",
     inStock: true,
     stock: 16,
@@ -1002,7 +1002,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1585059895524-72359e06133a?auto=format&fit=crop&w=400&q=80",
     description: "Kiwi verde rico en vitamina C",
     inStock: true,
     stock: 24,
@@ -1038,7 +1038,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80",
     description: "Toronja roja jugosa y refrescante",
     inStock: true,
     stock: 28,
@@ -1903,7 +1903,7 @@ export const products: Product[] = [
     aisle: "Pasillo 1",
     image:
       "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
-    description: "Brócoli orgánico rico en antioxidantes",
+    description: "Br��coli orgánico rico en antioxidantes",
     inStock: true,
     stock: 10,
     brand: "Orgánicos Natural",
