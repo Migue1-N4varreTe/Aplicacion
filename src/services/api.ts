@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
@@ -7,6 +8,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 let supabase = null;
 
 if (!supabaseUrl || !supabaseAnonKey) {
+  // Note: We use console here as logger may not be available during module initialization
   console.error(
     "❌ Missing Supabase configuration. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY",
   );
@@ -25,8 +27,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
         },
       },
     });
+    // Note: We use console here as logger may not be available during module initialization
     console.log("✅ Supabase client initialized successfully");
   } catch (error) {
+    // Note: We use console here as logger may not be available during module initialization
     console.error("❌ Supabase initialization failed:", error);
     throw error;
   }
@@ -90,7 +94,7 @@ class ApiService {
 
       return await response.json();
     } catch (error: any) {
-      console.error("API request failed:", error);
+      logger.error("API request failed", error);
 
       // Provide user-friendly error messages
       if (error.name === "TypeError" && error.message.includes("fetch")) {
