@@ -1,7 +1,45 @@
-// Import as ES module since the project uses type: "module"
-import { products, categories } from "../../src/lib/data.js";
+// Import data directly as JSON for Netlify Functions
+const { products, categories } = {
+  categories: [
+    {
+      id: "abarrotes",
+      name: "Abarrotes",
+      icon: "🥫",
+      description: "Productos básicos y de despensa",
+      color: "bg-orange-500",
+      products: 150
+    },
+    {
+      id: "frutas-verduras",
+      name: "Frutas y Verduras",
+      icon: "🥬",
+      description: "Productos frescos y naturales",
+      color: "bg-green-500",
+      products: 80
+    }
+  ],
+  products: [
+    {
+      id: "coca-cola-600ml",
+      name: "Coca-Cola 600ml",
+      category: "bebidas",
+      price: 25.00,
+      originalPrice: 28.00,
+      stock: 45,
+      description: "Refresco de cola sabor original en botella de 600ml",
+      image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=400&fit=crop&crop=center",
+      tags: ["bebida", "refresco", "cola", "600ml"],
+      brand: "Coca-Cola",
+      isOffer: true,
+      isFeatured: true,
+      rating: 4.8,
+      reviews: 125,
+      barcode: "7501055363057"
+    }
+  ]
+};
 
-export const handler = async (event, context) => {
+exports.handler = async (event, context) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",

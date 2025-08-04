@@ -2,18 +2,7 @@ import express from "express";
 import { body, validationResult } from "express-validator";
 import { authenticateToken, requirePermission } from "../auth/middleware.js";
 import { PERMISSIONS } from "../users/roles.js";
-import {
-  registerClient,
-  getClientById,
-  getAllClients,
-  updateClient,
-  getClientHistory,
-  addLoyaltyPoints,
-  redeemLoyaltyPoints,
-  generateCoupon,
-  getClientCoupons,
-  applyCoupon,
-} from "./clientService.js";
+import { ClientService } from "./clientService.js";
 
 const router = express.Router();
 
