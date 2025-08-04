@@ -1,416 +1,341 @@
-import { supabase } from "../config/supabase.js";
-import {
-  canManageUser,
-  validateRoleTransition,
-  hasPermission,
-} from "./permissions.js";
-import { ROLE_HIERARCHY } from "./roles.js";
+import { supabase, supabaseAdmin } from "../config/supabase.js";
+import bcrypt from "bcryptjs";
 
-const getAllUsers = async (currentUser) => {
-  try {
-    // Users can only see users of their level or lower
-    const { data: users, error } = await supabase
-      .from("users")
-      .select(
-        `
-        id,
+export class UserService {
+  // Create new user using auth.users and user_profiles
+  static async createUser(userData) {
+    try {
+      const {
         email,
-        first_name,
-        last_name,
-        role,
-        level,
-        store_id,
-        is_active,
-        created_at,
-        last_login_at,
-        stores (
-          id,
-          name
-        )
-      `,
-      )
-      .lte("level", currentUser.level)
-      .order("level", { ascending: false })
-      .order("created_at", { ascending: false });
+        password,
+        firstName,
+        lastName,
+        role = "ventas",
+        phone,
+        employeeId,
+        storeLocation,
+        salary,
+      } = userData;
 
-    if (error) {
-      throw new Error("Error al obtener usuarios: " + error.message);
-    }
-
-    return users;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getUserById = async (userId, currentUser) => {
-  try {
-    const { data: user, error } = await supabase
-      .from("users")
-      .select(
-        `
-        id,
+      // Create user in Supabase Auth
+      const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
         email,
-        first_name,
-        last_name,
-        role,
-        level,
-        store_id,
-        is_active,
-        created_at,
-        last_login_at,
-        stores (
-          id,
-          name,
-          address
-        )
-      `,
-      )
-      .eq("id", userId)
-      .single();
+        password,
+        email_confirm: true,
+      });
 
-    if (error || !user) {
-      throw new Error("Usuario no encontrado");
-    }
+      if (authError) throw authError;
 
-    // Check if current user can view this user
-    if (
-      !canManageUser(currentUser.role, user.role) &&
-      currentUser.id !== userId
-    ) {
-      throw new Error("No tienes permiso para ver este usuario");
-    }
+      // Get or create role
+      let { data: roleData, error: roleError } = await supabase
+        .from("roles")
+        .select("*")
+        .eq("name", role)
+        .single();
 
-    return user;
-  } catch (error) {
-    throw error;
-  }
-};
+      if (roleError && roleError.code === 'PGRST116') {
+        // Role doesn't exist, create it
+        const { data: newRole, error: createRoleError } = await supabaseAdmin
+          .from("roles")
+          .insert([{
+            name: role,
+            description: `Role for ${role}`,
+            permissions: {}
+          }])
+          .select()
+          .single();
 
-const updateUser = async (userId, updateData, currentUser) => {
-  try {
-    // Get target user first
-    const { data: targetUser, error: fetchError } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", userId)
-      .single();
-
-    if (fetchError || !targetUser) {
-      throw new Error("Usuario no encontrado");
-    }
-
-    // Check permissions
-    if (
-      !canManageUser(currentUser.role, targetUser.role) &&
-      currentUser.id !== userId
-    ) {
-      throw new Error("No tienes permiso para modificar este usuario");
-    }
-
-    // Prepare update data (exclude sensitive fields)
-    const allowedFields = [
-      "first_name",
-      "last_name",
-      "email",
-      "store_id",
-      "is_active",
-    ];
-    const filteredData = {};
-
-    for (const field of allowedFields) {
-      if (updateData[field] !== undefined) {
-        filteredData[field] = updateData[field];
+        if (createRoleError) throw createRoleError;
+        roleData = newRole;
+      } else if (roleError) {
+        throw roleError;
       }
+
+      // Create user profile
+      const { data: profile, error: profileError } = await supabaseAdmin
+        .from("user_profiles")
+        .insert([{
+          id: authUser.user.id,
+          role_id: roleData.id,
+          first_name: firstName,
+          last_name: lastName,
+          phone,
+          employee_id: employeeId,
+          store_location: storeLocation,
+          salary,
+          is_active: true,
+        }])
+        .select()
+        .single();
+
+      if (profileError) throw profileError;
+
+      // Also create user_auth_profiles for additional data
+      await supabaseAdmin
+        .from("user_auth_profiles")
+        .insert([{
+          user_id: authUser.user.id,
+          full_name: `${firstName} ${lastName}`,
+        }]);
+
+      return { 
+        ...authUser.user, 
+        profile,
+        role: roleData 
+      };
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw new Error("Failed to create user");
     }
-
-    // Only allow certain users to modify is_active
-    if (filteredData.is_active !== undefined && currentUser.level < 3) {
-      delete filteredData.is_active;
-    }
-
-    filteredData.updated_at = new Date().toISOString();
-
-    const { data: updatedUser, error } = await supabase
-      .from("users")
-      .update(filteredData)
-      .eq("id", userId)
-      .select(
-        `
-        id,
-        email,
-        first_name,
-        last_name,
-        role,
-        level,
-        store_id,
-        is_active,
-        updated_at
-      `,
-      )
-      .single();
-
-    if (error) {
-      throw new Error("Error al actualizar usuario: " + error.message);
-    }
-
-    return updatedUser;
-  } catch (error) {
-    throw error;
   }
-};
 
-const updateUserRole = async (userId, newRole, currentUser) => {
-  try {
-    // Get target user
-    const { data: targetUser, error: fetchError } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", userId)
-      .single();
+  // Get user by ID with profile and role
+  static async getUserById(userId) {
+    try {
+      const { data: profile, error } = await supabase
+        .from("user_profiles")
+        .select(`
+          *,
+          role:roles(*)
+        `)
+        .eq("id", userId)
+        .eq("is_active", true)
+        .single();
 
-    if (fetchError || !targetUser) {
-      throw new Error("Usuario no encontrado");
+      if (error) throw error;
+      return profile;
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      throw new Error("User not found");
     }
+  }
 
-    // Validate role transition
-    validateRoleTransition(targetUser.role, newRole, currentUser.role);
+  // Get all users with pagination
+  static async getAllUsers(page = 1, limit = 10, storeLocation = null) {
+    try {
+      const offset = (page - 1) * limit;
+      
+      let query = supabase
+        .from("user_profiles")
+        .select(`
+          *,
+          role:roles(*)
+        `, { count: "exact" })
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .range(offset, offset + limit - 1);
 
-    // Update role and level
-    const newLevel = ROLE_HIERARCHY[newRole];
+      if (storeLocation) {
+        query = query.eq("store_location", storeLocation);
+      }
 
-    const { data: updatedUser, error } = await supabase
-      .from("users")
-      .update({
-        role: newRole,
-        level: newLevel,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", userId)
-      .select(
-        `
-        id,
-        email,
-        first_name,
-        last_name,
-        role,
-        level,
-        store_id,
-        is_active,
-        updated_at
-      `,
-      )
-      .single();
+      const { data: users, error, count } = await query;
 
-    if (error) {
-      throw new Error("Error al actualizar rol: " + error.message);
-    }
+      if (error) throw error;
 
-    // Log role change
-    await supabase.from("audit_logs").insert([
-      {
-        user_id: currentUser.id,
-        target_user_id: userId,
-        action: "role_change",
-        details: {
-          old_role: targetUser.role,
-          new_role: newRole,
-          old_level: targetUser.level,
-          new_level: newLevel,
+      return {
+        users,
+        pagination: {
+          page,
+          limit,
+          total: count,
+          totalPages: Math.ceil(count / limit),
         },
-        created_at: new Date().toISOString(),
-      },
-    ]);
-
-    return updatedUser;
-  } catch (error) {
-    throw error;
+      };
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      throw new Error("Failed to fetch users");
+    }
   }
-};
 
-const deleteUser = async (userId, currentUser) => {
-  try {
-    // Get target user
-    const { data: targetUser, error: fetchError } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", userId)
-      .single();
+  // Update user profile
+  static async updateUser(userId, updateData) {
+    try {
+      const {
+        firstName,
+        lastName,
+        phone,
+        employeeId,
+        storeLocation,
+        salary,
+        isActive,
+      } = updateData;
 
-    if (fetchError || !targetUser) {
-      throw new Error("Usuario no encontrado");
-    }
-
-    // Check permissions
-    if (!canManageUser(currentUser.role, targetUser.role)) {
-      throw new Error("No tienes permiso para eliminar este usuario");
-    }
-
-    // Can't delete yourself
-    if (currentUser.id === userId) {
-      throw new Error("No puedes eliminar tu propia cuenta");
-    }
-
-    // Soft delete by deactivating
-    const { error } = await supabase
-      .from("users")
-      .update({
-        is_active: false,
+      const updateFields = {
         updated_at: new Date().toISOString(),
-      })
-      .eq("id", userId);
+      };
 
-    if (error) {
-      throw new Error("Error al eliminar usuario: " + error.message);
+      if (firstName !== undefined) updateFields.first_name = firstName;
+      if (lastName !== undefined) updateFields.last_name = lastName;
+      if (phone !== undefined) updateFields.phone = phone;
+      if (employeeId !== undefined) updateFields.employee_id = employeeId;
+      if (storeLocation !== undefined) updateFields.store_location = storeLocation;
+      if (salary !== undefined) updateFields.salary = salary;
+      if (isActive !== undefined) updateFields.is_active = isActive;
+
+      const { data: profile, error } = await supabaseAdmin
+        .from("user_profiles")
+        .update(updateFields)
+        .eq("id", userId)
+        .select(`
+          *,
+          role:roles(*)
+        `)
+        .single();
+
+      if (error) throw error;
+      return profile;
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw new Error("Failed to update user");
     }
-
-    // Log deletion
-    await supabase.from("audit_logs").insert([
-      {
-        user_id: currentUser.id,
-        target_user_id: userId,
-        action: "user_deactivated",
-        details: {
-          target_user_email: targetUser.email,
-          target_user_role: targetUser.role,
-        },
-        created_at: new Date().toISOString(),
-      },
-    ]);
-
-    return true;
-  } catch (error) {
-    throw error;
   }
-};
 
-const getTemporaryPermissions = async (userId) => {
-  try {
-    const { data: permissions, error } = await supabase
-      .from("temporary_permissions")
-      .select("*")
-      .eq("user_id", userId)
-      .gte("expires_at", new Date().toISOString())
-      .order("created_at", { ascending: false });
+  // Update user role
+  static async updateUserRole(userId, roleId) {
+    try {
+      const { data: profile, error } = await supabaseAdmin
+        .from("user_profiles")
+        .update({
+          role_id: roleId,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", userId)
+        .select(`
+          *,
+          role:roles(*)
+        `)
+        .single();
 
-    if (error) {
-      throw new Error("Error al obtener permisos temporales: " + error.message);
+      if (error) throw error;
+      return profile;
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      throw new Error("Failed to update user role");
     }
-
-    return permissions || [];
-  } catch (error) {
-    throw error;
   }
-};
 
-const grantTemporaryPermission = async (
-  userId,
-  permission,
-  durationMinutes,
-  granter,
-) => {
-  try {
-    // Check if granter has the permission they're trying to grant
-    if (!hasPermission(granter.role, permission)) {
-      throw new Error("No puedes otorgar un permiso que no tienes");
+  // Soft delete user
+  static async deleteUser(userId) {
+    try {
+      const { error } = await supabaseAdmin
+        .from("user_profiles")
+        .update({
+          is_active: false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", userId);
+
+      if (error) throw error;
+      return { message: "User deleted successfully" };
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      throw new Error("Failed to delete user");
     }
+  }
 
-    // Get target user
-    const { data: targetUser, error: fetchError } = await supabase
-      .from("users")
-      .select("role, level")
-      .eq("id", userId)
-      .single();
+  // Get users by role
+  static async getUsersByRole(roleName, storeLocation = null) {
+    try {
+      let query = supabase
+        .from("user_profiles")
+        .select(`
+          *,
+          role:roles!inner(*)
+        `)
+        .eq("role.name", roleName)
+        .eq("is_active", true)
+        .order("first_name", { ascending: true });
 
-    if (fetchError || !targetUser) {
-      throw new Error("Usuario no encontrado");
+      if (storeLocation) {
+        query = query.eq("store_location", storeLocation);
+      }
+
+      const { data: users, error } = await query;
+
+      if (error) throw error;
+      return users;
+    } catch (error) {
+      console.error("Error fetching users by role:", error);
+      throw new Error("Failed to fetch users by role");
     }
+  }
 
-    // Check if granter can manage target user
-    if (!canManageUser(granter.role, targetUser.role)) {
-      throw new Error("No tienes permiso para otorgar permisos a este usuario");
-    }
-
-    const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + durationMinutes);
-
-    const { data: tempPermission, error } = await supabase
-      .from("temporary_permissions")
-      .insert([
-        {
+  // Grant temporary permission
+  static async grantTemporaryPermission(userId, permissionType, resourceId, expiresAt, grantedBy) {
+    try {
+      const { data: permission, error } = await supabaseAdmin
+        .from("temporary_permissions")
+        .insert([{
           user_id: userId,
-          permission,
-          granted_by: granter.id,
-          expires_at: expiresAt.toISOString(),
-          duration_minutes: durationMinutes,
-          created_at: new Date().toISOString(),
-        },
-      ])
-      .select()
-      .single();
+          permission_type: permissionType,
+          resource_id: resourceId,
+          granted_by: grantedBy,
+          expires_at: expiresAt,
+          is_active: true,
+        }])
+        .select()
+        .single();
 
-    if (error) {
-      throw new Error("Error al otorgar permiso temporal: " + error.message);
+      if (error) throw error;
+      return permission;
+    } catch (error) {
+      console.error("Error granting temporary permission:", error);
+      throw new Error("Failed to grant temporary permission");
     }
-
-    // Log permission grant
-    await supabase.from("audit_logs").insert([
-      {
-        user_id: granter.id,
-        target_user_id: userId,
-        action: "temporary_permission_granted",
-        details: {
-          permission,
-          duration_minutes: durationMinutes,
-          expires_at: expiresAt.toISOString(),
-        },
-        created_at: new Date().toISOString(),
-      },
-    ]);
-
-    return tempPermission;
-  } catch (error) {
-    throw error;
   }
-};
 
-const revokeTemporaryPermission = async (userId, permission, revoker) => {
-  try {
-    const { error } = await supabase
-      .from("temporary_permissions")
-      .delete()
-      .eq("user_id", userId)
-      .eq("permission", permission)
-      .gte("expires_at", new Date().toISOString());
+  // Get active temporary permissions for user
+  static async getTemporaryPermissions(userId) {
+    try {
+      const { data: permissions, error } = await supabase
+        .from("temporary_permissions")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("is_active", true)
+        .gte("expires_at", new Date().toISOString());
 
-    if (error) {
-      throw new Error("Error al revocar permiso temporal: " + error.message);
+      if (error) throw error;
+      return permissions;
+    } catch (error) {
+      console.error("Error fetching temporary permissions:", error);
+      throw new Error("Failed to fetch temporary permissions");
     }
-
-    // Log permission revocation
-    await supabase.from("audit_logs").insert([
-      {
-        user_id: revoker.id,
-        target_user_id: userId,
-        action: "temporary_permission_revoked",
-        details: { permission },
-        created_at: new Date().toISOString(),
-      },
-    ]);
-
-    return true;
-  } catch (error) {
-    throw error;
   }
-};
 
-export {
-  getAllUsers,
-  getUserById,
-  updateUser,
-  updateUserRole,
-  deleteUser,
-  getTemporaryPermissions,
-  grantTemporaryPermission,
-  revokeTemporaryPermission,
-};
+  // Revoke temporary permission
+  static async revokeTemporaryPermission(permissionId) {
+    try {
+      const { error } = await supabaseAdmin
+        .from("temporary_permissions")
+        .update({
+          is_active: false,
+        })
+        .eq("id", permissionId);
+
+      if (error) throw error;
+      return { message: "Permission revoked successfully" };
+    } catch (error) {
+      console.error("Error revoking temporary permission:", error);
+      throw new Error("Failed to revoke temporary permission");
+    }
+  }
+
+  // Get all roles
+  static async getAllRoles() {
+    try {
+      const { data: roles, error } = await supabase
+        .from("roles")
+        .select("*")
+        .order("name");
+
+      if (error) throw error;
+      return roles;
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+      throw new Error("Failed to fetch roles");
+    }
+  }
+}
+
+export default UserService;
