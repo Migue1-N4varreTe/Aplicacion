@@ -22,7 +22,7 @@ router.get("/", authenticateToken, async (req, res) => {
         .select(
           `
           *,
-          products(id, name, price, stock_quantity, is_active)
+          products(id, name, price, current_stock, is_active)
         `,
         )
         .eq("is_active", true)
@@ -45,7 +45,7 @@ router.get("/", authenticateToken, async (req, res) => {
           ...category,
           product_count: activeProducts.length,
           total_stock: activeProducts.reduce(
-            (sum, p) => sum + (p.stock_quantity || 0),
+            (sum, p) => sum + (p.current_stock || 0),
             0,
           ),
           avg_price:
@@ -53,6 +53,10 @@ router.get("/", authenticateToken, async (req, res) => {
               ? activeProducts.reduce((sum, p) => sum + (p.price || 0), 0) /
                 activeProducts.length
               : 0,
+          total_value: activeProducts.reduce(
+            (sum, p) => sum + (p.price || 0) * (p.current_stock || 0),
+            0,
+          ),
           products: include_products === "true" ? activeProducts : undefined,
         };
       });
@@ -82,7 +86,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
           name,
           description,
           price,
-          stock_quantity,
+          current_stock,
           is_active,
           created_at
         )
@@ -100,7 +104,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
     const stats = {
       total_products: activeProducts.length,
       total_stock: activeProducts.reduce(
-        (sum, p) => sum + (p.stock_quantity || 0),
+        (sum, p) => sum + (p.current_stock || 0),
         0,
       ),
       avg_price:
@@ -116,6 +120,10 @@ router.get("/:id", authenticateToken, async (req, res) => {
         activeProducts.length > 0
           ? Math.max(...activeProducts.map((p) => p.price || 0))
           : 0,
+      total_value: activeProducts.reduce(
+        (sum, p) => sum + (p.price || 0) * (p.current_stock || 0),
+        0,
+      ),
     };
 
     res.json({
@@ -134,10 +142,10 @@ router.get("/:id", authenticateToken, async (req, res) => {
 router.post(
   "/",
   authenticateToken,
-  requireRole(["admin", "manager"]),
+  requireRole(["admin", "manager", "owner"]),
   async (req, res) => {
     try {
-      const { name, description, color, icon } = req.body;
+      const { name, description, image_url, color, icon } = req.body;
 
       if (!name) {
         return res
@@ -162,11 +170,11 @@ router.post(
         .from("categories")
         .insert({
           name,
-          description,
+          description: description || null,
+          image_url: image_url || null,
           color: color || "#22c55e",
           icon: icon || "package",
           is_active: true,
-          created_by: req.user.id,
         })
         .select("*")
         .single();
@@ -191,11 +199,11 @@ router.post(
 router.put(
   "/:id",
   authenticateToken,
-  requireRole(["admin", "manager"]),
+  requireRole(["admin", "manager", "owner"]),
   async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, description, color, icon, is_active } = req.body;
+      const { name, description, image_url, color, icon, is_active } = req.body;
 
       // Verificar que la categoría existe
       const { data: existingCategory, error: fetchError } = await supabase
@@ -228,6 +236,7 @@ router.put(
       const updateData = {};
       if (name !== undefined) updateData.name = name;
       if (description !== undefined) updateData.description = description;
+      if (image_url !== undefined) updateData.image_url = image_url;
       if (color !== undefined) updateData.color = color;
       if (icon !== undefined) updateData.icon = icon;
       if (is_active !== undefined) updateData.is_active = is_active;
@@ -260,7 +269,7 @@ router.put(
 router.delete(
   "/:id",
   authenticateToken,
-  requireRole(["admin"]),
+  requireRole(["admin", "owner"]),
   async (req, res) => {
     try {
       const { id } = req.params;
@@ -301,7 +310,6 @@ router.delete(
         .from("categories")
         .update({
           is_active: false,
-          deleted_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })
         .eq("id", id)
@@ -334,21 +342,38 @@ router.get("/stats/overview", authenticateToken, async (req, res) => {
         id,
         name,
         color,
-        products(id, price, stock_quantity, is_active)
+        is_active,
+        products(id, price, current_stock, is_active)
       `,
-      )
-      .eq("is_active", true);
+      );
 
     if (error) {
       console.error("Error fetching categories stats:", error);
       return res.status(500).json({ error: "Error al obtener estadísticas" });
     }
 
-    const stats = categoriesData.map((category) => {
+    // Estadísticas generales
+    const activeCategories = categoriesData?.filter(c => c.is_active) || [];
+    const allActiveProducts = categoriesData?.flatMap(c => 
+      c.products?.filter((p) => p.is_active) || []
+    ) || [];
+
+    const generalStats = {
+      total_categories: categoriesData?.length || 0,
+      active_categories: activeCategories.length,
+      total_products: allActiveProducts.length,
+      total_value: allActiveProducts.reduce(
+        (sum, p) => sum + (p.price || 0) * (p.current_stock || 0),
+        0,
+      ),
+    };
+
+    // Estadísticas por categoría
+    const categoryStats = activeCategories.map((category) => {
       const activeProducts =
         category.products?.filter((p) => p.is_active) || [];
       const totalValue = activeProducts.reduce(
-        (sum, p) => sum + (p.price || 0) * (p.stock_quantity || 0),
+        (sum, p) => sum + (p.price || 0) * (p.current_stock || 0),
         0,
       );
 
@@ -358,7 +383,7 @@ router.get("/stats/overview", authenticateToken, async (req, res) => {
         color: category.color,
         product_count: activeProducts.length,
         total_stock: activeProducts.reduce(
-          (sum, p) => sum + (p.stock_quantity || 0),
+          (sum, p) => sum + (p.current_stock || 0),
           0,
         ),
         total_value: totalValue,
@@ -371,13 +396,95 @@ router.get("/stats/overview", authenticateToken, async (req, res) => {
     });
 
     // Ordenar por valor total descendente
-    stats.sort((a, b) => b.total_value - a.total_value);
+    categoryStats.sort((a, b) => b.total_value - a.total_value);
 
-    res.json({ categories_stats: stats });
+    res.json({ 
+      general_stats: generalStats,
+      categories_stats: categoryStats 
+    });
   } catch (error) {
     console.error("Error in categories stats:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 });
+
+// Migrar categorías (endpoint especial para migración)
+router.post(
+  "/migrate",
+  authenticateToken,
+  requireRole(["admin", "owner"]),
+  async (req, res) => {
+    try {
+      const { categories: categoriesToMigrate } = req.body;
+
+      if (!categoriesToMigrate || !Array.isArray(categoriesToMigrate)) {
+        return res.status(400).json({ 
+          error: "Se requiere un array de categorías para migrar" 
+        });
+      }
+
+      const results = {
+        success: 0,
+        errors: [],
+        migrated: [],
+      };
+
+      for (const categoryData of categoriesToMigrate) {
+        try {
+          const { name, description, image_url, color, icon } = categoryData;
+
+          if (!name) {
+            results.errors.push(`Categoría sin nombre omitida`);
+            continue;
+          }
+
+          // Verificar si ya existe
+          const { data: existingCategory } = await supabase
+            .from("categories")
+            .select("id")
+            .eq("name", name)
+            .single();
+
+          if (existingCategory) {
+            results.errors.push(`Categoría "${name}" ya existe`);
+            continue;
+          }
+
+          // Crear categoría
+          const { data: newCategory, error: createError } = await supabase
+            .from("categories")
+            .insert({
+              name,
+              description: description || null,
+              image_url: image_url || null,
+              color: color || "#22c55e",
+              icon: icon || "package",
+              is_active: true,
+            })
+            .select("*")
+            .single();
+
+          if (createError) {
+            results.errors.push(`Error al crear "${name}": ${createError.message}`);
+            continue;
+          }
+
+          results.success++;
+          results.migrated.push(newCategory);
+        } catch (error) {
+          results.errors.push(`Error procesando categoría: ${error.message}`);
+        }
+      }
+
+      res.json({
+        message: "Migración completada",
+        ...results,
+      });
+    } catch (error) {
+      console.error("Error in migration:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+);
 
 module.exports = router;

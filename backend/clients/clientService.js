@@ -1,474 +1,472 @@
-import { supabase } from "../config/supabase.js";
+import { supabase, supabaseAdmin } from "../config/supabase.js";
 
-const registerClient = async (clientData, user) => {
-  try {
-    const { first_name, last_name, email, phone, birth_date, address } =
-      clientData;
+export class ClientService {
+  // Create new customer
+  static async createClient(clientData) {
+    try {
+      const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+        birthDate,
+        customerCode,
+        createdBy,
+      } = clientData;
 
-    // Check if client already exists by email or phone
-    if (email) {
-      const { data: existingByEmail } = await supabase
+      const { data: client, error } = await supabaseAdmin
         .from("customers")
-        .select("id")
+        .insert([
+          {
+            customer_code: customerCode,
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone,
+            address,
+            birth_date: birthDate,
+            loyalty_points: 0,
+            total_spent: 0,
+            is_active: true,
+            created_by: createdBy,
+            created_at: new Date().toISOString(),
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+      return client;
+    } catch (error) {
+      console.error("Error creating customer:", error);
+      throw new Error("Failed to create customer");
+    }
+  }
+
+  // Get customer by ID
+  static async getClientById(clientId) {
+    try {
+      const { data: client, error } = await supabase
+        .from("customers")
+        .select(`
+          *,
+          orders:orders(
+            id,
+            order_number,
+            total_amount,
+            status,
+            created_at
+          )
+        `)
+        .eq("id", clientId)
+        .eq("is_active", true)
+        .single();
+
+      if (error) throw error;
+      return client;
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+      throw new Error("Customer not found");
+    }
+  }
+
+  // Get customer by email
+  static async getClientByEmail(email) {
+    try {
+      const { data: client, error } = await supabase
+        .from("customers")
+        .select("*")
         .eq("email", email)
+        .eq("is_active", true)
         .single();
 
-      if (existingByEmail) {
-        throw new Error("Ya existe un cliente con este email");
-      }
+      if (error) throw error;
+      return client;
+    } catch (error) {
+      console.error("Error fetching customer by email:", error);
+      return null;
     }
+  }
 
-    if (phone) {
-      const { data: existingByPhone } = await supabase
+  // Get customer by phone
+  static async getClientByPhone(phone) {
+    try {
+      const { data: client, error } = await supabase
         .from("customers")
-        .select("id")
+        .select("*")
         .eq("phone", phone)
+        .eq("is_active", true)
         .single();
 
-      if (existingByPhone) {
-        throw new Error("Ya existe un cliente con este teléfono");
-      }
+      if (error) throw error;
+      return client;
+    } catch (error) {
+      console.error("Error fetching customer by phone:", error);
+      return null;
     }
+  }
 
-    const { data: client, error } = await supabase
-      .from("customers")
-      .insert([
-        {
-          first_name,
-          last_name,
-          email,
-          phone,
-          birth_date,
-          address,
-          loyalty_points: 0,
-          total_spent: 0,
-          visit_count: 0,
-          registered_by: user.id,
-          store_id: user.store_id,
-          is_active: true,
-          created_at: new Date().toISOString(),
+  // Get customer by customer code
+  static async getClientByCode(customerCode) {
+    try {
+      const { data: client, error } = await supabase
+        .from("customers")
+        .select("*")
+        .eq("customer_code", customerCode)
+        .eq("is_active", true)
+        .single();
+
+      if (error) throw error;
+      return client;
+    } catch (error) {
+      console.error("Error fetching customer by code:", error);
+      return null;
+    }
+  }
+
+  // Get all customers with pagination and search
+  static async getAllClients(page = 1, limit = 10, searchTerm = "") {
+    try {
+      const offset = (page - 1) * limit;
+      
+      let query = supabase
+        .from("customers")
+        .select("*", { count: "exact" })
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .range(offset, offset + limit - 1);
+
+      if (searchTerm) {
+        query = query.or(
+          `first_name.ilike.%${searchTerm}%,last_name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%,phone.ilike.%${searchTerm}%,customer_code.ilike.%${searchTerm}%`
+        );
+      }
+
+      const { data: clients, error, count } = await query;
+
+      if (error) throw error;
+
+      return {
+        clients,
+        pagination: {
+          page,
+          limit,
+          total: count,
+          totalPages: Math.ceil(count / limit),
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+      throw new Error("Failed to fetch customers");
+    }
+  }
+
+  // Update customer
+  static async updateClient(clientId, updateData) {
+    try {
+      const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+        birthDate,
+        customerCode,
+        isActive,
+      } = updateData;
+
+      const updateFields = {
+        updated_at: new Date().toISOString(),
+      };
+
+      if (firstName !== undefined) updateFields.first_name = firstName;
+      if (lastName !== undefined) updateFields.last_name = lastName;
+      if (email !== undefined) updateFields.email = email;
+      if (phone !== undefined) updateFields.phone = phone;
+      if (address !== undefined) updateFields.address = address;
+      if (birthDate !== undefined) updateFields.birth_date = birthDate;
+      if (customerCode !== undefined) updateFields.customer_code = customerCode;
+      if (isActive !== undefined) updateFields.is_active = isActive;
+
+      const { data: client, error } = await supabaseAdmin
+        .from("customers")
+        .update(updateFields)
+        .eq("id", clientId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return client;
+    } catch (error) {
+      console.error("Error updating customer:", error);
+      throw new Error("Failed to update customer");
+    }
+  }
+
+  // Update loyalty points
+  static async updateLoyaltyPoints(clientId, points) {
+    try {
+      const { data: client, error } = await supabaseAdmin
+        .from("customers")
+        .update({
+          loyalty_points: points,
           updated_at: new Date().toISOString(),
-        },
-      ])
-      .select()
-      .single();
+        })
+        .eq("id", clientId)
+        .select()
+        .single();
 
-    if (error) {
-      throw new Error("Error al registrar cliente: " + error.message);
+      if (error) throw error;
+      return client;
+    } catch (error) {
+      console.error("Error updating loyalty points:", error);
+      throw new Error("Failed to update loyalty points");
     }
-
-    // Log client registration
-    await supabase.from("audit_logs").insert([
-      {
-        user_id: user.id,
-        action: "client_registered",
-        details: {
-          client_id: client.id,
-          client_name: `${first_name} ${last_name}`,
-          email,
-          phone,
-        },
-        created_at: new Date().toISOString(),
-      },
-    ]);
-
-    return client;
-  } catch (error) {
-    throw error;
   }
-};
 
-const getAllClients = async (filters = {}) => {
-  try {
-    let query = supabase
-      .from("customers")
-      .select("*")
-      .eq("is_active", true)
-      .order("created_at", { ascending: false });
+  // Add loyalty points (for purchases)
+  static async addLoyaltyPoints(clientId, pointsToAdd) {
+    try {
+      // Get current points
+      const { data: client, error: fetchError } = await supabase
+        .from("customers")
+        .select("loyalty_points")
+        .eq("id", clientId)
+        .single();
 
-    if (filters.search) {
-      query = query.or(
-        `first_name.ilike.%${filters.search}%,last_name.ilike.%${filters.search}%,email.ilike.%${filters.search}%,phone.ilike.%${filters.search}%`,
-      );
+      if (fetchError) throw fetchError;
+
+      const newPoints = (client.loyalty_points || 0) + pointsToAdd;
+
+      const { data: updatedClient, error } = await supabaseAdmin
+        .from("customers")
+        .update({
+          loyalty_points: newPoints,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", clientId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return updatedClient;
+    } catch (error) {
+      console.error("Error adding loyalty points:", error);
+      throw new Error("Failed to add loyalty points");
     }
-
-    if (filters.store_id) {
-      query = query.eq("store_id", filters.store_id);
-    }
-
-    // Pagination
-    const offset = (filters.page - 1) * filters.limit;
-    query = query.range(offset, offset + filters.limit - 1);
-
-    const { data: clients, error, count } = await query;
-
-    if (error) {
-      throw new Error("Error al obtener clientes: " + error.message);
-    }
-
-    return {
-      clients: clients || [],
-      pagination: {
-        page: filters.page,
-        limit: filters.limit,
-        total: count,
-        pages: Math.ceil(count / filters.limit),
-      },
-    };
-  } catch (error) {
-    throw error;
   }
-};
 
-const getClientById = async (clientId) => {
-  try {
-    const { data: client, error } = await supabase
-      .from("customers")
-      .select("*")
-      .eq("id", clientId)
-      .eq("is_active", true)
-      .single();
+  // Redeem loyalty points
+  static async redeemLoyaltyPoints(clientId, pointsToRedeem) {
+    try {
+      // Get current points
+      const { data: client, error: fetchError } = await supabase
+        .from("customers")
+        .select("loyalty_points")
+        .eq("id", clientId)
+        .single();
 
-    if (error || !client) {
-      throw new Error("Cliente no encontrado");
-    }
+      if (fetchError) throw fetchError;
 
-    return client;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const updateClient = async (clientId, updateData, user) => {
-  try {
-    const allowedFields = [
-      "first_name",
-      "last_name",
-      "email",
-      "phone",
-      "birth_date",
-      "address",
-    ];
-
-    const filteredData = {};
-    for (const field of allowedFields) {
-      if (updateData[field] !== undefined) {
-        filteredData[field] = updateData[field];
+      const currentPoints = client.loyalty_points || 0;
+      if (currentPoints < pointsToRedeem) {
+        throw new Error("Insufficient loyalty points");
       }
+
+      const newPoints = currentPoints - pointsToRedeem;
+
+      const { data: updatedClient, error } = await supabaseAdmin
+        .from("customers")
+        .update({
+          loyalty_points: newPoints,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", clientId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return updatedClient;
+    } catch (error) {
+      console.error("Error redeeming loyalty points:", error);
+      throw new Error("Failed to redeem loyalty points");
     }
-
-    filteredData.updated_at = new Date().toISOString();
-
-    const { data: client, error } = await supabase
-      .from("customers")
-      .update(filteredData)
-      .eq("id", clientId)
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error("Error al actualizar cliente: " + error.message);
-    }
-
-    return client;
-  } catch (error) {
-    throw error;
   }
-};
 
-const getClientHistory = async (clientId, filters = {}) => {
-  try {
-    let query = supabase
-      .from("sales")
-      .select(
-        `
-        *,
-        sale_items (
-          product_name,
-          quantity,
-          product_price,
-          subtotal
-        ),
-        users!cashier_id (
-          first_name,
-          last_name
-        )
-      `,
-      )
-      .eq("customer_id", clientId)
-      .eq("status", "completed")
-      .order("created_at", { ascending: false });
+  // Update total spent
+  static async updateTotalSpent(clientId, amountToAdd) {
+    try {
+      // Get current total
+      const { data: client, error: fetchError } = await supabase
+        .from("customers")
+        .select("total_spent")
+        .eq("id", clientId)
+        .single();
 
-    // Pagination
-    const offset = (filters.page - 1) * filters.limit;
-    query = query.range(offset, offset + filters.limit - 1);
+      if (fetchError) throw fetchError;
 
-    const { data: purchases, error, count } = await query;
+      const newTotal = (client.total_spent || 0) + amountToAdd;
 
-    if (error) {
-      throw new Error("Error al obtener historial: " + error.message);
+      const { data: updatedClient, error } = await supabaseAdmin
+        .from("customers")
+        .update({
+          total_spent: newTotal,
+          last_visit: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", clientId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return updatedClient;
+    } catch (error) {
+      console.error("Error updating total spent:", error);
+      throw new Error("Failed to update total spent");
     }
-
-    // Calculate summary statistics
-    const totalSpent = purchases.reduce((sum, sale) => sum + sale.total, 0);
-    const averageTicket =
-      purchases.length > 0 ? totalSpent / purchases.length : 0;
-
-    return {
-      purchases: purchases || [],
-      summary: {
-        total_purchases: count,
-        total_spent: totalSpent,
-        average_ticket: averageTicket,
-      },
-      pagination: {
-        page: filters.page,
-        limit: filters.limit,
-        total: count,
-        pages: Math.ceil(count / filters.limit),
-      },
-    };
-  } catch (error) {
-    throw error;
   }
-};
 
-const addLoyaltyPoints = async (clientId, points, reason, user) => {
-  try {
-    // Get current client
-    const { data: client, error: clientError } = await supabase
-      .from("customers")
-      .select("*")
-      .eq("id", clientId)
-      .single();
+  // Soft delete customer
+  static async deleteClient(clientId) {
+    try {
+      const { error } = await supabaseAdmin
+        .from("customers")
+        .update({
+          is_active: false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", clientId);
 
-    if (clientError || !client) {
-      throw new Error("Cliente no encontrado");
+      if (error) throw error;
+      return { message: "Customer deleted successfully" };
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+      throw new Error("Failed to delete customer");
     }
-
-    // Update loyalty points
-    const newPoints = client.loyalty_points + points;
-
-    const { data: updatedClient, error: updateError } = await supabase
-      .from("customers")
-      .update({
-        loyalty_points: newPoints,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", clientId)
-      .select()
-      .single();
-
-    if (updateError) {
-      throw new Error("Error al actualizar puntos: " + updateError.message);
-    }
-
-    // Log loyalty transaction
-    await supabase.from("loyalty_transactions").insert([
-      {
-        customer_id: clientId,
-        transaction_type: "earned",
-        points,
-        reason,
-        processed_by: user.id,
-        created_at: new Date().toISOString(),
-      },
-    ]);
-
-    return {
-      client: updatedClient,
-      points_added: points,
-      new_total: newPoints,
-      message: `${points} puntos agregados exitosamente`,
-    };
-  } catch (error) {
-    throw error;
   }
-};
 
-const redeemLoyaltyPoints = async (clientId, points, rewardType, user) => {
-  try {
-    // Get current client
-    const { data: client, error: clientError } = await supabase
-      .from("customers")
-      .select("*")
-      .eq("id", clientId)
-      .single();
+  // Get customer purchase history
+  static async getClientPurchaseHistory(clientId, page = 1, limit = 10) {
+    try {
+      const offset = (page - 1) * limit;
 
-    if (clientError || !client) {
-      throw new Error("Cliente no encontrado");
-    }
+      const { data: orders, error, count } = await supabase
+        .from("orders")
+        .select(`
+          id,
+          order_number,
+          total_amount,
+          payment_method,
+          status,
+          created_at,
+          items:order_items(
+            id,
+            quantity,
+            unit_price,
+            product:products(
+              id,
+              name,
+              barcode
+            )
+          )
+        `, { count: "exact" })
+        .eq("customer_id", clientId)
+        .order("created_at", { ascending: false })
+        .range(offset, offset + limit - 1);
 
-    if (client.loyalty_points < points) {
-      throw new Error("Puntos insuficientes");
-    }
+      if (error) throw error;
 
-    // Update loyalty points
-    const newPoints = client.loyalty_points - points;
-
-    const { data: updatedClient, error: updateError } = await supabase
-      .from("customers")
-      .update({
-        loyalty_points: newPoints,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", clientId)
-      .select()
-      .single();
-
-    if (updateError) {
-      throw new Error("Error al canjear puntos: " + updateError.message);
-    }
-
-    // Log redemption
-    await supabase.from("loyalty_transactions").insert([
-      {
-        customer_id: clientId,
-        transaction_type: "redeemed",
-        points: -points,
-        reason: `Canje por: ${rewardType}`,
-        processed_by: user.id,
-        created_at: new Date().toISOString(),
-      },
-    ]);
-
-    return {
-      client: updatedClient,
-      points_redeemed: points,
-      new_total: newPoints,
-      reward_type: rewardType,
-      message: "Puntos canjeados exitosamente",
-    };
-  } catch (error) {
-    throw error;
-  }
-};
-
-const generateCoupon = async (clientId, couponData, user) => {
-  try {
-    const {
-      discount_type,
-      discount_value,
-      min_purchase_amount = 0,
-      expires_at,
-      description,
-    } = couponData;
-
-    // Generate unique coupon code
-    const couponCode = `COUP${Date.now()}${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-
-    const { data: coupon, error } = await supabase
-      .from("coupons")
-      .insert([
-        {
-          code: couponCode,
-          customer_id: clientId,
-          discount_type,
-          discount_value,
-          min_purchase_amount,
-          description,
-          expires_at,
-          is_used: false,
-          created_by: user.id,
-          created_at: new Date().toISOString(),
+      return {
+        orders,
+        pagination: {
+          page,
+          limit,
+          total: count,
+          totalPages: Math.ceil(count / limit),
         },
-      ])
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error("Error al generar cupón: " + error.message);
+      };
+    } catch (error) {
+      console.error("Error fetching customer purchase history:", error);
+      throw new Error("Failed to fetch purchase history");
     }
-
-    return coupon;
-  } catch (error) {
-    throw error;
   }
-};
 
-const getClientCoupons = async (clientId) => {
-  try {
-    const { data: coupons, error } = await supabase
-      .from("coupons")
-      .select("*")
-      .eq("customer_id", clientId)
-      .gte("expires_at", new Date().toISOString())
-      .eq("is_used", false)
-      .order("created_at", { ascending: false });
+  // Get top customers by loyalty points
+  static async getTopClientsByLoyalty(limit = 10) {
+    try {
+      const { data: clients, error } = await supabase
+        .from("customers")
+        .select("id, first_name, last_name, email, loyalty_points, total_spent")
+        .eq("is_active", true)
+        .order("loyalty_points", { ascending: false })
+        .limit(limit);
 
-    if (error) {
-      throw new Error("Error al obtener cupones: " + error.message);
+      if (error) throw error;
+      return clients;
+    } catch (error) {
+      console.error("Error fetching top customers:", error);
+      throw new Error("Failed to fetch top customers");
     }
-
-    return coupons || [];
-  } catch (error) {
-    throw error;
   }
-};
 
-const applyCoupon = async (couponCode, saleTotal, user) => {
-  try {
-    // Get coupon
-    const { data: coupon, error: couponError } = await supabase
-      .from("coupons")
-      .select("*")
-      .eq("code", couponCode)
-      .eq("is_used", false)
-      .gte("expires_at", new Date().toISOString())
-      .single();
+  // Get top customers by total spent
+  static async getTopClientsBySpending(limit = 10) {
+    try {
+      const { data: clients, error } = await supabase
+        .from("customers")
+        .select("id, first_name, last_name, email, loyalty_points, total_spent")
+        .eq("is_active", true)
+        .order("total_spent", { ascending: false })
+        .limit(limit);
 
-    if (couponError || !coupon) {
-      throw new Error("Cupón inválido o expirado");
+      if (error) throw error;
+      return clients;
+    } catch (error) {
+      console.error("Error fetching top spending customers:", error);
+      throw new Error("Failed to fetch top spending customers");
     }
-
-    // Check minimum purchase amount
-    if (saleTotal < coupon.min_purchase_amount) {
-      throw new Error(
-        `Compra mínima requerida: $${coupon.min_purchase_amount}`,
-      );
-    }
-
-    // Calculate discount
-    let discountAmount = 0;
-    if (coupon.discount_type === "percentage") {
-      discountAmount = (saleTotal * coupon.discount_value) / 100;
-    } else {
-      discountAmount = coupon.discount_value;
-    }
-
-    // Ensure discount doesn't exceed total
-    discountAmount = Math.min(discountAmount, saleTotal);
-
-    // Mark coupon as used
-    await supabase
-      .from("coupons")
-      .update({
-        is_used: true,
-        used_at: new Date().toISOString(),
-        used_by: user.id,
-      })
-      .eq("id", coupon.id);
-
-    return {
-      coupon,
-      discount_amount: discountAmount,
-      new_total: saleTotal - discountAmount,
-      message: "Cupón aplicado exitosamente",
-    };
-  } catch (error) {
-    throw error;
   }
-};
 
-export {
-  registerClient,
-  getAllClients,
-  getClientById,
-  updateClient,
-  getClientHistory,
-  addLoyaltyPoints,
-  redeemLoyaltyPoints,
-  generateCoupon,
-  getClientCoupons,
-  applyCoupon,
-};
+  // Get customer analytics
+  static async getClientAnalytics(clientId) {
+    try {
+      // Get customer info
+      const client = await this.getClientById(clientId);
+
+      // Get purchase statistics
+      const { data: orderStats, error: statsError } = await supabase
+        .from("orders")
+        .select("total_amount, created_at, status")
+        .eq("customer_id", clientId)
+        .eq("status", "completed");
+
+      if (statsError) throw statsError;
+
+      const totalSpent = orderStats.reduce((sum, order) => sum + (order.total_amount || 0), 0);
+      const totalOrders = orderStats.length;
+      const averageOrderValue = totalOrders > 0 ? totalSpent / totalOrders : 0;
+
+      // Get last purchase date
+      const lastPurchase = orderStats.length > 0 
+        ? new Date(Math.max(...orderStats.map(order => new Date(order.created_at))))
+        : null;
+
+      return {
+        client,
+        analytics: {
+          totalSpent,
+          totalOrders,
+          averageOrderValue,
+          lastPurchase,
+          loyaltyPoints: client.loyalty_points || 0,
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching customer analytics:", error);
+      throw new Error("Failed to fetch customer analytics");
+    }
+  }
+}
+
+export default ClientService;
