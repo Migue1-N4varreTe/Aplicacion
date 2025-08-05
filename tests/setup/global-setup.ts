@@ -11,10 +11,14 @@ async function globalSetup(config: FullConfig) {
     // Wait for the application to be ready
     console.log("⏳ Waiting for application to be ready...");
     await page.goto("http://localhost:8080");
+    await page.waitForSelector('[data-testid="app-ready"]', { timeout: 30000 });
 
-    // Wait for the page to load by checking for basic elements
-    await page.waitForSelector("body", { timeout: 30000 });
-    await page.waitForLoadState("networkidle");
+    // Check if backend is responding
+    console.log("⏳ Checking backend health...");
+    const response = await page.request.get("http://localhost:5000/api/health");
+    if (!response.ok()) {
+      throw new Error("Backend is not responding");
+    }
 
     console.log("✅ Application is ready for testing");
 
