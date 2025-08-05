@@ -2,15 +2,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, ShoppingCart, Star, Clock, MapPin, Scale, Package } from "lucide-react";
+import { Heart, ShoppingCart, Star, Clock, MapPin } from "lucide-react";
 import { Product } from "@/lib/data";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
-import { formatUnit } from "@/lib/product-audit";
 import { cn } from "@/lib/utils";
-import QuantitySelector from "@/components/QuantitySelector";
-import { ProductImage } from "@/components/ui/smart-image";
 
 interface ProductCardProps {
   product: Product;
@@ -28,35 +25,24 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       return;
     }
 
-    // For products that require quantity selection, let QuantitySelector handle it
-    // For simple products (by piece, not requiring special selection), add directly
-    const needsQuantitySelector = product.sellByWeight || product.unit === "gramo";
+    setIsAddingToCart(true);
 
-    if (!needsQuantitySelector) {
-      setIsAddingToCart(true);
+    try {
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
-      try {
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 300));
+      // Try to add to cart with validations
+      const success = addToCartWithNotification(product.id, 1, product.name);
 
-        // Try to add to cart with validations
-        const success = addToCartWithNotification(product.id, 1, product.name);
-
-        if (!success) {
-          // Error was already shown in the toast, just log for debugging
-          console.log(`Failed to add ${product.name} to cart`);
-        }
-      } catch (error) {
-        console.error("Error adding to cart:", error);
-      } finally {
-        setIsAddingToCart(false);
+      if (!success) {
+        // Error was already shown in the toast, just log for debugging
+        console.log(`Failed to add ${product.name} to cart`);
       }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    } finally {
+      setIsAddingToCart(false);
     }
-  };
-
-  const handleQuantitySelected = (quantity: number) => {
-    // This callback is called when quantity is selected and added to cart
-    console.log(`Added ${quantity} ${product.unit} of ${product.name} to cart`);
   };
 
   const toggleFavorite = () => {
@@ -77,7 +63,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
     <Card
       className={cn(
         "group relative overflow-hidden border-0 shadow-sm hover:shadow-md transition-all duration-200 sm:hover:-translate-y-1",
-        "mobile-card sm:p-4 container-safe",
+        "mobile-card sm:p-4",
         !product.inStock && "opacity-75",
         className,
       )}
@@ -85,10 +71,9 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       <CardContent className="p-0">
         {/* Image Container */}
         <div className="relative aspect-square overflow-hidden bg-gray-50">
-          <ProductImage
+          <img
             src={product.image}
-            productName={product.name}
-            category={product.category}
+            alt={product.name}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
 
@@ -144,16 +129,16 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
         </div>
 
         {/* Product Info */}
-        <div className="adaptive-padding container-safe">
+        <div className="p-3 sm:p-4">
           {/* Brand */}
           {product.brand && (
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1 text-ellipsis-safe">
+            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
               {product.brand}
             </p>
           )}
 
           {/* Name */}
-          <h3 className="font-medium text-sm sm:text-base text-gray-900 text-clamp-2 mb-2 leading-tight text-safe">
+          <h3 className="font-medium text-sm sm:text-base text-gray-900 line-clamp-2 mb-2 leading-tight">
             {product.name}
           </h3>
 
@@ -186,28 +171,16 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
             )}
           </div>
 
-          {/* Price and Unit Info */}
+          {/* Price */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="font-bold text-lg text-gray-900">
                 ${product.price}
               </span>
               {product.unit && (
-                <div className="flex items-center gap-1">
-                  {product.sellByWeight ? (
-                    <Scale className="h-3 w-3 text-green-600" />
-                  ) : (
-                    <Package className="h-3 w-3 text-blue-600" />
-                  )}
-                  <span className={cn(
-                    "text-xs px-2 py-1 rounded",
-                    product.sellByWeight
-                      ? "text-green-700 bg-green-100"
-                      : "text-blue-700 bg-blue-100"
-                  )}>
-                    por {product.unit}
-                  </span>
-                </div>
+                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  /{product.unit}
+                </span>
               )}
               {product.originalPrice && (
                 <span className="text-sm text-gray-500 line-through">
@@ -217,79 +190,36 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
             </div>
           </div>
 
-          {/* Weight/Unit Helper Text */}
-          {product.sellByWeight && (
-            <div className="mb-3 p-2 bg-green-50 border border-green-200 rounded-md">
-              <p className="text-xs text-green-700 flex items-center gap-1">
-                <Scale className="h-3 w-3" />
-                Producto vendido por peso
-                {product.unit === "kg" && " - Mínimo 100g"}
-                {product.unit === "gramo" && " - Mínimo 100g"}
-              </p>
-            </div>
-          )}
-
           {/* Add to Cart Button */}
-          {(product.sellByWeight || product.unit === "gramo") ? (
-            <QuantitySelector
-              product={product}
-              onAddToCart={handleQuantitySelected}
-            >
-              <Button
-                disabled={!product.inStock}
-                className={cn(
-                  "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
-                  product.inStock
-                    ? "btn-gradient hover:shadow-glow focus:shadow-glow"
-                    : "bg-gray-200 text-gray-500 cursor-not-allowed",
-                )}
-              >
-                {!product.inStock ? (
-                  <>Agotado</>
-                ) : isInCart(product.id) ? (
-                  <>
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    En carrito ({formatUnit(product, getItemQuantity(product.id))})
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Seleccionar cantidad
-                  </>
-                )}
-              </Button>
-            </QuantitySelector>
-          ) : (
-            <Button
-              onClick={handleAddToCart}
-              disabled={!product.inStock || isAddingToCart}
-              className={cn(
-                "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto btn-spacing text-safe",
-                product.inStock
-                  ? "btn-gradient hover:shadow-glow focus:shadow-glow"
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed",
-              )}
-            >
-              {isAddingToCart ? (
-                <>
-                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Agregando...
-                </>
-              ) : !product.inStock ? (
-                <>Agotado</>
-              ) : isInCart(product.id) ? (
-                <>
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  En carrito ({formatUnit(product, getItemQuantity(product.id))})
-                </>
-              ) : (
-                <>
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Agregar al carrito
-                </>
-              )}
-            </Button>
-          )}
+          <Button
+            onClick={handleAddToCart}
+            disabled={!product.inStock || isAddingToCart}
+            className={cn(
+              "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto",
+              product.inStock
+                ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                : "bg-gray-200 text-gray-500 cursor-not-allowed",
+            )}
+          >
+            {isAddingToCart ? (
+              <>
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                Agregando...
+              </>
+            ) : !product.inStock ? (
+              <>Agotado</>
+            ) : isInCart(product.id) ? (
+              <>
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                En carrito ({getItemQuantity(product.id)})
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Agregar al carrito
+              </>
+            )}
+          </Button>
         </div>
       </CardContent>
     </Card>

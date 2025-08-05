@@ -32,21 +32,12 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
   // Aplicar el tamaño de fuente al DOM
   const applyFontSize = (size: number) => {
     const scale = size / 100;
-    const root = document.documentElement;
+    document.documentElement.style.setProperty(
+      "--font-scale",
+      scale.toString(),
+    );
 
-    // Set CSS variables
-    root.style.setProperty("--font-scale", scale.toString());
-
-    // Scale spacing variables proportionally
-    const baseGap = scale;
-    const basePadding = scale;
-    const baseMargin = scale;
-
-    root.style.setProperty("--base-gap", `${baseGap}rem`);
-    root.style.setProperty("--base-padding", `${basePadding}rem`);
-    root.style.setProperty("--base-margin", `${baseMargin}rem`);
-
-    // Apply classes for additional styling
+    // Aplicar clases CSS según el tamaño
     const body = document.body;
     body.classList.remove(
       "font-size-small",
@@ -64,9 +55,6 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
     } else {
       body.classList.add("font-size-xl");
     }
-
-    // Trigger layout recalculation for responsive elements
-    window.dispatchEvent(new Event('resize'));
   };
 
   // Manejar cambios en el slider
