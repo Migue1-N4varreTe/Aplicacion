@@ -4,9 +4,9 @@
  * Optimizes the build process for deployment
  */
 
-const fs = require('fs');
-const path = require('path');
-
+import fs from 'fs';
+import path from 'path';
+// 
 console.log('🚀 Running Netlify pre-build optimizations...');
 
 // Ensure required directories exist
