@@ -237,7 +237,7 @@ const SeguimientoPedidos = () => {
                 <Package className="w-8 h-8" />
               </div>
               <div>
-                <h1 className="font-sans font-bold text-3xl lg:text-4xl">
+                <h1 className="font-display font-bold text-3xl lg:text-4xl">
                   Seguimiento de Pedidos
                 </h1>
                 <p className="text-white/90 text-lg">

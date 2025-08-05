@@ -87,7 +87,7 @@ const NewProducts = () => {
 
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="font-sans font-bold text-3xl text-gray-900 mb-2">
+              <h1 className="font-display font-bold text-3xl text-gray-900 mb-2">
                 Nuevos Productos
               </h1>
               <p className="text-gray-600">

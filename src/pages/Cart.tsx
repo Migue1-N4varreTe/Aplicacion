@@ -31,7 +31,6 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
 import { useCartActions } from "@/hooks/use-cart-actions";
 import { useState } from "react";
-import { ProductImage } from "@/components/ui/smart-image";
 
 const Cart = () => {
   const { cartItems, cartProducts, cartCount, cartSubtotal } = useCart();
@@ -72,7 +71,7 @@ const Cart = () => {
             <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
               <ShoppingCart className="w-12 h-12 text-gray-400" />
             </div>
-            <h1 className="font-sans font-bold text-2xl text-gray-900 mb-4">
+            <h1 className="font-display font-bold text-2xl text-gray-900 mb-4">
               Tu carrito está vacío
             </h1>
             <p className="text-gray-600 mb-8">
@@ -112,7 +111,7 @@ const Cart = () => {
             </Link>
           </Button>
           <div>
-            <h1 className="font-sans font-bold text-3xl text-gray-900">
+            <h1 className="font-display font-bold text-3xl text-gray-900">
               Mi carrito
             </h1>
             <p className="text-gray-600">
@@ -144,10 +143,9 @@ const Cart = () => {
                     <div className="flex gap-4">
                       {/* Product Image */}
                       <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                        <ProductImage
+                        <img
                           src={item.image}
-                          productName={item.name}
-                          category={item.category}
+                          alt={item.name}
                           className="w-full h-full object-cover"
                         />
                       </div>

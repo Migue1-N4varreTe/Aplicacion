@@ -44,7 +44,7 @@ const Categories = () => {
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
             <div>
-              <h1 className="font-sans font-bold text-3xl text-gray-900 mb-2">
+              <h1 className="font-display font-bold text-3xl text-gray-900 mb-2">
                 Categorías por Pasillos
               </h1>
               <p className="text-gray-600">
@@ -284,7 +284,7 @@ const Categories = () => {
 
         {/* Popular Categories CTA */}
         <div className="mt-16 bg-gradient-to-r from-brand-500 to-fresh-500 rounded-2xl p-8 text-center text-white">
-          <h2 className="font-sans font-bold text-2xl lg:text-3xl mb-4">
+          <h2 className="font-display font-bold text-2xl lg:text-3xl mb-4">
             ¿No encuentras lo que buscas?
           </h2>
           <p className="text-white/90 mb-6 max-w-2xl mx-auto">
