@@ -100,7 +100,7 @@ const Login = () => {
           <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
             <span className="text-white font-bold text-sm">LE</span>
           </div>
-          <span className="font-sans font-bold text-xl text-gray-900 hidden sm:block">
+          <span className="font-display font-bold text-xl text-gray-900 hidden sm:block">
             La Económica
           </span>
         </Link>
@@ -111,7 +111,7 @@ const Login = () => {
         <div className="w-full max-w-md space-y-6">
           {/* Welcome Message */}
           <div className="text-center space-y-2 animate-fade-in">
-            <h1 className="font-sans font-bold text-3xl text-gray-900">
+            <h1 className="font-display font-bold text-3xl text-gray-900">
               ¡Bienvenido de vuelta!
             </h1>
             <p className="text-gray-600">

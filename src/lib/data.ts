@@ -33,23 +33,6 @@ export interface Product {
   sellByWeight?: boolean;
 }
 
-export interface QuickCategory {
-  id: string;
-  name: string;
-  icon: string;
-  color: string;
-  link: string;
-}
-
-export interface DeliveryOption {
-  id: string;
-  name: string;
-  description: string;
-  time: string;
-  price: number;
-  icon: string;
-}
-
 export interface Subcategory {
   id: string;
   name: string;
@@ -184,7 +167,7 @@ export const categories: Category[] = [
     name: "Lácteos y Huevos",
     image:
       "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80",
-    icon: "���",
+    icon: "🥛",
     color: "bg-orange-400",
     productCount: 42,
     aisle: 4,
@@ -782,7 +765,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description:
       "Manzanas rojas frescas y crujientes, ideales para snacks saludables",
     inStock: true,
@@ -804,7 +787,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Plátanos frescos y dulces, ricos en potasio",
     inStock: true,
     stock: 30,
@@ -822,7 +805,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Naranjas jugosas valencia, perfectas para jugo",
     inStock: true,
     stock: 40,
@@ -840,7 +823,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Fresas dulces y frescas de temporada",
     inStock: true,
     stock: 15,
@@ -858,7 +841,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Uvas verdes sin semilla, dulces y refrescantes",
     inStock: true,
     stock: 25,
@@ -876,7 +859,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1490885578174-acda8905c2c6?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Piña madura y dulce, perfecta para postres",
     inStock: true,
     stock: 20,
@@ -894,7 +877,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1605664515962-8f671a34e051?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Mango ataulfo maduro, cremoso y dulce",
     inStock: true,
     stock: 18,
@@ -912,7 +895,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1617112848923-cc2234396a7d?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Papaya madura, ideal para digestión",
     inStock: true,
     stock: 12,
@@ -930,7 +913,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1587049633312-d628ae50a8ae?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Sandía dulce y refrescante para el calor",
     inStock: true,
     stock: 8,
@@ -948,7 +931,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Melón cantaloupe maduro y aromático",
     inStock: true,
     stock: 15,
@@ -966,7 +949,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Peras anjou maduras y jugosas",
     inStock: true,
     stock: 22,
@@ -984,7 +967,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1629828874514-d59ee3580d3f?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Duraznos maduros de temporada",
     inStock: true,
     stock: 16,
@@ -1002,7 +985,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1585059895524-72359e06133a?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Kiwi verde rico en vitamina C",
     inStock: true,
     stock: 24,
@@ -1020,7 +1003,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1590502593747-42a4e6dc7bb2?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Limones verdes mexicanos, muy jugosos",
     inStock: true,
     stock: 35,
@@ -1038,7 +1021,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Toronja roja jugosa y refrescante",
     inStock: true,
     stock: 28,
@@ -1056,7 +1039,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Mandarinas dulces fáciles de pelar",
     inStock: true,
     stock: 30,
@@ -1074,7 +1057,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1459181215473-0a9dd180d6d5?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Coco fresco para agua y pulpa",
     inStock: true,
     stock: 12,
@@ -1094,7 +1077,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1580905367936-e6ea9afdd1b4?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Granada roja rica en antioxidantes",
     inStock: true,
     stock: 8,
@@ -1112,7 +1095,7 @@ export const products: Product[] = [
     subcategory: "frutas-frescas",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Ciruelas rojas dulces y jugosas",
     inStock: true,
     stock: 14,
@@ -2094,7 +2077,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Jugo de naranja 100% natural recién exprimido",
     inStock: true,
     stock: 24,
@@ -2112,7 +2095,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Jugo verde con espinaca, apio, pepino y manzana",
     inStock: true,
     stock: 18,
@@ -2130,7 +2113,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Jugo de zanahoria natural rico en vitamina A",
     inStock: true,
     stock: 20,
@@ -2148,7 +2131,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Jugo de betabel natural energizante",
     inStock: true,
     stock: 15,
@@ -2166,7 +2149,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Jugo de apio puro depurativo",
     inStock: true,
     stock: 12,
@@ -2184,7 +2167,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Mezcla de jugo de naranja, toronja y limón",
     inStock: true,
     stock: 16,
@@ -2202,7 +2185,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Jugo de manzana 100% natural sin azúcar añadida",
     inStock: true,
     stock: 22,
@@ -2220,7 +2203,7 @@ export const products: Product[] = [
     subcategory: "jugos-naturales",
     aisle: "Pasillo 1",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Agua fresca de jamaica natural sin azúcar",
     inStock: true,
     stock: 18,
@@ -2241,7 +2224,7 @@ export const products: Product[] = [
     subcategory: "pan-de-caja",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Pan dulce tradicional mexicano",
     inStock: true,
     stock: 12,
@@ -2259,7 +2242,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Pan dulce sabor elote muy mexicano",
     inStock: true,
     stock: 10,
@@ -2277,7 +2260,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Concha mexicana con cobertura de chocolate",
     inStock: true,
     stock: 24,
@@ -2295,7 +2278,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Concha mexicana tradicional de vainilla",
     inStock: true,
     stock: 24,
@@ -2313,7 +2296,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Cuerno dulce esponjoso con mantequilla",
     inStock: true,
     stock: 18,
@@ -2331,7 +2314,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Dona esponjosa cubierta de azúcar",
     inStock: true,
     stock: 20,
@@ -2362,7 +2345,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Dona con glaseado de chocolate",
     inStock: true,
     stock: 16,
@@ -2380,7 +2363,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Pan dulce tradicional mexicano",
     inStock: true,
     stock: 12,
@@ -2398,7 +2381,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Pan dulce sabor elote muy mexicano",
     inStock: true,
     stock: 10,
@@ -2416,7 +2399,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Polvorón tradicional que se deshace en la boca",
     inStock: true,
     stock: 14,
@@ -2434,7 +2417,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Empanada rellena de dulce de leche",
     inStock: true,
     stock: 12,
@@ -2452,7 +2435,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     description: "Pan dulce en forma de gusano con azúcar",
     inStock: true,
     stock: 8,
@@ -2470,7 +2453,7 @@ export const products: Product[] = [
     subcategory: "pan-dulce-salado",
     aisle: "Pasillo 2",
     image:
-      "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80",
+      "https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Imagen+del+Producto",
     inStock: true,
     stock: 8,
     brand: "Panadería Local",
@@ -2511,7 +2494,7 @@ export const products: Product[] = [
     description: "Delicioso pastel tres leches individual",
     inStock: true,
     stock: 12,
-    brand: "Reposter��a Dulce",
+    brand: "Repostería Dulce",
     tags: ["tres leches", "individual", "cremoso", "tradicional"],
     rating: 4.9,
     reviewCount: 145,
@@ -3334,7 +3317,7 @@ export const deliveryOptions = [
     time: "10-15 min",
     price: 0,
     icon: "🏪",
-    description: "Sin costo de envío • Pago únicamente por app",
+    description: "Sin costo de envío",
   },
 ];
 

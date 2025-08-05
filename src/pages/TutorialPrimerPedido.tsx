@@ -185,7 +185,7 @@ const TutorialPrimerPedido = () => {
                 <Play className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="font-sans font-bold text-3xl lg:text-4xl">
+                <h1 className="font-display font-bold text-3xl lg:text-4xl">
                   Cómo Hacer Tu Primer Pedido
                 </h1>
                 <p className="text-white/90 text-lg">
