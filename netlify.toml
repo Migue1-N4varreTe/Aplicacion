@@ -25,7 +25,6 @@
   command = "npm run dev:frontend"
   port = 8080
   publish = "dist"
-
 # Security headers
 [[headers]]
   for = "/*"
