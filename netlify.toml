@@ -3,7 +3,8 @@
   command = "npm run build"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "20.13.1"  # ✅ versión válida
+  NPM_FLAGS = "--no-optional"
   VITE_SUPABASE_URL="https://evyslzzekjrskeyparqn.supabase.co"
   VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2eXNsenpla2pyc2tleXBhcnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE5MDQzMjUsImV4cCI6MjA2NzQ4MDMyNX0.IaWDx8biv47wna-vdRR7kDLkS_gyn7KkW8XW60XnbFM"
 
