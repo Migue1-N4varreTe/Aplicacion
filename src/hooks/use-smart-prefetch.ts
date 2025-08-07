@@ -27,6 +27,29 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
   const prefetchQueue = useRef<Set<string>>(new Set());
   const activePrefetch = useRef<Set<string>>(new Set());
 
+  // Prefetch de ruta específica (defined first to avoid circular dependency)
+  const prefetchRoute = useCallback(async (route: string) => {
+    if (activePrefetch.current.has(route) ||
+        activePrefetch.current.size >= finalConfig.maxConcurrentPrefetch) {
+      return;
+    }
+
+    activePrefetch.current.add(route);
+
+    try {
+      // Simular carga de datos de la ruta
+      const routeData = await loadRouteData(route);
+      routeCache.set(route, routeData);
+
+      // Prefetch assets de la ruta
+      await prefetchRouteAssets(route);
+    } catch (error) {
+      console.warn(`Failed to prefetch route ${route}:`, error);
+    } finally {
+      activePrefetch.current.delete(route);
+    }
+  }, [finalConfig.maxConcurrentPrefetch]);
+
   // Prefetch de rutas críticas
   const prefetchCriticalRoutes = useCallback(async () => {
     if (!finalConfig.enabled) return;
@@ -75,29 +98,6 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
       console.warn('Error prefetching product data:', error);
     }
   }, [location.pathname, location.search, finalConfig.enabled]);
-
-  // Prefetch de ruta específica
-  const prefetchRoute = useCallback(async (route: string) => {
-    if (activePrefetch.current.has(route) || 
-        activePrefetch.current.size >= finalConfig.maxConcurrentPrefetch) {
-      return;
-    }
-    
-    activePrefetch.current.add(route);
-    
-    try {
-      // Simular carga de datos de la ruta
-      const routeData = await loadRouteData(route);
-      routeCache.set(route, routeData);
-      
-      // Prefetch assets de la ruta
-      await prefetchRouteAssets(route);
-    } catch (error) {
-      console.warn(`Failed to prefetch route ${route}:`, error);
-    } finally {
-      activePrefetch.current.delete(route);
-    }
-  }, [finalConfig.maxConcurrentPrefetch]);
 
   // Cargar datos de una ruta
   const loadRouteData = async (route: string) => {
