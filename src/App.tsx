@@ -1,4 +1,3 @@
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -19,45 +18,21 @@ import { FlashSalesProvider } from "@/contexts/FlashSalesContext";
 import { EleventaProvider } from "@/contexts/EleventaContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
+import PerformanceOptimizer from "@/components/PerformanceOptimizer";
+import { Toaster } from "@/components/ui/toaster";
 
 // Core pages (loaded immediately)
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
-// Lazy loaded pages
-const Favorites = lazy(() => import("./pages/Favorites"));
-const Shop = lazy(() => import("./pages/ShopFixed"));
-const Categories = lazy(() => import("./pages/Categories"));
-const Offers = lazy(() => import("./pages/Offers"));
-const Cart = lazy(() => import("./pages/Cart"));
-const Login = lazy(() => import("./pages/Login"));
-const Register = lazy(() => import("./pages/Register"));
-const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
-const Checkout = lazy(() => import("./pages/Checkout"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Orders = lazy(() => import("./pages/Orders"));
-const Settings = lazy(() => import("./pages/Settings"));
-const Help = lazy(() => import("./pages/Help"));
-const Contact = lazy(() => import("./pages/Contact"));
-const Terms = lazy(() => import("./pages/Terms"));
-const Privacy = lazy(() => import("./pages/Privacy"));
-const NewProducts = lazy(() => import("./pages/NewProducts"));
-
-// Admin pages (lazy loaded)
-const Admin = lazy(() => import("./pages/Admin"));
-const Inventory = lazy(() => import("./pages/Inventory"));
-const POS = lazy(() => import("./pages/POS"));
-const Reports = lazy(() => import("./pages/Reports"));
-const Employees = lazy(() => import("./pages/Employees"));
-const Clients = lazy(() => import("./pages/Clients"));
-const SystemConfig = lazy(() => import("./pages/SystemConfig"));
-const IntegracionEleventa = lazy(() => import("./pages/IntegracionEleventa"));
-// Helper function for lazy loading with error handling
-const lazyWithErrorBoundary = (importFunc: () => Promise<any>, componentName: string = "Unknown") => {
+// Create a helper for lazy loading with error handling
+const lazyWithErrorBoundary = (
+  importFunc: () => Promise<{ default: React.ComponentType<any> }>,
+  componentName: string
+) => {
   return lazy(() =>
     importFunc()
       .then((module) => {
-        // Validate that the module has a default export
         if (!module.default) {
           throw new Error(`Component ${componentName} does not have a default export`);
         }
@@ -90,23 +65,18 @@ const lazyWithErrorBoundary = (importFunc: () => Promise<any>, componentName: st
                     {errorType}: {error.message}
                   </p>
                 </div>
-                <div className="space-y-4">
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 mr-4"
-                  >
-                    Recargar página
-                  </button>
-                  <button
-                    onClick={() => window.location.href = '/'}
-                    className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
-                  >
-                    Ir al inicio
-                  </button>
-                </div>
+                <p className="text-gray-600 mb-4">
+                  La página solicitada no se pudo cargar correctamente.
+                </p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors"
+                >
+                  Recargar página
+                </button>
               </div>
             </div>
-          ),
+          )
         };
       })
   );
@@ -155,247 +125,187 @@ const queryClient = new QueryClient();
 const App = () => (
   <MobileErrorBoundary>
     <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-      <AuthProvider>
-        <FavoritesProvider>
-          <CartProvider>
-            <ShoppingListProvider>
-              <AddressProvider>
-                <ReviewsProvider>
-                  <PickupProvider>
-                    <FlashSalesProvider>
-                      <EleventaProvider autoConnect={false} autoSync={false}>
-                        <SafeWebSocketProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <PerformanceOptimizer>
-                  <Suspense fallback={<PageLoader />}>
-        <AuthProvider>
-          <FavoritesProvider>
-            <CartProvider>
-              <SafeWebSocketProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <Suspense fallback={
-                    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-500 mx-auto mb-4"></div>
-                        <h2 className="text-lg font-semibold text-gray-700 mb-2">Cargando página...</h2>
-                        <p className="text-gray-500">Por favor espera un momento</p>
-                      </div>
-                    </div>
-                  }>
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/shop" element={<Shop />} />
-                      <Route path="/categories" element={<Categories />} />
-                      <Route path="/offers" element={<Offers />} />
-                      <Route path="/new" element={<NewProducts />} />
-                      <Route path="/cart" element={<Cart />} />
-                      <Route path="/favorites" element={<Favorites />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                      <Route
-                        path="/forgot-password"
-                        element={<ForgotPassword />}
-                      />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/orders" element={<Orders />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/help" element={<Help />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route
-                        path="/tutorial-primer-pedido"
-                        element={<TutorialPrimerPedido />}
-                      />
-                      <Route
-                        path="/gestionar-perfil"
-                        element={<GestionarPerfil />}
-                      />
-                      <Route
-                        path="/seguimiento-pedidos"
-                        element={<SeguimientoPedidos />}
-                      />
-                      <Route
-                        path="/programa-lealtad"
-                        element={<ProgramaLealtad />}
-                      />
-                      <Route path="/terms" element={<Terms />} />
-                      <Route path="/privacy" element={<Privacy />} />
-                      <Route
-                        path="/admin"
-                        element={
-                          <PermissionGuard
-                            permission="staff:view"
-                            fallback={
-                              <AccessDenied requiredPermission="staff:view" />
-                            }
-                          >
-                            <Admin />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/inventory"
-                        element={
-                          <PermissionGuard
-                            permission="inventory:view"
-                            fallback={
-                              <AccessDenied requiredPermission="inventory:view" />
-                            }
-                          >
-                            <Inventory />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/pos"
-                        element={
-                          <PermissionGuard
-                            permission="sales:create"
-                            fallback={
-                              <AccessDenied requiredPermission="sales:create" />
-                            }
-                          >
-                            <POS />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/reports"
-                        element={
-                          <PermissionGuard
-                            permission="reports:view"
-                            fallback={
-                              <AccessDenied requiredPermission="reports:view" />
-                            }
-                          >
-                            <Reports />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/employees"
-                        element={
-                          <PermissionGuard
-                            permission="staff:view"
-                            fallback={
-                              <AccessDenied requiredPermission="staff:view" />
-                            }
-                          >
-                            <Employees />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/clients"
-                        element={
-                          <PermissionGuard
-                            permission="clients:view"
-                            fallback={
-                              <AccessDenied requiredPermission="clients:view" />
-                            }
-                          >
-                            <Clients />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/integracion-eleventa"
-                        element={
-                          <PermissionGuard
-                            permission="system:config"
-                            fallback={
-                              <AccessDenied requiredPermission="system:config" />
-                            }
-                          >
-                            <IntegracionEleventa />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/system-config"
-                        element={
-                          <PermissionGuard
-                            permission="system:config"
-                            fallback={
-                              <AccessDenied requiredPermission="system:config" />
-                            }
-                          >
-                            <SystemConfig />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/database-test"
-                        element={<DatabaseTest />}
-                      />
-                      <Route
-                        path="/pos-weight"
-                        element={
-                          <PermissionGuard
-                            permission="sales:create"
-                            fallback={
-                              <AccessDenied requiredPermission="sales:create" />
-                            }
-                          >
-                            <WeightAwarePOS />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/categories-migration"
-                        element={
-                          <PermissionGuard
-                            permission="inventory:manage"
-                            fallback={
-                              <AccessDenied requiredPermission="inventory:manage" />
-                            }
-                          >
-                            <CategoriesMigration />
-                          </PermissionGuard>
-                        }
-                      />
-                      <Route
-                        path="/categories-admin"
-                        element={
-                          <PermissionGuard
-                            permission="inventory:manage"
-                            fallback={
-                              <AccessDenied requiredPermission="inventory:manage" />
-                            }
-                          >
-                            <CategoriesAdmin />
-                          </PermissionGuard>
-                        }
-                      />
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </Suspense>
-                </PerformanceOptimizer>
-              </BrowserRouter>
-                        </SafeWebSocketProvider>
-                      </EleventaProvider>
-                    </FlashSalesProvider>
-                  </PickupProvider>
-                </ReviewsProvider>
-              </AddressProvider>
-            </ShoppingListProvider>
-          </CartProvider>
-        </FavoritesProvider>
-      </AuthProvider>
-                </BrowserRouter>
-              </SafeWebSocketProvider>
-            </CartProvider>
-          </FavoritesProvider>
-        </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AuthProvider>
+            <FavoritesProvider>
+              <CartProvider>
+                <ShoppingListProvider>
+                  <AddressProvider>
+                    <ReviewsProvider>
+                      <PickupProvider>
+                        <FlashSalesProvider>
+                          <EleventaProvider autoConnect={false} autoSync={false}>
+                            <SafeWebSocketProvider>
+                              <Toaster />
+                              <Sonner />
+                              <BrowserRouter>
+                                <PerformanceOptimizer>
+                                  <Suspense fallback={<PageLoader />}>
+                                    <Routes>
+                                      <Route path="/" element={<Index />} />
+                                      <Route path="/shop" element={<Shop />} />
+                                      <Route path="/categories" element={<Categories />} />
+                                      <Route path="/offers" element={<Offers />} />
+                                      <Route path="/new" element={<NewProducts />} />
+                                      <Route path="/cart" element={<Cart />} />
+                                      <Route path="/favorites" element={<Favorites />} />
+                                      <Route path="/login" element={<Login />} />
+                                      <Route path="/register" element={<Register />} />
+                                      <Route path="/forgot-password" element={<ForgotPassword />} />
+                                      <Route path="/checkout" element={<Checkout />} />
+                                      <Route path="/profile" element={<Profile />} />
+                                      <Route path="/orders" element={<Orders />} />
+                                      <Route path="/settings" element={<Settings />} />
+                                      <Route path="/help" element={<Help />} />
+                                      <Route path="/contact" element={<Contact />} />
+                                      <Route path="/tutorial-primer-pedido" element={<TutorialPrimerPedido />} />
+                                      <Route path="/gestionar-perfil" element={<GestionarPerfil />} />
+                                      <Route path="/seguimiento-pedidos" element={<SeguimientoPedidos />} />
+                                      <Route path="/programa-lealtad" element={<ProgramaLealtad />} />
+                                      <Route path="/terms" element={<Terms />} />
+                                      <Route path="/privacy" element={<Privacy />} />
+                                      
+                                      {/* Admin routes with permission guards */}
+                                      <Route
+                                        path="/admin"
+                                        element={
+                                          <PermissionGuard
+                                            permission="admin:access"
+                                            fallback={<AccessDenied requiredPermission="admin:access" />}
+                                          >
+                                            <Admin />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/inventory"
+                                        element={
+                                          <PermissionGuard
+                                            permission="inventory:manage"
+                                            fallback={<AccessDenied requiredPermission="inventory:manage" />}
+                                          >
+                                            <Inventory />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/pos"
+                                        element={
+                                          <PermissionGuard
+                                            permission="sales:access"
+                                            fallback={<AccessDenied requiredPermission="sales:access" />}
+                                          >
+                                            <POS />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/weight-pos"
+                                        element={
+                                          <PermissionGuard
+                                            permission="sales:access"
+                                            fallback={<AccessDenied requiredPermission="sales:access" />}
+                                          >
+                                            <WeightAwarePOS />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/reports"
+                                        element={
+                                          <PermissionGuard
+                                            permission="reports:view"
+                                            fallback={<AccessDenied requiredPermission="reports:view" />}
+                                          >
+                                            <Reports />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/employees"
+                                        element={
+                                          <PermissionGuard
+                                            permission="employees:manage"
+                                            fallback={<AccessDenied requiredPermission="employees:manage" />}
+                                          >
+                                            <Employees />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/clients"
+                                        element={
+                                          <PermissionGuard
+                                            permission="clients:view"
+                                            fallback={<AccessDenied requiredPermission="clients:view" />}
+                                          >
+                                            <Clients />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/system-config"
+                                        element={
+                                          <PermissionGuard
+                                            permission="system:configure"
+                                            fallback={<AccessDenied requiredPermission="system:configure" />}
+                                          >
+                                            <SystemConfig />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/database-test"
+                                        element={
+                                          <PermissionGuard
+                                            permission="system:test"
+                                            fallback={<AccessDenied requiredPermission="system:test" />}
+                                          >
+                                            <DatabaseTest />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/categories-migration"
+                                        element={
+                                          <PermissionGuard
+                                            permission="inventory:manage"
+                                            fallback={<AccessDenied requiredPermission="inventory:manage" />}
+                                          >
+                                            <CategoriesMigration />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      <Route
+                                        path="/categories-admin"
+                                        element={
+                                          <PermissionGuard
+                                            permission="inventory:manage"
+                                            fallback={<AccessDenied requiredPermission="inventory:manage" />}
+                                          >
+                                            <CategoriesAdmin />
+                                          </PermissionGuard>
+                                        }
+                                      />
+                                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                                      <Route path="*" element={<NotFound />} />
+                                    </Routes>
+                                  </Suspense>
+                                </PerformanceOptimizer>
+                              </BrowserRouter>
+                            </SafeWebSocketProvider>
+                          </EleventaProvider>
+                        </FlashSalesProvider>
+                      </PickupProvider>
+                    </ReviewsProvider>
+                  </AddressProvider>
+                </ShoppingListProvider>
+              </CartProvider>
+            </FavoritesProvider>
+          </AuthProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   </MobileErrorBoundary>
 );
