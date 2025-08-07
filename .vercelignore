@@ -1,0 +1,16 @@
+node_modules
+.env.local
+.env
+dist
+build
+*.log
+.DS_Store
+.vscode
+.idea
+coverage
+tests
+playwright-report
+Aplicacion
+netlify
+*.md
+!README.md
