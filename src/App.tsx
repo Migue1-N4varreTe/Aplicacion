@@ -90,7 +90,7 @@ const App = () => (
                 <ReviewsProvider>
                   <PickupProvider>
                     <FlashSalesProvider>
-                      <EleventaProvider autoConnect={false} autoSync={false}>
+                      {/* <EleventaProvider autoConnect={false} autoSync={false}> */}
                         <SafeWebSocketProvider>
               <Toaster />
               <Sonner />
@@ -257,7 +257,7 @@ const App = () => (
                 </PerformanceOptimizer>
               </BrowserRouter>
                         </SafeWebSocketProvider>
-                      </EleventaProvider>
+                      {/* </EleventaProvider> */}
                     </FlashSalesProvider>
                   </PickupProvider>
                 </ReviewsProvider>
