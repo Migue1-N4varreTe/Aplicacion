@@ -244,14 +244,29 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
   // Prefetch inicial
   useEffect(() => {
     if (!finalConfig.enabled) return;
-    
+
+    // Polyfill para requestIdleCallback si no está disponible
+    const requestIdleCallbackPolyfill = (callback: () => void) => {
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(callback);
+      } else {
+        setTimeout(callback, 1);
+      }
+    };
+
     // Prefetch crítico inmediato
-    requestIdleCallback(() => {
-      prefetchCriticalRoutes();
-      prefetchProductData();
-      intelligentPrefetch();
+    requestIdleCallbackPolyfill(async () => {
+      try {
+        await Promise.allSettled([
+          prefetchCriticalRoutes(),
+          prefetchProductData(),
+        ]);
+        intelligentPrefetch();
+      } catch (error) {
+        console.warn('Error during initial prefetch:', error);
+      }
     });
-  }, [location.pathname]);
+  }, [location.pathname, finalConfig.enabled, prefetchCriticalRoutes, prefetchProductData, intelligentPrefetch]);
 
   // Limpiar prefetch cuando cambia la ruta
   useEffect(() => {
