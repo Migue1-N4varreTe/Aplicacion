@@ -27,7 +27,7 @@ import NotFound from "./pages/NotFound";
 
 // Lazy loaded pages
 const Favorites = lazy(() => import("./pages/Favorites"));
-const Shop = lazy(() => import("./pages/ShopMinimal"));
+const Shop = lazy(() => import("./pages/ShopFixed"));
 const Categories = lazy(() => import("./pages/Categories"));
 const Offers = lazy(() => import("./pages/Offers"));
 const Cart = lazy(() => import("./pages/Cart"));
@@ -90,7 +90,7 @@ const App = () => (
                 <ReviewsProvider>
                   <PickupProvider>
                     <FlashSalesProvider>
-                      {/* <EleventaProvider autoConnect={false} autoSync={false}> */}
+                      <EleventaProvider autoConnect={false} autoSync={false}>
                         <SafeWebSocketProvider>
               <Toaster />
               <Sonner />
@@ -257,7 +257,7 @@ const App = () => (
                 </PerformanceOptimizer>
               </BrowserRouter>
                         </SafeWebSocketProvider>
-                      {/* </EleventaProvider> */}
+                      </EleventaProvider>
                     </FlashSalesProvider>
                   </PickupProvider>
                 </ReviewsProvider>
