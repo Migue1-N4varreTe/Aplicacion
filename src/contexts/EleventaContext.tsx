@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import {
-  useEleventaIntegration
+  useEleventaIntegration,
+  EleventaStats
 } from '@/hooks/use-eleventa-integration';
-import type { EleventaStats } from '@/hooks/use-eleventa-integration';
 import { 
   EleventaSale, 
   EleventaProduct, 
