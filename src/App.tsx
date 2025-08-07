@@ -90,7 +90,8 @@ const App = () => (
                 <ReviewsProvider>
                   <PickupProvider>
                     <FlashSalesProvider>
-                      <SafeWebSocketProvider>
+                      <EleventaProvider autoConnect={false} autoSync={false}>
+                        <SafeWebSocketProvider>
               <Toaster />
               <Sonner />
               <BrowserRouter>
@@ -255,7 +256,8 @@ const App = () => (
                   </Suspense>
                 </PerformanceOptimizer>
               </BrowserRouter>
-                      </SafeWebSocketProvider>
+                        </SafeWebSocketProvider>
+                      </EleventaProvider>
                     </FlashSalesProvider>
                   </PickupProvider>
                 </ReviewsProvider>
