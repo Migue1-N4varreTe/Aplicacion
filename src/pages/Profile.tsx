@@ -241,7 +241,7 @@ const Profile = () => {
                 <div className="flex-1">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                      <h1 className="font-sans font-bold text-2xl text-gray-900">
+                      <h1 className="font-display font-bold text-2xl text-gray-900">
                         {user.name}
                       </h1>
                       <p className="text-gray-600 flex items-center gap-2">

@@ -2,50 +2,166 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Sistema de Punto de Venta para supermercados - La Económica POS"
-    />
+    <link rel="icon" type="image/svg+xml" href="/placeholder.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#16a34a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="La Económica POS" />
+    <meta name="apple-mobile-web-app-title" content="La Económica" />
+    
+    <!-- Mobile Optimizations -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="application-name" content="La Económica POS" />
-
-    <!-- PWA Manifest -->
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Favicon and Icons -->
     <link rel="manifest" href="/manifest.json" />
-
-    <!-- Favicons and Icons -->
-    <link rel="icon" href="/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/icons/icon-192x192.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/icons/icon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/icons/icon-16x16.png"
-    />
-
-    <!-- Preload Service Worker -->
-    <link rel="preload" href="/sw.js" as="script" />
-
-    <title>La Económica POS - Sistema de Punto de Venta</title>
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    
+    <title>La Económica POS</title>
+    
+    <!-- Critical CSS for preventing FOUC on mobile -->
+    <style>
+      /* Critical loading styles */
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      #root {
+        min-height: 100vh;
+        width: 100%;
+      }
+      
+      /* Loading spinner for initial load */
+      .loading-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f9fafb;
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #e5e7eb;
+        border-top: 3px solid #16a34a;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Hide loading when app loads */
+      .app-loaded .loading-container {
+        display: none;
+      }
+      
+      /* Mobile-specific optimizations */
+      @media (max-width: 768px) {
+        body {
+          overflow-x: hidden;
+        }
+        
+        * {
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+    </style>
   </head>
-
   <body>
-    <div id="root"></div>
-
+    <div id="root">
+      <!-- Initial loading state for better UX -->
+      <div class="loading-container">
+        <div style="text-align: center;">
+          <div class="loading-spinner"></div>
+          <p style="margin-top: 1rem; color: #6b7280; font-size: 14px;">
+            Cargando La Económica...
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      // Mobile-friendly service worker registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+              console.log('SW registered: ', registration);
+            })
+            .catch(function(registrationError) {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+      
+      // Remove loading state when app loads
+      window.addEventListener('load', function() {
+        document.body.classList.add('app-loaded');
+      });
+      
+      // Error handling for script loading failures on mobile
+      window.addEventListener('error', function(e) {
+        if (e.filename && (e.filename.includes('.js') || e.filename.includes('.css'))) {
+          console.error('Failed to load resource:', e.filename);
+          
+          // Show user-friendly error on mobile
+          if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            const root = document.getElementById('root');
+            if (root) {
+              root.innerHTML = `
+                <div style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  min-height: 100vh;
+                  padding: 1rem;
+                  text-align: center;
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                ">
+                  <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                  <h1 style="color: #1f2937; margin-bottom: 1rem;">Error de carga</h1>
+                  <p style="color: #6b7280; margin-bottom: 2rem;">
+                    No se pudo cargar la aplicación. Verifica tu conexión a internet.
+                  </p>
+                  <button 
+                    onclick="window.location.reload()"
+                    style="
+                      background: #16a34a;
+                      color: white;
+                      border: none;
+                      padding: 0.75rem 1.5rem;
+                      border-radius: 0.5rem;
+                      cursor: pointer;
+                      font-size: 1rem;
+                    "
+                  >
+                    Reintentar
+                  </button>
+                </div>
+              `;
+            }
+          }
+        }
+      });
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

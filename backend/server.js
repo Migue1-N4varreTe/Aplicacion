@@ -12,7 +12,15 @@ import {
   securityLogger,
   validateIP,
 } from "./middleware/security.js";
-
+// import authRoutes from "./auth/routes.js";
+// import userRoutes from "./users/routes.js";
+// import productRoutes from "./products/routes.js";
+// import salesRoutes from "./sales/routes.js";
+// import clientRoutes from "./clients/routes.js";
+// import employeeRoutes from "./employees/routes.js";
+// import reportRoutes from "./reports/routes.js";
+// import paymentRoutes from "./payments/routes.js";
+import eleventaRoutes from "./eleventa/routes.js";
 import authRoutes from "./auth/routes.js";
 import userRoutes from "./users/routes.js";
 import productRoutes from "./products/routes.js";
@@ -58,6 +66,9 @@ app.use("/api/sales", salesRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/reports", reportRoutes);
+
+// Eleventa Integration Routes
+app.use("/api/eleventa", eleventaRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

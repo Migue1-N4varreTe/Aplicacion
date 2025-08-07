@@ -10,70 +10,15 @@
   "categories": ["business", "productivity", "retail"],
   "lang": "es",
   "dir": "ltr",
+  "scope": "/",
+  "id": "la-economica-pos",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
+      "src": "/placeholder.svg",
+      "sizes": "72x72 96x96 128x128 144x144 152x152 192x192 384x384 512x512",
+      "type": "image/svg+xml",
       "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshots/desktop-1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Vista principal del POS"
-    },
-    {
-      "src": "/screenshots/mobile-1.png",
-      "sizes": "375x812",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "POS en dispositivo móvil"
     }
   ],
   "shortcuts": [
@@ -84,65 +29,41 @@
       "url": "/pos",
       "icons": [
         {
-          "src": "/icons/pos-shortcut.png",
+          "src": "/placeholder.svg",
           "sizes": "96x96",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     },
     {
-      "name": "Inventario",
-      "short_name": "Inventario",
-      "description": "Gestión de inventario",
-      "url": "/inventory",
+      "name": "Tienda",
+      "short_name": "Shop",
+      "description": "Ver productos de la tienda",
+      "url": "/shop",
       "icons": [
         {
-          "src": "/icons/inventory-shortcut.png",
+          "src": "/placeholder.svg",
           "sizes": "96x96",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     },
     {
-      "name": "Reportes",
-      "short_name": "Reportes",
-      "description": "Ver reportes y analíticas",
-      "url": "/reports",
+      "name": "Categorías",
+      "short_name": "Categorías",
+      "description": "Explorar por categorías",
+      "url": "/categories",
       "icons": [
         {
-          "src": "/icons/reports-shortcut.png",
+          "src": "/placeholder.svg",
           "sizes": "96x96",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     }
   ],
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
-        {
-          "name": "file",
-          "accept": ["image/*", "application/pdf"]
-        }
-      ]
-    }
-  },
-  "protocol_handlers": [
-    {
-      "protocol": "web+laeconomica",
-      "url": "/handle?protocol=%s"
-    }
-  ],
-  "prefer_related_applications": false,
+  "display_override": ["standalone", "minimal-ui"],
   "edge_side_panel": {
     "preferred_width": 400
-  },
-  "scope": "/",
-  "id": "la-economica-pos"
+  }
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ProductImage } from "@/components/ui/smart-image";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -278,7 +277,7 @@ const Checkout = () => {
             Volver al carrito
           </Button>
           <div>
-            <h1 className="font-sans font-bold text-2xl md:text-3xl text-gray-900">
+            <h1 className="font-display font-bold text-2xl md:text-3xl text-gray-900">
               Finalizar pedido
             </h1>
             <p className="text-gray-600">
@@ -823,10 +822,9 @@ const Checkout = () => {
                     if (!item) return null;
                     return (
                       <div key={item.id} className="flex gap-3">
-                        <ProductImage
+                        <img
                           src={item.image}
-                          productName={item.name}
-                          category={item.category}
+                          alt={item.name}
                           className="w-12 h-12 object-cover rounded-lg bg-gray-100"
                         />
                         <div className="flex-1 min-w-0">

@@ -27,66 +27,6 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
   const prefetchQueue = useRef<Set<string>>(new Set());
   const activePrefetch = useRef<Set<string>>(new Set());
 
-  // Prefetch de rutas críticas
-  const prefetchCriticalRoutes = useCallback(async () => {
-    const criticalRoutes = ['/shop', '/cart', '/favorites', '/categories'];
-    
-    for (const route of criticalRoutes) {
-      if (location.pathname !== route && !routeCache.get(route)) {
-        await prefetchRoute(route);
-      }
-    }
-  }, [location.pathname]);
-
-  // Prefetch de productos basado en comportamiento del usuario
-  const prefetchProductData = useCallback(async () => {
-    // Prefetch productos populares
-    const popularProducts = allProducts
-      .sort((a, b) => b.reviewCount - a.reviewCount)
-      .slice(0, 20)
-      .map(p => p.id);
-    
-    await productCache.preload(popularProducts);
-    
-    // Prefetch productos de la categoría actual si estamos en shop
-    if (location.pathname === '/shop') {
-      const searchParams = new URLSearchParams(location.search);
-      const category = searchParams.get('category');
-      
-      if (category) {
-        const categoryProducts = allProducts
-          .filter(p => p.category === category)
-          .slice(0, 40)
-          .map(p => p.id);
-        
-        await productCache.preload(categoryProducts);
-      }
-    }
-  }, [location]);
-
-  // Prefetch de ruta específica
-  const prefetchRoute = useCallback(async (route: string) => {
-    if (activePrefetch.current.has(route) || 
-        activePrefetch.current.size >= finalConfig.maxConcurrentPrefetch) {
-      return;
-    }
-    
-    activePrefetch.current.add(route);
-    
-    try {
-      // Simular carga de datos de la ruta
-      const routeData = await loadRouteData(route);
-      routeCache.set(route, routeData);
-      
-      // Prefetch assets de la ruta
-      await prefetchRouteAssets(route);
-    } catch (error) {
-      console.warn(`Failed to prefetch route ${route}:`, error);
-    } finally {
-      activePrefetch.current.delete(route);
-    }
-  }, [finalConfig.maxConcurrentPrefetch]);
-
   // Cargar datos de una ruta
   const loadRouteData = async (route: string) => {
     switch (route) {
@@ -129,9 +69,9 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
         ...allProducts.slice(0, 10).map(p => p.image),
       ],
     };
-    
+
     const assets = assetMap[route] || [];
-    
+
     // Prefetch imágenes
     const prefetchPromises = assets.map(async (src) => {
       return new Promise<void>((resolve) => {
@@ -141,15 +81,87 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
         img.src = src;
       });
     });
-    
+
     await Promise.allSettled(prefetchPromises);
   };
+
+  // Prefetch de ruta específica (defined after helper functions)
+  const prefetchRoute = useCallback(async (route: string) => {
+    if (activePrefetch.current.has(route) ||
+        activePrefetch.current.size >= finalConfig.maxConcurrentPrefetch) {
+      return;
+    }
+
+    activePrefetch.current.add(route);
+
+    try {
+      // Simular carga de datos de la ruta
+      const routeData = await loadRouteData(route);
+      routeCache.set(route, routeData);
+
+      // Prefetch assets de la ruta
+      await prefetchRouteAssets(route);
+    } catch (error) {
+      console.warn(`Failed to prefetch route ${route}:`, error);
+    } finally {
+      activePrefetch.current.delete(route);
+    }
+  }, [finalConfig.maxConcurrentPrefetch]);
+
+  // Prefetch de rutas críticas
+  const prefetchCriticalRoutes = useCallback(async () => {
+    if (!finalConfig.enabled) return;
+
+    const criticalRoutes = ['/shop', '/cart', '/favorites', '/categories'];
+
+    try {
+      for (const route of criticalRoutes) {
+        if (location.pathname !== route && !routeCache.get(route)) {
+          await prefetchRoute(route);
+        }
+      }
+    } catch (error) {
+      console.warn('Error prefetching critical routes:', error);
+    }
+  }, [location.pathname, finalConfig.enabled, prefetchRoute]);
+
+  // Prefetch de productos basado en comportamiento del usuario
+  const prefetchProductData = useCallback(async () => {
+    if (!finalConfig.enabled) return;
+
+    try {
+      // Prefetch productos populares
+      const popularProducts = allProducts
+        .sort((a, b) => b.reviewCount - a.reviewCount)
+        .slice(0, 20)
+        .map(p => p.id);
+
+      await productCache.preload(popularProducts);
+
+      // Prefetch productos de la categoría actual si estamos en shop
+      if (location.pathname === '/shop') {
+        const searchParams = new URLSearchParams(location.search);
+        const category = searchParams.get('category');
+
+        if (category) {
+          const categoryProducts = allProducts
+            .filter(p => p.category === category)
+            .slice(0, 40)
+            .map(p => p.id);
+
+          await productCache.preload(categoryProducts);
+        }
+      }
+    } catch (error) {
+      console.warn('Error prefetching product data:', error);
+    }
+  }, [location.pathname, location.search, finalConfig.enabled]);
 
   // Hook para prefetch en hover
   const usePrefetchOnHover = () => {
     return useCallback((route: string) => {
       if (!finalConfig.prefetchOnHover || !finalConfig.enabled) return {};
-      
+
       return {
         onMouseEnter: () => {
           setTimeout(() => {
@@ -157,34 +169,38 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
           }, finalConfig.prefetchDelay);
         },
       };
-    }, []);
+    }, [finalConfig.prefetchOnHover, finalConfig.enabled, finalConfig.prefetchDelay, prefetchRoute]);
   };
 
   // Hook para prefetch en intersección
   const usePrefetchOnVisible = () => {
     const observerRef = useRef<IntersectionObserver>();
-    
+
     useEffect(() => {
       if (!finalConfig.prefetchOnVisible || !finalConfig.enabled) return;
-      
+
       observerRef.current = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const route = entry.target.getAttribute('data-prefetch-route');
             if (route) {
-              prefetchRoute(route);
+              try {
+                prefetchRoute(route);
+              } catch (error) {
+                console.warn('Error prefetching route on visibility:', error);
+              }
             }
           }
         });
       }, {
         rootMargin: '50px',
       });
-      
+
       return () => {
         observerRef.current?.disconnect();
       };
-    }, []);
-    
+    }, [finalConfig.prefetchOnVisible, finalConfig.enabled, prefetchRoute]);
+
     return useCallback((element: HTMLElement | null, route: string) => {
       if (element && observerRef.current) {
         element.setAttribute('data-prefetch-route', route);
@@ -195,45 +211,66 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
 
   // Prefetch inteligente basado en patrones de navegación
   const intelligentPrefetch = useCallback(() => {
+    if (!finalConfig.enabled) return;
+
     const currentPath = location.pathname;
     const searchParams = new URLSearchParams(location.search);
-    
-    // Prefetch basado en la página actual
-    switch (currentPath) {
-      case '/':
-        // Desde home, es probable que vayan a shop
-        prefetchRoute('/shop');
-        break;
-      case '/shop':
-        // Desde shop, es probable que vayan a producto específico o carrito
-        prefetchRoute('/cart');
-        if (searchParams.get('category')) {
-          // Si hay categoría, prefetch productos relacionados
-          prefetchProductData();
-        }
-        break;
-      case '/cart':
-        // Desde carrito, es probable que vayan a checkout
-        prefetchRoute('/checkout');
-        break;
-      case '/categories':
-        // Desde categorías, es probable que vayan a shop con filtro
-        prefetchRoute('/shop');
-        break;
+
+    try {
+      // Prefetch basado en la página actual
+      switch (currentPath) {
+        case '/':
+          // Desde home, es probable que vayan a shop
+          prefetchRoute('/shop');
+          break;
+        case '/shop':
+          // Desde shop, es probable que vayan a producto específico o carrito
+          prefetchRoute('/cart');
+          if (searchParams.get('category')) {
+            // Si hay categoría, prefetch productos relacionados
+            prefetchProductData();
+          }
+          break;
+        case '/cart':
+          // Desde carrito, es probable que vayan a checkout
+          prefetchRoute('/checkout');
+          break;
+        case '/categories':
+          // Desde categorías, es probable que vayan a shop con filtro
+          prefetchRoute('/shop');
+          break;
+      }
+    } catch (error) {
+      console.warn('Error in intelligent prefetch:', error);
     }
-  }, [location, prefetchProductData]);
+  }, [location.pathname, location.search, finalConfig.enabled, prefetchRoute, prefetchProductData]);
 
   // Prefetch inicial
   useEffect(() => {
     if (!finalConfig.enabled) return;
-    
+
+    // Polyfill para requestIdleCallback si no está disponible
+    const requestIdleCallbackPolyfill = (callback: () => void) => {
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(callback);
+      } else {
+        setTimeout(callback, 1);
+      }
+    };
+
     // Prefetch crítico inmediato
-    requestIdleCallback(() => {
-      prefetchCriticalRoutes();
-      prefetchProductData();
-      intelligentPrefetch();
+    requestIdleCallbackPolyfill(async () => {
+      try {
+        await Promise.allSettled([
+          prefetchCriticalRoutes(),
+          prefetchProductData(),
+        ]);
+        intelligentPrefetch();
+      } catch (error) {
+        console.warn('Error during initial prefetch:', error);
+      }
     });
-  }, [location.pathname]);
+  }, [location.pathname, finalConfig.enabled, prefetchCriticalRoutes, prefetchProductData, intelligentPrefetch]);
 
   // Limpiar prefetch cuando cambia la ruta
   useEffect(() => {

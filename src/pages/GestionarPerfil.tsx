@@ -163,7 +163,7 @@ const GestionarPerfil = () => {
                 <User className="w-8 h-8" />
               </div>
               <div>
-                <h1 className="font-sans font-bold text-3xl lg:text-4xl">
+                <h1 className="font-display font-bold text-3xl lg:text-4xl">
                   Gestionar Perfil
                 </h1>
                 <p className="text-white/90 text-lg">
@@ -386,7 +386,7 @@ const GestionarPerfil = () => {
                         <div>
                           {address.city}, {address.state} {address.postalCode}
                         </div>
-                        <div className="mt-1 text-gray-600">
+                        <div className="mt-1 italic">
                           Referencias: {address.references}
                         </div>
                       </div>
