@@ -175,28 +175,32 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
   // Hook para prefetch en intersección
   const usePrefetchOnVisible = () => {
     const observerRef = useRef<IntersectionObserver>();
-    
+
     useEffect(() => {
       if (!finalConfig.prefetchOnVisible || !finalConfig.enabled) return;
-      
+
       observerRef.current = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const route = entry.target.getAttribute('data-prefetch-route');
             if (route) {
-              prefetchRoute(route);
+              try {
+                prefetchRoute(route);
+              } catch (error) {
+                console.warn('Error prefetching route on visibility:', error);
+              }
             }
           }
         });
       }, {
         rootMargin: '50px',
       });
-      
+
       return () => {
         observerRef.current?.disconnect();
       };
-    }, []);
-    
+    }, [finalConfig.prefetchOnVisible, finalConfig.enabled, prefetchRoute]);
+
     return useCallback((element: HTMLElement | null, route: string) => {
       if (element && observerRef.current) {
         element.setAttribute('data-prefetch-route', route);
