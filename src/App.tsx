@@ -223,6 +223,19 @@ const App = () => (
                         }
                       />
                       <Route
+                        path="/integracion-eleventa"
+                        element={
+                          <PermissionGuard
+                            permission="system:config"
+                            fallback={
+                              <AccessDenied requiredPermission="system:config" />
+                            }
+                          >
+                            <IntegracionEleventa />
+                          </PermissionGuard>
+                        }
+                      />
+                      <Route
                         path="/system-config"
                         element={
                           <PermissionGuard
