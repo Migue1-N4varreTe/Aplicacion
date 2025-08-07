@@ -58,6 +58,9 @@ app.use(morgan("combined"));
 // app.use("/api/employees", employeeRoutes);
 // app.use("/api/reports", reportRoutes);
 
+// Eleventa Integration Routes
+app.use("/api/eleventa", eleventaRoutes);
+
 // Health check
 app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "La Económica API is running" });
