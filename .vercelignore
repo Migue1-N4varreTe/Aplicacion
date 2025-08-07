@@ -10,7 +10,6 @@ build
 coverage
 tests
 playwright-report
-Aplicacion
 netlify
 *.md
 !README.md
