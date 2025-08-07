@@ -27,7 +27,7 @@ import NotFound from "./pages/NotFound";
 
 // Lazy loaded pages
 const Favorites = lazy(() => import("./pages/Favorites"));
-const Shop = lazy(() => import("./pages/Shop"));
+const Shop = lazy(() => import("./pages/ShopSimple"));
 const Categories = lazy(() => import("./pages/Categories"));
 const Offers = lazy(() => import("./pages/Offers"));
 const Cart = lazy(() => import("./pages/Cart"));
