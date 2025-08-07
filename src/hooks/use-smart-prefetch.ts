@@ -29,40 +29,52 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
 
   // Prefetch de rutas críticas
   const prefetchCriticalRoutes = useCallback(async () => {
+    if (!finalConfig.enabled) return;
+
     const criticalRoutes = ['/shop', '/cart', '/favorites', '/categories'];
-    
-    for (const route of criticalRoutes) {
-      if (location.pathname !== route && !routeCache.get(route)) {
-        await prefetchRoute(route);
+
+    try {
+      for (const route of criticalRoutes) {
+        if (location.pathname !== route && !routeCache.get(route)) {
+          await prefetchRoute(route);
+        }
       }
+    } catch (error) {
+      console.warn('Error prefetching critical routes:', error);
     }
-  }, [location.pathname]);
+  }, [location.pathname, finalConfig.enabled, prefetchRoute]);
 
   // Prefetch de productos basado en comportamiento del usuario
   const prefetchProductData = useCallback(async () => {
-    // Prefetch productos populares
-    const popularProducts = allProducts
-      .sort((a, b) => b.reviewCount - a.reviewCount)
-      .slice(0, 20)
-      .map(p => p.id);
-    
-    await productCache.preload(popularProducts);
-    
-    // Prefetch productos de la categoría actual si estamos en shop
-    if (location.pathname === '/shop') {
-      const searchParams = new URLSearchParams(location.search);
-      const category = searchParams.get('category');
-      
-      if (category) {
-        const categoryProducts = allProducts
-          .filter(p => p.category === category)
-          .slice(0, 40)
-          .map(p => p.id);
-        
-        await productCache.preload(categoryProducts);
+    if (!finalConfig.enabled) return;
+
+    try {
+      // Prefetch productos populares
+      const popularProducts = allProducts
+        .sort((a, b) => b.reviewCount - a.reviewCount)
+        .slice(0, 20)
+        .map(p => p.id);
+
+      await productCache.preload(popularProducts);
+
+      // Prefetch productos de la categoría actual si estamos en shop
+      if (location.pathname === '/shop') {
+        const searchParams = new URLSearchParams(location.search);
+        const category = searchParams.get('category');
+
+        if (category) {
+          const categoryProducts = allProducts
+            .filter(p => p.category === category)
+            .slice(0, 40)
+            .map(p => p.id);
+
+          await productCache.preload(categoryProducts);
+        }
       }
+    } catch (error) {
+      console.warn('Error prefetching product data:', error);
     }
-  }, [location]);
+  }, [location.pathname, location.search, finalConfig.enabled]);
 
   // Prefetch de ruta específica
   const prefetchRoute = useCallback(async (route: string) => {
