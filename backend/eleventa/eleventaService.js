@@ -751,4 +751,4 @@ class EleventaService {
 // Crear instancia singleton
 const eleventaService = new EleventaService();
 
-module.exports = eleventaService;
+export default eleventaService;
