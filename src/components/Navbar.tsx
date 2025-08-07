@@ -323,6 +323,14 @@ const Navbar: React.FC = () => {
                       </Link>
                     </DropdownMenuItem>
                   </PermissionGuard>
+                  <PermissionGuard permission="system:config">
+                    <DropdownMenuItem asChild>
+                      <Link to="/integracion-eleventa" className="flex items-center">
+                        <Store className="mr-2 h-4 w-4" />
+                        Integración Eleventa
+                      </Link>
+                    </DropdownMenuItem>
+                  </PermissionGuard>
                   <PermissionGuard permission="staff:view">
                     <DropdownMenuItem asChild>
                       <Link to="/admin" className="flex items-center">
