@@ -161,7 +161,7 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
   const usePrefetchOnHover = () => {
     return useCallback((route: string) => {
       if (!finalConfig.prefetchOnHover || !finalConfig.enabled) return {};
-      
+
       return {
         onMouseEnter: () => {
           setTimeout(() => {
@@ -169,7 +169,7 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
           }, finalConfig.prefetchDelay);
         },
       };
-    }, []);
+    }, [finalConfig.prefetchOnHover, finalConfig.enabled, finalConfig.prefetchDelay, prefetchRoute]);
   };
 
   // Hook para prefetch en intersección
