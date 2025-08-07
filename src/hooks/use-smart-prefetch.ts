@@ -207,33 +207,39 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
 
   // Prefetch inteligente basado en patrones de navegación
   const intelligentPrefetch = useCallback(() => {
+    if (!finalConfig.enabled) return;
+
     const currentPath = location.pathname;
     const searchParams = new URLSearchParams(location.search);
-    
-    // Prefetch basado en la página actual
-    switch (currentPath) {
-      case '/':
-        // Desde home, es probable que vayan a shop
-        prefetchRoute('/shop');
-        break;
-      case '/shop':
-        // Desde shop, es probable que vayan a producto específico o carrito
-        prefetchRoute('/cart');
-        if (searchParams.get('category')) {
-          // Si hay categoría, prefetch productos relacionados
-          prefetchProductData();
-        }
-        break;
-      case '/cart':
-        // Desde carrito, es probable que vayan a checkout
-        prefetchRoute('/checkout');
-        break;
-      case '/categories':
-        // Desde categorías, es probable que vayan a shop con filtro
-        prefetchRoute('/shop');
-        break;
+
+    try {
+      // Prefetch basado en la página actual
+      switch (currentPath) {
+        case '/':
+          // Desde home, es probable que vayan a shop
+          prefetchRoute('/shop');
+          break;
+        case '/shop':
+          // Desde shop, es probable que vayan a producto específico o carrito
+          prefetchRoute('/cart');
+          if (searchParams.get('category')) {
+            // Si hay categoría, prefetch productos relacionados
+            prefetchProductData();
+          }
+          break;
+        case '/cart':
+          // Desde carrito, es probable que vayan a checkout
+          prefetchRoute('/checkout');
+          break;
+        case '/categories':
+          // Desde categorías, es probable que vayan a shop con filtro
+          prefetchRoute('/shop');
+          break;
+      }
+    } catch (error) {
+      console.warn('Error in intelligent prefetch:', error);
     }
-  }, [location, prefetchProductData]);
+  }, [location.pathname, location.search, finalConfig.enabled, prefetchRoute, prefetchProductData]);
 
   // Prefetch inicial
   useEffect(() => {
