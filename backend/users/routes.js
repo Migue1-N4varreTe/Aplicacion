@@ -6,16 +6,7 @@ import {
   requireLevel,
 } from "../auth/middleware.js";
 import { PERMISSIONS } from "./roles.js";
-import {
-  getAllUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
-  updateUserRole,
-  getTemporaryPermissions,
-  grantTemporaryPermission,
-  revokeTemporaryPermission,
-} from "./userService.js";
+import { UserService } from "./userService.js";
 
 const router = express.Router();
 

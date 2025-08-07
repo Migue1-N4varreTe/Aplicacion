@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { apiService } from "../services/api";
-import { logger } from "@/lib/logger";
 
 export interface User {
   id: string;
@@ -154,7 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       await apiService.logout();
     } catch (error) {
-      logger.error("Logout error", error as Error);
+      console.error("Logout error:", error);
     } finally {
       setUser(null);
     }
@@ -165,7 +164,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const userData = await apiService.getMe();
       setUser(userData);
     } catch (error) {
-      logger.error("Failed to refresh user", error as Error);
+      console.error("Failed to refresh user:", error);
       setUser(null);
     }
   };
@@ -202,9 +201,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         try {
           await refreshUser();
         } catch (error) {
-          logger.error("Auth initialization failed", error);
+          console.error("Auth initialization failed:", error);
           // Don't remove token on initialization failure - might be network issue
-          logger.warn("Keeping auth token - will retry on next request");
+          console.warn("Keeping auth token - will retry on next request");
         }
       }
       setLoading(false);
