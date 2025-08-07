@@ -51,6 +51,7 @@ const Reports = lazy(() => import("./pages/Reports"));
 const Employees = lazy(() => import("./pages/Employees"));
 const Clients = lazy(() => import("./pages/Clients"));
 const SystemConfig = lazy(() => import("./pages/SystemConfig"));
+const IntegracionEleventa = lazy(() => import("./pages/IntegracionEleventa"));
 
 // User onboarding pages (lazy loaded)
 const TutorialPrimerPedido = lazy(() => import("./pages/TutorialPrimerPedido"));
