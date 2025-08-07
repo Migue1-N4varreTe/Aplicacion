@@ -98,7 +98,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
 
     // Enable sourcemaps for production debugging
-    sourcemap: process.env.NODE_ENV === "development",
+    sourcemap: process.env.NODE_ENV !== "production",
   },
 
   // Development server optimization
@@ -126,9 +126,10 @@ export default defineConfig({
   },
 
   // Define environment variables
-  define: {
-    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
-    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+define: {
+  __APP_VERSION__: JSON.stringify(process.env.npm_package_version || "0.0.0"),
+  __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+
   },
 
   // Optimize dependencies

@@ -95,15 +95,11 @@ export const testProducts: Product[] = [
   },
 ];
 
-import { getBalancedProducts } from "./product-audit";
-
-// Función para agregar productos de prueba y balanceados
+// Función para agregar productos de prueba en desarrollo
 export const addTestProducts = (): Product[] => {
   if (process.env.NODE_ENV === "development") {
-    console.log("🧪 Agregando productos de prueba básicos para desarrollo");
-    console.log("📊 Agregando productos balanceados para completar categorías");
-    return [...testProducts, ...getBalancedProducts()];
+    console.log("🧪 Agregando productos de prueba para desarrollo");
+    return testProducts;
   }
-  // En producción, solo agregar productos balanceados (sin los de prueba básicos)
-  return getBalancedProducts();
+  return [];
 };

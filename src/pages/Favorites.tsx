@@ -101,7 +101,7 @@ const Favorites = () => {
             <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
               <Heart className="w-12 h-12 text-gray-400" />
             </div>
-            <h1 className="font-sans font-bold text-2xl md:text-3xl text-gray-900 mb-4">
+            <h1 className="font-display font-bold text-2xl md:text-3xl text-gray-900 mb-4">
               No tienes favoritos aún
             </h1>
             <p className="text-gray-600 mb-8">
@@ -134,7 +134,7 @@ const Favorites = () => {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Heart className="w-8 h-8 text-red-500 fill-red-500" />
-            <h1 className="font-sans font-bold text-2xl md:text-3xl text-gray-900">
+            <h1 className="font-display font-bold text-2xl md:text-3xl text-gray-900">
               Mis Favoritos
             </h1>
             <Badge className="bg-red-100 text-red-700">
@@ -315,7 +315,7 @@ const Favorites = () => {
         {/* Quick Actions */}
         <div className="mt-16 grid md:grid-cols-2 gap-6">
           <div className="bg-gradient-to-r from-brand-500 to-fresh-500 rounded-2xl p-6 md:p-8 text-white">
-            <h2 className="font-sans font-bold text-xl md:text-2xl mb-4">
+            <h2 className="font-display font-bold text-xl md:text-2xl mb-4">
               ¿Listo para comprar?
             </h2>
             <p className="text-white/90 mb-6">
@@ -334,7 +334,7 @@ const Favorites = () => {
           </div>
 
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-6 md:p-8 text-white">
-            <h2 className="font-sans font-bold text-xl md:text-2xl mb-4">
+            <h2 className="font-display font-bold text-xl md:text-2xl mb-4">
               Descubre más productos
             </h2>
             <p className="text-white/90 mb-6">

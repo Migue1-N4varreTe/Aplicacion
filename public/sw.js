@@ -1,26 +1,15 @@
-const CACHE_NAME = "la-economica-pos-v1.0.0";
-const API_CACHE_NAME = "la-economica-api-v1.0.0";
+const CACHE_NAME = "la-economica-pos-v1.1.0";
+const API_CACHE_NAME = "la-economica-api-v1.1.0";
 
 // Static assets to cache
 const STATIC_ASSETS = [
   "/",
-  "/pos",
-  "/inventory",
-  "/reports",
-  "/clients",
-  "/employees",
-  "/system-config",
   "/manifest.json",
-  // Add more critical routes and assets here
-];
-
-// API endpoints to cache for offline functionality
-const API_ENDPOINTS = [
-  "/api/products",
-  "/api/categories",
-  "/api/clients",
-  "/api/employees",
-  "/api/sales/recent",
+  // Critical routes for mobile
+  "/shop",
+  "/categories",
+  "/cart",
+  "/favorites",
 ];
 
 // Install event - cache static assets
@@ -28,30 +17,17 @@ self.addEventListener("install", (event) => {
   console.log("Service Worker installing...");
 
   event.waitUntil(
-    Promise.all([
-      // Cache static assets
-      caches.open(CACHE_NAME).then((cache) => {
-        console.log("Caching static assets");
-        return cache.addAll(STATIC_ASSETS);
-      }),
-      // Cache API endpoints
-      caches.open(API_CACHE_NAME).then((cache) => {
-        console.log("Pre-caching API endpoints");
-        return Promise.allSettled(
-          API_ENDPOINTS.map(
-            (endpoint) =>
-              fetch(endpoint)
-                .then((response) =>
-                  response.ok ? cache.put(endpoint, response) : null,
-                )
-                .catch(() => null), // Ignore errors during pre-caching
-          ),
-        );
-      }),
-    ]).then(() => {
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log("Caching static assets");
+      // Handle cache failures gracefully on mobile
+      return cache.addAll(STATIC_ASSETS).catch((error) => {
+        console.warn("Some assets failed to cache, continuing anyway:", error);
+        return Promise.resolve();
+      });
+    }).then(() => {
       // Force activation of new service worker
       self.skipWaiting();
-    }),
+    })
   );
 });
 
@@ -78,360 +54,175 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch event - handle requests with caching strategies
+// Simplified fetch handler for mobile compatibility
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
   // Skip non-GET requests and external requests
-  if (request.method !== "GET" || !url.origin.includes(self.location.origin)) {
+  if (request.method !== "GET") {
     return;
   }
 
-  // API requests - Network First with fallback to cache
+  // Skip cross-origin requests that might fail on mobile
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  // For API requests, try network first, then cache
   if (url.pathname.startsWith("/api/")) {
-    event.respondWith(networkFirstStrategy(request, API_CACHE_NAME));
-    return;
-  }
-
-  // Static assets - Cache First
-  if (isStaticAsset(url.pathname)) {
-    event.respondWith(cacheFirstStrategy(request, CACHE_NAME));
-    return;
-  }
-
-  // Pages - Network First with cache fallback
-  event.respondWith(networkFirstStrategy(request, CACHE_NAME));
-});
-
-// Cache First Strategy - for static assets
-async function cacheFirstStrategy(request, cacheName) {
-  try {
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    console.error("Cache first strategy failed:", error);
-    // Return a fallback response for critical assets
-    return createFallbackResponse(request);
-  }
-}
-
-// Network First Strategy - for dynamic content and API
-async function networkFirstStrategy(request, cacheName) {
-  try {
-    const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      // Update cache with fresh data
-      const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
-    }
-
-    return networkResponse;
-  } catch (error) {
-    console.log("Network failed, falling back to cache:", request.url);
-
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Return offline fallback
-    return createOfflineFallback(request);
-  }
-}
-
-// Check if request is for a static asset
-function isStaticAsset(pathname) {
-  const staticExtensions = [
-    ".js",
-    ".css",
-    ".png",
-    ".jpg",
-    ".jpeg",
-    ".svg",
-    ".ico",
-    ".woff",
-    ".woff2",
-  ];
-  return staticExtensions.some((ext) => pathname.endsWith(ext));
-}
-
-// Create fallback response for failed requests
-function createFallbackResponse(request) {
-  const url = new URL(request.url);
-
-  if (url.pathname.startsWith("/api/")) {
-    // Return offline indicator for API calls
-    return new Response(
-      JSON.stringify({
-        error: "Offline",
-        message: "Esta función requiere conexión a internet",
-        offline: true,
-      }),
-      {
-        status: 503,
-        statusText: "Service Unavailable",
-        headers: { "Content-Type": "application/json" },
-      },
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          // Cache successful responses
+          if (response.ok) {
+            const responseClone = response.clone();
+            caches.open(API_CACHE_NAME).then(cache => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache
+          return caches.match(request).then(cachedResponse => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // Return offline response for API
+            return new Response(
+              JSON.stringify({
+                error: "Offline",
+                message: "Sin conexión a internet",
+                offline: true,
+              }),
+              {
+                status: 503,
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+          });
+        })
     );
-  }
-
-  // Return basic HTML for page requests
-  return new Response(
-    `<!DOCTYPE html>
-    <html>
-    <head>
-      <title>La Económica POS - Offline</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>
-        body { 
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          display: flex; 
-          justify-content: center; 
-          align-items: center; 
-          height: 100vh; 
-          margin: 0; 
-          background: #f9fafb;
-          color: #374151;
-        }
-        .container { 
-          text-align: center; 
-          max-width: 400px; 
-          padding: 2rem;
-        }
-        .icon { 
-          font-size: 4rem; 
-          margin-bottom: 1rem; 
-        }
-        h1 { 
-          color: #1f2937; 
-          margin-bottom: 0.5rem; 
-        }
-        p { 
-          color: #6b7280; 
-          margin-bottom: 1.5rem; 
-        }
-        button {
-          background: #16a34a;
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 0.5rem;
-          cursor: pointer;
-          font-size: 1rem;
-        }
-        button:hover {
-          background: #15803d;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="icon">📱</div>
-        <h1>Funcionando sin conexión</h1>
-        <p>La aplicación está disponible en modo offline. Algunas funciones pueden estar limitadas.</p>
-        <button onclick="window.location.reload()">Reintentar</button>
-      </div>
-    </body>
-    </html>`,
-    {
-      status: 200,
-      headers: { "Content-Type": "text/html" },
-    },
-  );
-}
-
-// Create offline fallback for API requests
-function createOfflineFallback(request) {
-  const url = new URL(request.url);
-
-  if (url.pathname.startsWith("/api/")) {
-    return new Response(
-      JSON.stringify({
-        error: "Network unavailable",
-        message: "Please check your internet connection",
-        offline: true,
-        cached: false,
-      }),
-      {
-        status: 503,
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-  }
-
-  return createFallbackResponse(request);
-}
-
-// Background sync for offline actions
-self.addEventListener("sync", (event) => {
-  console.log("Background sync triggered:", event.tag);
-
-  if (event.tag === "sync-sales") {
-    event.waitUntil(syncOfflineSales());
-  }
-
-  if (event.tag === "sync-inventory") {
-    event.waitUntil(syncInventoryUpdates());
-  }
-});
-
-// Sync offline sales when connection is restored
-async function syncOfflineSales() {
-  try {
-    const offlineSales = await getOfflineData("sales");
-
-    for (const sale of offlineSales) {
-      try {
-        const response = await fetch("/api/sales", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(sale),
-        });
-
-        if (response.ok) {
-          await removeOfflineData("sales", sale.id);
-          console.log("Offline sale synced:", sale.id);
-        }
-      } catch (error) {
-        console.error("Failed to sync sale:", sale.id, error);
-      }
-    }
-  } catch (error) {
-    console.error("Background sync failed:", error);
-  }
-}
-
-// Sync inventory updates
-async function syncInventoryUpdates() {
-  try {
-    const inventoryUpdates = await getOfflineData("inventory");
-
-    for (const update of inventoryUpdates) {
-      try {
-        const response = await fetch(`/api/products/${update.productId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(update.data),
-        });
-
-        if (response.ok) {
-          await removeOfflineData("inventory", update.id);
-          console.log("Inventory update synced:", update.id);
-        }
-      } catch (error) {
-        console.error("Failed to sync inventory update:", update.id, error);
-      }
-    }
-  } catch (error) {
-    console.error("Inventory sync failed:", error);
-  }
-}
-
-// Helper functions for offline data management
-async function getOfflineData(type) {
-  const cache = await caches.open(`${type}-offline`);
-  const requests = await cache.keys();
-  const data = [];
-
-  for (const request of requests) {
-    const response = await cache.match(request);
-    if (response) {
-      const item = await response.json();
-      data.push(item);
-    }
-  }
-
-  return data;
-}
-
-async function removeOfflineData(type, id) {
-  const cache = await caches.open(`${type}-offline`);
-  await cache.delete(`/${type}/${id}`);
-}
-
-// Push notification handling
-self.addEventListener("push", (event) => {
-  console.log("Push notification received:", event);
-
-  const options = {
-    body: "Nueva notificación de La Económica POS",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/badge-72x72.png",
-    tag: "la-economica-notification",
-    requireInteraction: false,
-    actions: [
-      {
-        action: "view",
-        title: "Ver",
-        icon: "/icons/view-action.png",
-      },
-      {
-        action: "dismiss",
-        title: "Descartar",
-        icon: "/icons/dismiss-action.png",
-      },
-    ],
-  };
-
-  if (event.data) {
-    try {
-      const data = event.data.json();
-      options.body = data.message || options.body;
-      options.tag = data.tag || options.tag;
-      options.data = data;
-    } catch (error) {
-      console.error("Error parsing push data:", error);
-    }
-  }
-
-  event.waitUntil(
-    self.registration.showNotification("La Económica POS", options),
-  );
-});
-
-// Handle notification clicks
-self.addEventListener("notificationclick", (event) => {
-  console.log("Notification clicked:", event);
-
-  event.notification.close();
-
-  if (event.action === "view") {
-    // Open the app
-    event.waitUntil(clients.openWindow("/"));
-  } else if (event.action === "dismiss") {
-    // Just close the notification
     return;
-  } else {
-    // Default action - open the app
-    event.waitUntil(clients.openWindow("/"));
   }
+
+  // For all other requests, network first with cache fallback
+  event.respondWith(
+    fetch(request)
+      .then(response => {
+        // Cache successful responses
+        if (response.ok) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(request, responseClone);
+          });
+        }
+        return response;
+      })
+      .catch(() => {
+        // Fallback to cache
+        return caches.match(request).then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          
+          // Return a simple offline page for navigation requests
+          if (request.mode === 'navigate') {
+            return new Response(
+              `<!DOCTYPE html>
+              <html lang="es">
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>La Económica - Sin conexión</title>
+                <style>
+                  body { 
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    height: 100vh; 
+                    margin: 0; 
+                    background: #f9fafb;
+                    color: #374151;
+                    padding: 1rem;
+                    box-sizing: border-box;
+                  }
+                  .container { 
+                    text-align: center; 
+                    max-width: 400px; 
+                    width: 100%;
+                  }
+                  .icon { 
+                    font-size: 3rem; 
+                    margin-bottom: 1rem; 
+                  }
+                  h1 { 
+                    color: #1f2937; 
+                    margin-bottom: 0.5rem;
+                    font-size: 1.5rem;
+                  }
+                  p { 
+                    color: #6b7280; 
+                    margin-bottom: 1.5rem; 
+                  }
+                  button {
+                    background: #16a34a;
+                    color: white;
+                    border: none;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 0.5rem;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    width: 100%;
+                    max-width: 200px;
+                  }
+                  button:hover {
+                    background: #15803d;
+                  }
+                  @media (max-width: 480px) {
+                    .icon { font-size: 2.5rem; }
+                    h1 { font-size: 1.25rem; }
+                    p { font-size: 0.9rem; }
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <div class="icon">📱</div>
+                  <h1>Sin conexión</h1>
+                  <p>Verifica tu conexión a internet e intenta nuevamente.</p>
+                  <button onclick="window.location.reload()">Reintentar</button>
+                </div>
+              </body>
+              </html>`,
+              {
+                status: 200,
+                headers: { "Content-Type": "text/html" },
+              }
+            );
+          }
+          
+          // For other requests, return a generic error
+          return new Response("Offline", { status: 503 });
+        });
+      })
+  );
 });
 
 // Handle message events from the main thread
 self.addEventListener("message", (event) => {
-  console.log("Service Worker received message:", event.data);
-
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
+});
 
-  if (event.data && event.data.type === "CACHE_URLS") {
-    event.waitUntil(
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.addAll(event.data.urls);
-      }),
-    );
-  }
+// Simplified error handling
+self.addEventListener("error", (event) => {
+  console.error("Service Worker error:", event.error);
+});
+
+self.addEventListener("unhandledrejection", (event) => {
+  console.error("Service Worker unhandled rejection:", event.reason);
 });

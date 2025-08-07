@@ -246,7 +246,7 @@ const Help = () => {
       <section className="bg-gradient-to-r from-brand-500 to-fresh-500 text-white py-16">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="font-sans font-bold text-4xl lg:text-5xl mb-4">
+            <h1 className="font-display font-bold text-4xl lg:text-5xl mb-4">
               ¿En qué podemos ayudarte?
             </h1>
             <p className="text-lg text-white/90 mb-8">
@@ -399,7 +399,7 @@ const Help = () => {
           {/* Guides Tab */}
           <TabsContent value="guides" className="space-y-8">
             <div className="text-center mb-8">
-              <h2 className="font-sans font-bold text-2xl text-gray-900 mb-2">
+              <h2 className="font-display font-bold text-2xl text-gray-900 mb-2">
                 Guías y tutoriales
               </h2>
               <p className="text-gray-600">
@@ -481,7 +481,7 @@ const Help = () => {
             {/* Video Tutorials */}
             <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-8 text-white">
               <div className="max-w-2xl mx-auto text-center">
-                <h3 className="font-sans font-bold text-2xl mb-4">
+                <h3 className="font-display font-bold text-2xl mb-4">
                   Tutoriales en video
                 </h3>
                 <p className="text-white/90 mb-6">
@@ -503,7 +503,7 @@ const Help = () => {
           {/* Contact Tab */}
           <TabsContent value="contact" className="space-y-8">
             <div className="text-center mb-8">
-              <h2 className="font-sans font-bold text-2xl text-gray-900 mb-2">
+              <h2 className="font-display font-bold text-2xl text-gray-900 mb-2">
                 Contactar soporte
               </h2>
               <p className="text-gray-600">

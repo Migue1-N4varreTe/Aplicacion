@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ProductImage } from "@/components/ui/smart-image";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -269,7 +268,7 @@ const Orders = () => {
       <div className="container px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="font-sans font-bold text-2xl md:text-3xl text-gray-900 mb-2">
+          <h1 className="font-display font-bold text-2xl md:text-3xl text-gray-900 mb-2">
             Mis pedidos
           </h1>
           <p className="text-gray-600">
@@ -413,11 +412,10 @@ const Orders = () => {
                         {/* Products Preview */}
                         <div className="flex items-center gap-2 mt-4">
                           {order.items.slice(0, 3).map((item) => (
-                            <ProductImage
+                            <img
                               key={item.id}
                               src={item.image}
-                              productName={item.name}
-                              category={item.category}
+                              alt={item.name}
                               className="w-10 h-10 rounded-lg object-cover bg-gray-100"
                             />
                           ))}
@@ -514,10 +512,9 @@ const Orders = () => {
                                         key={item.id}
                                         className="flex items-center gap-3 p-3 border rounded-lg"
                                       >
-                                        <ProductImage
+                                        <img
                                           src={item.image}
-                                          productName={item.name}
-                                          category={item.category}
+                                          alt={item.name}
                                           className="w-12 h-12 rounded-lg object-cover"
                                         />
                                         <div className="flex-1">

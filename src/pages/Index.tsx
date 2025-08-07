@@ -1,5 +1,4 @@
-import { useState, lazy, Suspense, useMemo } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,12 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import ResourcePreloader from "@/components/ResourcePreloader";
-
-// Lazy load non-critical components
-const ProductCard = lazy(() => import("@/components/ProductCard"));
-const CategoryCard = lazy(() => import("@/components/CategoryCard"));
+import ProductCard from "@/components/ProductCard";
+import CategoryCard from "@/components/CategoryCard";
 import {
   Truck,
   Clock,
@@ -47,16 +42,15 @@ const Index = () => {
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
   const { toast } = useToast();
-  const isMobile = useIsMobile();
 
-  const suggestedLocations = useMemo(() => [
+  const suggestedLocations = [
     "Centro, Ciudad de México",
     "Roma Norte, Ciudad de México",
     "Condesa, Ciudad de México",
     "Polanco, Ciudad de México",
     "Santa Fe, Ciudad de México",
     "Coyoacán, Ciudad de México",
-  ], []);
+  ];
 
   const handleLocationChange = (newLocation: string) => {
     setCurrentLocation(newLocation);
@@ -99,7 +93,6 @@ const Index = () => {
   );
   return (
     <div className="min-h-screen bg-gray-50">
-      <ResourcePreloader priority="high" />
       <Navbar />
 
       {/* Current Location Bar */}
@@ -188,26 +181,13 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-brand-500 via-brand-600 to-fresh-600 overflow-hidden">
         <div className="absolute inset-0 bg-black/10" />
-        <div className="absolute inset-0 opacity-10">
-          <picture>
-            <source
-              media="(max-width: 640px)"
-              srcSet="https://images.pexels.com/photos/2564460/pexels-photo-2564460.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop"
-            />
-            <source
-              media="(max-width: 1024px)"
-              srcSet="https://images.pexels.com/photos/2564460/pexels-photo-2564460.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop"
-            />
-            <img
-              src="https://images.pexels.com/photos/2564460/pexels-photo-2564460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
-              alt="Supermercado La Económica"
-              className="w-full h-full object-cover"
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </picture>
-        </div>
+        <div
+          className="absolute inset-0 opacity-10 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url(https://images.pexels.com/photos/2564460/pexels-photo-2564460.jpeg)",
+          }}
+        />
         <div className="container relative px-0 py-20">
           <div className="max-w-4xl mx-auto text-center">
             {/* Hero Content */}
@@ -218,7 +198,7 @@ const Index = () => {
                 </span>
               </Badge>
 
-              <h1 className="font-sans font-bold text-4xl lg:text-6xl leading-tight">
+              <h1 className="font-display font-bold text-4xl lg:text-6xl leading-tight">
                 Todo lo que necesitas,
                 <span className="block text-yellow-300 text-xl pb-1.5">
                   <br />
@@ -237,7 +217,7 @@ const Index = () => {
                   className="bg-yellow-500 text-gray-900 hover:bg-yellow-400 shadow-lg font-semibold"
                   asChild
                 >
-                  <Link to="/shop" target="_blank" rel="noopener noreferrer">
+                  <Link to="/shop" target="_blank">
                     <span className="font-sans text-xl">Explorar tienda</span>
                     <ArrowRight className="ml-2 h-4 w-4 text-3xl" />
                   </Link>
@@ -281,42 +261,51 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Quick Categories - Single Line Responsive */}
+      {/* Quick Categories */}
       <section className="py-5 bg-white">
-        <div className="container mx-auto px-4">
-          {/* Universal horizontal scroll layout for all devices */}
-          <div className="flex overflow-x-auto scrollbar-hide snap-scroll adaptive-gap py-2">
+        <div className="container mx-auto">
+          {/* Desktop view */}
+          <div className="hidden md:flex flex-row justify-center items-center gap-20 px-5">
             {quickCategories.map((cat, index) => (
               <Link
                 key={cat.name}
                 to="/shop"
-                className={`flex items-center justify-center adaptive-gap btn-spacing rounded-xl transition-all hover:scale-105 hover:shadow-md ${cat.color} text-white font-medium whitespace-nowrap flex-shrink-0 snap-item btn-text text-safe
-                  xs:px-3 xs:py-2 xs:text-xs
-                  sm:px-4 sm:py-3 sm:text-sm
-                  md:px-5 md:py-4 md:text-base
-                  lg:px-6 lg:py-4 lg:text-lg
-                  xl:px-7 xl:py-4 xl:text-xl
-                  min-w-[100px] sm:min-w-[120px] md:min-w-[140px] lg:min-w-[160px] xl:min-w-[180px]
-                  max-w-[120px] sm:max-w-[140px] md:max-w-[160px] lg:max-w-[200px] xl:max-w-[220px]
-                  animate-slide-in container-safe`}
+                className={`flex items-center ${index === 0 ? "px-6 pr-4" : index === 1 ? "px-7 pr-4" : index === 2 ? "px-4 pr-15" : "px-4"} py-4 rounded-xl transition-all hover:-translate-y-1 hover:shadow-md ${cat.color} text-white animate-slide-in text-xl`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <span className="text-base sm:text-lg md:text-xl lg:text-2xl flex-shrink-0">{cat.icon}</span>
-                <span className="leading-tight text-center font-sans text-ellipsis-safe">
-                  {cat.name === "Delivery rápido" && isMobile ? "Delivery" : cat.name}
+                <span className="text-2xl">{cat.icon}</span>
+                <span
+                  className={`font-medium ${index === 3 ? "text-xl" : "text-xl"} ml-3`}
+                >
+                  {cat.name === "Delivery rápido" ? (
+                    <p>Delivery rápido</p>
+                  ) : (
+                    cat.name
+                  )}
                 </span>
               </Link>
             ))}
           </div>
 
-          {/* Scroll indicators */}
-          <div className="flex justify-center mt-2 gap-1">
-            {quickCategories.map((_, index) => (
-              <div
-                key={`indicator-${index}`}
-                className="w-1.5 h-1.5 rounded-full bg-gray-300 transition-colors"
-              />
-            ))}
+          {/* Mobile view - horizontal scroll */}
+          <div className="md:hidden">
+            <div className="flex overflow-x-auto scrollbar-hide gap-4 px-4 py-2">
+              {quickCategories.map((cat, index) => (
+                <Link
+                  key={`mobile-${cat.name}`}
+                  to="/shop"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${cat.color} text-white text-sm font-medium whitespace-nowrap flex-shrink-0 min-w-fit`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <span className="text-lg">{cat.icon}</span>
+                  <span>
+                    {cat.name === "Delivery rápido"
+                      ? "Delivery rápido"
+                      : cat.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -324,7 +313,7 @@ const Index = () => {
       {/* Delivery Options */}
       <section className="pb-5">
         <div className="container px-4">
-          <h2 className="font-sans font-bold text-3xl text-gray-900 self-stretch pb-5 pl-87.5">
+          <h2 className="font-display font-bold text-3xl text-gray-900 self-stretch pb-5 pl-87.5">
             <br />
             ¿Cómo quieres recibir tu pedido?
           </h2>
@@ -366,7 +355,7 @@ const Index = () => {
         <div className="container px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="font-sans font-bold text-3xl text-gray-900 mb-2">
+              <h2 className="font-display font-bold text-3xl text-gray-900 mb-2">
                 Explora por categorías
               </h2>
               <p className="text-gray-600">
@@ -382,23 +371,13 @@ const Index = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <Suspense fallback={
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
-                {Array.from({ length: 8 }).map((_, index) => (
-                  <div key={`skeleton-${index}`} className="animate-pulse">
-                    <div className="bg-gray-200 rounded-lg h-32 w-full"></div>
-                  </div>
-                ))}
-              </div>
-            }>
-              {categories.slice(0, 8).map((category, index) => (
-                <CategoryCard
-                  key={category.id}
-                  category={category}
-                  className={`animate-slide-in delay-${index * 100}`}
-                />
-              ))}
-            </Suspense>
+            {categories.slice(0, 8).map((category, index) => (
+              <CategoryCard
+                key={category.id}
+                category={category}
+                className={`animate-slide-in delay-${index * 100}`}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -407,7 +386,7 @@ const Index = () => {
       <section className="py-12 bg-white">
         <div className="container px-4">
           <div className="text-center mb-12">
-            <h2 className="font-sans font-bold text-3xl text-gray-900 mb-4">
+            <h2 className="font-display font-bold text-3xl text-gray-900 mb-4">
               ¿Por qué elegir La Economica?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -463,7 +442,7 @@ const Index = () => {
       <section className="py-12 bg-gradient-to-r from-brand-50 to-yellow-50">
         <div className="container px-4">
           <div className="text-center mb-8">
-            <h2 className="font-sans font-bold text-3xl text-gray-900 mb-2">
+            <h2 className="font-display font-bold text-3xl text-gray-900 mb-2">
               Nuestro Inventario
             </h2>
             <p className="text-gray-600">
@@ -502,7 +481,7 @@ const Index = () => {
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-brand-500 to-fresh-500">
         <div className="container px-4 text-center">
-          <h2 className="font-sans font-bold text-3xl lg:text-4xl text-white mb-4">
+          <h2 className="font-display font-bold text-3xl lg:text-4xl text-white mb-4">
             ¿Listo para tu primer pedido?
           </h2>
           <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
@@ -532,7 +511,7 @@ const Index = () => {
                 <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-500 to-fresh-500 flex items-center justify-center">
                   <span className="text-white font-bold text-sm">LE</span>
                 </div>
-                <span className="font-sans font-bold text-xl">
+                <span className="font-display font-bold text-xl">
                   La Economica
                 </span>
               </div>
