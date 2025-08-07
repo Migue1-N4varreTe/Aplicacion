@@ -27,7 +27,65 @@ export const useSmartPrefetch = (config: Partial<PrefetchConfig> = {}) => {
   const prefetchQueue = useRef<Set<string>>(new Set());
   const activePrefetch = useRef<Set<string>>(new Set());
 
-  // Prefetch de ruta específica (defined first to avoid circular dependency)
+  // Cargar datos de una ruta
+  const loadRouteData = async (route: string) => {
+    switch (route) {
+      case '/shop':
+        return {
+          products: allProducts.slice(0, 20),
+          categories: ['lacteos-huevos', 'carniceria-cremeria', 'frutas-verduras'],
+          filters: {},
+        };
+      case '/cart':
+        return {
+          items: [],
+          total: 0,
+          shipping: 0,
+        };
+      case '/favorites':
+        return {
+          favorites: [],
+          recommendations: allProducts.slice(0, 10),
+        };
+      default:
+        return { preloaded: true };
+    }
+  };
+
+  // Prefetch assets de una ruta
+  const prefetchRouteAssets = async (route: string) => {
+    const assetMap: Record<string, string[]> = {
+      '/shop': [
+        // Imágenes de productos populares
+        ...allProducts.slice(0, 20).map(p => p.image),
+      ],
+      '/cart': [
+        // Iconos de métodos de pago
+        'https://via.placeholder.com/50x30/4285f4/FFFFFF?text=PayPal',
+        'https://via.placeholder.com/50x30/000000/FFFFFF?text=Card',
+      ],
+      '/favorites': [
+        // Imágenes de productos recomendados
+        ...allProducts.slice(0, 10).map(p => p.image),
+      ],
+    };
+
+    const assets = assetMap[route] || [];
+
+    // Prefetch imágenes
+    const prefetchPromises = assets.map(async (src) => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = src;
+      });
+    });
+
+    await Promise.allSettled(prefetchPromises);
+  };
+
+  // Prefetch de ruta específica (defined after helper functions)
   const prefetchRoute = useCallback(async (route: string) => {
     if (activePrefetch.current.has(route) ||
         activePrefetch.current.size >= finalConfig.maxConcurrentPrefetch) {
