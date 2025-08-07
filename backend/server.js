@@ -21,6 +21,7 @@ import {
 // import employeeRoutes from "./employees/routes.js";
 // import reportRoutes from "./reports/routes.js";
 // import paymentRoutes from "./payments/routes.js";
+import eleventaRoutes from "./eleventa/routes.js";
 
 dotenv.config({ path: "../.env" });
 
