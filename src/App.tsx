@@ -17,6 +17,7 @@ import { AddressProvider } from "@/contexts/AddressContext";
 import { ReviewsProvider } from "@/contexts/ReviewsContext";
 import { PickupProvider } from "@/contexts/PickupContext";
 import { FlashSalesProvider } from "@/contexts/FlashSalesContext";
+import { EleventaProvider } from "@/contexts/EleventaContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
 
