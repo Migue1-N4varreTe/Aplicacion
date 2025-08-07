@@ -11,6 +11,12 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { SafeWebSocketProvider } from "@/contexts/SafeWebSocketContext";
+import { ShoppingListProvider } from "@/contexts/ShoppingListContext";
+import { AddressProvider } from "@/contexts/AddressContext";
+import { ReviewsProvider } from "@/contexts/ReviewsContext";
+import { PickupProvider } from "@/contexts/PickupContext";
+import { FlashSalesProvider } from "@/contexts/FlashSalesContext";
+import { EleventaProvider } from "@/contexts/EleventaContext";
 import PermissionGuard from "@/components/PermissionGuard";
 import AccessDenied from "@/components/AccessDenied";
 
@@ -18,6 +24,34 @@ import AccessDenied from "@/components/AccessDenied";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
+// Lazy loaded pages
+const Favorites = lazy(() => import("./pages/Favorites"));
+const Shop = lazy(() => import("./pages/ShopFixed"));
+const Categories = lazy(() => import("./pages/Categories"));
+const Offers = lazy(() => import("./pages/Offers"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Orders = lazy(() => import("./pages/Orders"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Help = lazy(() => import("./pages/Help"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const NewProducts = lazy(() => import("./pages/NewProducts"));
+
+// Admin pages (lazy loaded)
+const Admin = lazy(() => import("./pages/Admin"));
+const Inventory = lazy(() => import("./pages/Inventory"));
+const POS = lazy(() => import("./pages/POS"));
+const Reports = lazy(() => import("./pages/Reports"));
+const Employees = lazy(() => import("./pages/Employees"));
+const Clients = lazy(() => import("./pages/Clients"));
+const SystemConfig = lazy(() => import("./pages/SystemConfig"));
+const IntegracionEleventa = lazy(() => import("./pages/IntegracionEleventa"));
 // Helper function for lazy loading with error handling
 const lazyWithErrorBoundary = (importFunc: () => Promise<any>, componentName: string = "Unknown") => {
   return lazy(() =>
@@ -123,6 +157,21 @@ const App = () => (
     <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+      <AuthProvider>
+        <FavoritesProvider>
+          <CartProvider>
+            <ShoppingListProvider>
+              <AddressProvider>
+                <ReviewsProvider>
+                  <PickupProvider>
+                    <FlashSalesProvider>
+                      <EleventaProvider autoConnect={false} autoSync={false}>
+                        <SafeWebSocketProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <PerformanceOptimizer>
+                  <Suspense fallback={<PageLoader />}>
         <AuthProvider>
           <FavoritesProvider>
             <CartProvider>
@@ -256,6 +305,19 @@ const App = () => (
                         }
                       />
                       <Route
+                        path="/integracion-eleventa"
+                        element={
+                          <PermissionGuard
+                            permission="system:config"
+                            fallback={
+                              <AccessDenied requiredPermission="system:config" />
+                            }
+                          >
+                            <IntegracionEleventa />
+                          </PermissionGuard>
+                        }
+                      />
+                      <Route
                         path="/system-config"
                         element={
                           <PermissionGuard
@@ -315,6 +377,18 @@ const App = () => (
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
+                </PerformanceOptimizer>
+              </BrowserRouter>
+                        </SafeWebSocketProvider>
+                      </EleventaProvider>
+                    </FlashSalesProvider>
+                  </PickupProvider>
+                </ReviewsProvider>
+              </AddressProvider>
+            </ShoppingListProvider>
+          </CartProvider>
+        </FavoritesProvider>
+      </AuthProvider>
                 </BrowserRouter>
               </SafeWebSocketProvider>
             </CartProvider>
