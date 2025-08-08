@@ -28,6 +28,9 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
   const { isInCart, getItemQuantity } = useCart();
   const { addToCartWithNotification } = useCartActions();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [showQuantityDialog, setShowQuantityDialog] = useState(false);
+  const [quantity, setQuantity] = useState(product.sellByWeight ? 0.5 : 1);
+  const [weight, setWeight] = useState(0.5);
 
   const handleAddToCart = async () => {
     if (!product.inStock) {
