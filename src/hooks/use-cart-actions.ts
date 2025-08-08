@@ -95,6 +95,7 @@ export const useCartActions = () => {
     productId: string,
     quantity: number,
     maxStock?: number,
+    weight?: number,
   ) => {
     if (quantity < 1) {
       removeFromCart(productId);
@@ -111,7 +112,7 @@ export const useCartActions = () => {
       return;
     }
 
-    updateQuantity(productId, quantity);
+    updateQuantity(productId, quantity, weight);
   };
 
   return {
