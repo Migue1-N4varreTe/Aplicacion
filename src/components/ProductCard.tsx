@@ -274,9 +274,11 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                 <Button
                   disabled={!product.inStock || isAddingToCart}
                   className={cn(
-                    "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto",
+                    "w-full h-12 text-sm font-bold transition-all duration-200 transform hover:scale-105 shadow-lg",
                     product.inStock
-                      ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                      ? product.sellByWeight
+                        ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-green-200 border-2 border-green-300"
+                        : "btn-gradient hover:shadow-glow focus:shadow-glow"
                       : "bg-gray-200 text-gray-500 cursor-not-allowed",
                   )}
                 >
@@ -284,14 +286,14 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                     "Agotado"
                   ) : isInCart(product.id) ? (
                     <>
-                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      <ShoppingCart className="h-5 w-5 mr-2" />
                       Modificar ({getItemQuantity(product.id)})
                     </>
                   ) : (
                     <>
-                      {product.sellByWeight && <Scale className="h-4 w-4 mr-2" />}
-                      <ShoppingCart className="h-4 w-4 mr-2" />
-                      {product.sellByWeight ? "Seleccionar peso" : "Agregar al carrito"}
+                      {product.sellByWeight && <Scale className="h-5 w-5 mr-2 animate-pulse" />}
+                      <ShoppingCart className="h-5 w-5 mr-2" />
+                      {product.sellByWeight ? "🎯 Seleccionar Peso" : "Agregar al carrito"}
                     </>
                   )}
                 </Button>
