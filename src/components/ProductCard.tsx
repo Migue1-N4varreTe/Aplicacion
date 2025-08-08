@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Heart, ShoppingCart, Star, Clock, MapPin, Plus, Minus, Scale } from "lucide-react";
+import { Heart, ShoppingCart, Star, Clock, MapPin, Plus, Minus, Scale, Package } from "lucide-react";
 import { Product } from "@/lib/data";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useCart } from "@/contexts/CartContext";
@@ -537,7 +537,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                     {/* Stock info */}
                     {product.stock && product.stock <= 5 && (
                       <p className="text-sm text-orange-600">
-                        ���️ Solo quedan {product.stock} unidades
+                        ⚠️ Solo quedan {product.stock} unidades
                       </p>
                     )}
                   </div>
