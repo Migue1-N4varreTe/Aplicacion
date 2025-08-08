@@ -133,6 +133,7 @@ const DatabaseTest = lazyWithErrorBoundary(() => import("./pages/DatabaseTest"),
 const WeightAwarePOS = lazyWithErrorBoundary(() => import("./pages/WeightAwarePOS"), "WeightAwarePOS");
 const CategoriesMigration = lazyWithErrorBoundary(() => import("./pages/CategoriesMigration"), "CategoriesMigration");
 const CategoriesAdmin = lazyWithErrorBoundary(() => import("./pages/CategoriesAdmin"), "CategoriesAdmin");
+const AppTest = lazyWithErrorBoundary(() => import("./pages/AppTest"), "AppTest");
 
 // User onboarding pages (lazy loaded)
 const TutorialPrimerPedido = lazyWithErrorBoundary(() => import("./pages/TutorialPrimerPedido"), "TutorialPrimerPedido");
