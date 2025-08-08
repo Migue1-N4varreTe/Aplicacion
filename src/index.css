@@ -48,8 +48,8 @@
   --mint-500: #14b8a6;
   --mint-600: #0d9488;
 
-  /* Font scaling variable */
-  --font-scale: 1;
+  /* Font scaling variable - RESET TO 1 */
+  --font-scale: 1 !important;
 }
 
 /* Font size classes for accessibility */
