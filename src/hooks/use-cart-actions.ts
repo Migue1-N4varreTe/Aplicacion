@@ -55,11 +55,15 @@ export const useCartActions = () => {
     }
 
     // Add to cart if all validations pass
-    addToCart(productId, quantity);
+    addToCart(productId, quantity, weight);
+
+    const description = product.sellByWeight && weight
+      ? `${productName || product.name} (${weight} ${product.unit}) se agregó al carrito`
+      : `${productName || product.name} se agregó al carrito`;
 
     toast({
       title: "Producto agregado",
-      description: `${productName || product.name} se agregó al carrito`,
+      description,
       duration: 2000,
     });
 
