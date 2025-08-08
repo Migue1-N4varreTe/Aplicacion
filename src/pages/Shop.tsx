@@ -308,7 +308,7 @@ const Shop = () => {
             <Button
               onClick={() => {
                 setSearchQuery('');
-                setSelectedCategory('');
+                setSelectedCategory('all');
                 setPriceRange('all');
               }}
               variant="outline"
