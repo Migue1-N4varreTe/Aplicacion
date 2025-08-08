@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search, Package, ShoppingCart } from 'lucide-react';
+import { allProducts, categories } from '@/lib/data';
+import ProductCard from '@/components/ProductCard';
+import Navbar from '@/components/Navbar';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
