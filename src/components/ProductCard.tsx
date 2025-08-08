@@ -248,35 +248,251 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
           </div>
 
           {/* Add to Cart Button */}
-          <Button
-            onClick={handleAddToCart}
-            disabled={!product.inStock || isAddingToCart}
-            className={cn(
-              "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto",
-              product.inStock
-                ? "btn-gradient hover:shadow-glow focus:shadow-glow"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed",
-            )}
-          >
-            {isAddingToCart ? (
-              <>
-                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Agregando...
-              </>
-            ) : !product.inStock ? (
-              <>Agotado</>
-            ) : isInCart(product.id) ? (
-              <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                En carrito ({getItemQuantity(product.id)})
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                Agregar al carrito
-              </>
-            )}
-          </Button>
+          {product.sellByWeight || isInCart(product.id) ? (
+            <Dialog open={showQuantityDialog} onOpenChange={setShowQuantityDialog}>
+              <DialogTrigger asChild>
+                <Button
+                  disabled={!product.inStock || isAddingToCart}
+                  className={cn(
+                    "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto",
+                    product.inStock
+                      ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                      : "bg-gray-200 text-gray-500 cursor-not-allowed",
+                  )}
+                >
+                  {!product.inStock ? (
+                    "Agotado"
+                  ) : isInCart(product.id) ? (
+                    <>
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Modificar ({getItemQuantity(product.id)})
+                    </>
+                  ) : (
+                    <>
+                      {product.sellByWeight && <Scale className="h-4 w-4 mr-2" />}
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      {product.sellByWeight ? "Seleccionar peso" : "Agregar al carrito"}
+                    </>
+                  )}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    {product.sellByWeight && <Scale className="h-5 w-5 text-green-600" />}
+                    {product.name}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  {/* Product Info */}
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-16 h-16 object-cover rounded-md"
+                    />
+                    <div>
+                      <p className="font-medium text-gray-900">{product.name}</p>
+                      <p className="text-sm text-gray-600">
+                        ${product.price} / {product.unit}
+                      </p>
+                      <Badge
+                        className={cn(
+                          "text-xs",
+                          product.sellByWeight
+                            ? "text-green-700 bg-green-50"
+                            : "text-blue-700 bg-blue-50"
+                        )}
+                      >
+                        {product.sellByWeight ? `Venta por ${product.unit}` : `Venta por pieza`}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Quantity/Weight Selector */}
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium">
+                      {product.sellByWeight ?
+                        `Cantidad ${product.unit === "kg" ? "(en kg)" : "(en gramos)"}` :
+                        "Cantidad (piezas)"
+                      }
+                    </Label>
+
+                    <div className="flex items-center gap-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={decrementQuantity}
+                        disabled={
+                          product.sellByWeight ?
+                            weight <= (product.unit === "kg" ? 0.1 : 0.05) :
+                            quantity <= 1
+                        }
+                        className="h-10 w-10 p-0"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+
+                      <div className="flex-1 text-center">
+                        <div className="text-lg font-semibold text-gray-900">
+                          {formatQuantityDisplay()}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          Total: ${calculatePrice()}
+                        </div>
+                      </div>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={incrementQuantity}
+                        disabled={
+                          product.sellByWeight ?
+                            weight >= 10 :
+                            quantity >= (product.stock || 99)
+                        }
+                        className="h-10 w-10 p-0"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    {/* Quick quantity buttons for weight products */}
+                    {product.sellByWeight && (
+                      <div className="flex gap-2 flex-wrap">
+                        {product.unit === "kg" ? (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWeight(0.25)}
+                              className="text-xs"
+                            >
+                              250g
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWeight(0.5)}
+                              className="text-xs"
+                            >
+                              500g
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWeight(1)}
+                              className="text-xs"
+                            >
+                              1kg
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWeight(2)}
+                              className="text-xs"
+                            >
+                              2kg
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWeight(0.1)}
+                              className="text-xs"
+                            >
+                              100g
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWeight(0.25)}
+                              className="text-xs"
+                            >
+                              250g
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWeight(0.5)}
+                              className="text-xs"
+                            >
+                              500g
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Stock info */}
+                    {product.stock && product.stock <= 5 && (
+                      <p className="text-sm text-orange-600">
+                        ⚠️ Solo quedan {product.stock} unidades
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowQuantityDialog(false)}
+                      className="flex-1"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={() => handleAddToCart(
+                        product.sellByWeight ? 1 : quantity,
+                        product.sellByWeight ? weight : undefined
+                      )}
+                      disabled={isAddingToCart}
+                      className="flex-1 bg-fresh-500 hover:bg-fresh-600"
+                    >
+                      {isAddingToCart ? (
+                        <>
+                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Agregando...
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart className="h-4 w-4 mr-2" />
+                          {isInCart(product.id) ? "Actualizar" : "Agregar al carrito"}
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          ) : (
+            <Button
+              onClick={() => handleAddToCart()}
+              disabled={!product.inStock || isAddingToCart}
+              className={cn(
+                "w-full h-10 sm:h-9 text-sm font-medium transition-all duration-200 mobile-btn sm:btn-auto",
+                product.inStock
+                  ? "btn-gradient hover:shadow-glow focus:shadow-glow"
+                  : "bg-gray-200 text-gray-500 cursor-not-allowed",
+              )}
+            >
+              {isAddingToCart ? (
+                <>
+                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Agregando...
+                </>
+              ) : !product.inStock ? (
+                <>Agotado</>
+              ) : (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Agregar al carrito
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
