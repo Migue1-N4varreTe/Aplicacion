@@ -21,6 +21,26 @@ import AccessDenied from "@/components/AccessDenied";
 import PerformanceOptimizer from "@/components/PerformanceOptimizer";
 import { Toaster } from "@/components/ui/toaster";
 
+// Emergency font reset on app load
+if (typeof window !== 'undefined') {
+  // Reset font scale immediately
+  document.documentElement.style.setProperty('--font-scale', '1');
+  // Clear any problematic localStorage values
+  try {
+    const savedFontSize = localStorage.getItem("fontSizePreference");
+    if (savedFontSize) {
+      const size = parseInt(savedFontSize);
+      if (size < 75 || size > 150) {
+        localStorage.removeItem("fontSizePreference");
+      }
+    }
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+  // Remove font size classes
+  document.body.classList.remove("font-size-small", "font-size-normal", "font-size-large", "font-size-xl");
+}
+
 // Core pages (loaded immediately)
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
