@@ -24,8 +24,16 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
     const savedFontSize = localStorage.getItem("fontSizePreference");
     if (savedFontSize) {
       const size = parseInt(savedFontSize);
-      setFontSize(size);
-      applyFontSize(size);
+      // Validar que el tamaño esté en rango válido
+      if (size >= 75 && size <= 150) {
+        setFontSize(size);
+        applyFontSize(size);
+      } else {
+        // Si está fuera del rango, resetear a 100%
+        setFontSize(100);
+        applyFontSize(100);
+        localStorage.setItem("fontSizePreference", "100");
+      }
     }
   }, []);
 
