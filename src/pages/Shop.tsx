@@ -224,7 +224,7 @@ const Shop = () => {
           </div>
 
           {/* Active Filters Display */}
-          {(searchQuery || selectedCategory || priceRange !== 'all') && (
+          {(searchQuery || (selectedCategory && selectedCategory !== 'all') || priceRange !== 'all') && (
             <div className="flex flex-wrap gap-2 items-center">
               <span className="text-sm text-gray-600">Filtros activos:</span>
               {searchQuery && (
