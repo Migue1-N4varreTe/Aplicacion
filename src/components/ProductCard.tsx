@@ -32,7 +32,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
   const [quantity, setQuantity] = useState(product.sellByWeight ? 0.5 : 1);
   const [weight, setWeight] = useState(0.5);
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (selectedQuantity?: number, selectedWeight?: number) => {
     if (!product.inStock) {
       return;
     }
@@ -43,18 +43,63 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      // Try to add to cart with validations
-      const success = addToCartWithNotification(product.id, 1, product.name);
+      // Use selected quantity/weight or default
+      const finalQuantity = selectedQuantity || (product.sellByWeight ? 1 : quantity);
+      const finalWeight = product.sellByWeight ? (selectedWeight || weight) : undefined;
 
-      if (!success) {
-        // Error was already shown in the toast, just log for debugging
-        console.log(`Failed to add ${product.name} to cart`);
+      // Try to add to cart with validations
+      const success = addToCartWithNotification(product.id, finalQuantity, product.name, finalWeight);
+
+      if (success) {
+        setShowQuantityDialog(false);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
     } finally {
       setIsAddingToCart(false);
     }
+  };
+
+  const incrementQuantity = () => {
+    if (product.sellByWeight) {
+      if (product.unit === "kg") {
+        setWeight(Math.min(weight + 0.1, 10));
+      } else {
+        setWeight(Math.min(weight + 0.05, 5));
+      }
+    } else {
+      setQuantity(Math.min(quantity + 1, product.stock || 99));
+    }
+  };
+
+  const decrementQuantity = () => {
+    if (product.sellByWeight) {
+      if (product.unit === "kg") {
+        setWeight(Math.max(weight - 0.1, 0.1));
+      } else {
+        setWeight(Math.max(weight - 0.05, 0.05));
+      }
+    } else {
+      setQuantity(Math.max(quantity - 1, 1));
+    }
+  };
+
+  const formatQuantityDisplay = () => {
+    if (product.sellByWeight) {
+      if (product.unit === "kg") {
+        return `${weight.toFixed(1)} kg`;
+      } else {
+        return `${(weight * 1000).toFixed(0)} g`;
+      }
+    }
+    return `${quantity} ${quantity === 1 ? 'pieza' : 'piezas'}`;
+  };
+
+  const calculatePrice = () => {
+    if (product.sellByWeight) {
+      return (product.price * weight).toFixed(2);
+    }
+    return (product.price * quantity).toFixed(2);
   };
 
   const toggleFavorite = () => {
