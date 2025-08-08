@@ -188,6 +188,7 @@ const App = () => (
                                       <Route path="/terms" element={<Terms />} />
                                       <Route path="/privacy" element={<Privacy />} />
                                       <Route path="/addresses" element={<Addresses />} />
+                                      <Route path="/app-test" element={<AppTest />} />
                                       
                                       {/* Admin routes with permission guards */}
                                       <Route
