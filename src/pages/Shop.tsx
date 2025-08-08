@@ -238,7 +238,7 @@ const Shop = () => {
                   </button>
                 </Badge>
               )}
-              {selectedCategory && (
+              {selectedCategory && selectedCategory !== 'all' && (
                 <Badge variant="secondary" className="gap-1">
                   {categories.find(c => c.id === selectedCategory)?.name}
                   <button
