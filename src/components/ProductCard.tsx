@@ -355,50 +355,80 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                   </div>
 
                   {/* Quantity/Weight Selector */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-medium">
-                      {product.sellByWeight ?
-                        `Cantidad ${product.unit === "kg" ? "(en kg)" : "(en gramos)"}` :
-                        "Cantidad (piezas)"
-                      }
+                  <div className={cn(
+                    "space-y-4 p-4 rounded-lg border-2",
+                    product.sellByWeight
+                      ? "bg-green-50 border-green-200"
+                      : "bg-blue-50 border-blue-200"
+                  )}>
+                    <Label className="text-base font-bold text-gray-900 flex items-center gap-2">
+                      {product.sellByWeight ? (
+                        <>
+                          <Scale className="h-5 w-5 text-green-600" />
+                          🎯 Selecciona la cantidad {product.unit === "kg" ? "(en kilogramos)" : "(en gramos)"}
+                        </>
+                      ) : (
+                        <>
+                          <Package className="h-5 w-5 text-blue-600" />
+                          📦 Selecciona cantidad (piezas)
+                        </>
+                      )}
                     </Label>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Button
                         variant="outline"
-                        size="sm"
+                        size="lg"
                         onClick={decrementQuantity}
                         disabled={
                           product.sellByWeight ?
                             weight <= (product.unit === "kg" ? 0.1 : 0.05) :
                             quantity <= 1
                         }
-                        className="h-10 w-10 p-0"
+                        className={cn(
+                          "h-14 w-14 p-0 text-xl font-bold border-2 shadow-md",
+                          product.sellByWeight
+                            ? "border-green-300 hover:bg-green-100 text-green-700"
+                            : "border-blue-300 hover:bg-blue-100 text-blue-700"
+                        )}
                       >
-                        <Minus className="h-4 w-4" />
+                        <Minus className="h-6 w-6" />
                       </Button>
 
-                      <div className="flex-1 text-center">
-                        <div className="text-lg font-semibold text-gray-900">
+                      <div className={cn(
+                        "flex-1 text-center p-4 rounded-lg border-2",
+                        product.sellByWeight
+                          ? "bg-white border-green-300"
+                          : "bg-white border-blue-300"
+                      )}>
+                        <div className="text-2xl font-bold text-gray-900 mb-1">
                           {formatQuantityDisplay()}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className={cn(
+                          "text-lg font-semibold",
+                          product.sellByWeight ? "text-green-600" : "text-blue-600"
+                        )}>
                           Total: ${calculatePrice()}
                         </div>
                       </div>
 
                       <Button
                         variant="outline"
-                        size="sm"
+                        size="lg"
                         onClick={incrementQuantity}
                         disabled={
                           product.sellByWeight ?
                             weight >= 10 :
                             quantity >= (product.stock || 99)
                         }
-                        className="h-10 w-10 p-0"
+                        className={cn(
+                          "h-14 w-14 p-0 text-xl font-bold border-2 shadow-md",
+                          product.sellByWeight
+                            ? "border-green-300 hover:bg-green-100 text-green-700"
+                            : "border-blue-300 hover:bg-blue-100 text-blue-700"
+                        )}
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-6 w-6" />
                       </Button>
                     </div>
 
