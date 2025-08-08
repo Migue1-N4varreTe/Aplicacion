@@ -16,6 +16,7 @@ export const useCartActions = () => {
     productId: string,
     quantity: number = 1,
     productName?: string,
+    weight?: number,
   ) => {
     // Find the product to validate before adding
     const product = allProducts.find((p) => p.id === productId);
