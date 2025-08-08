@@ -24,8 +24,16 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
     const savedFontSize = localStorage.getItem("fontSizePreference");
     if (savedFontSize) {
       const size = parseInt(savedFontSize);
-      setFontSize(size);
-      applyFontSize(size);
+      // Validar que el tamaño esté en rango válido
+      if (size >= 75 && size <= 150) {
+        setFontSize(size);
+        applyFontSize(size);
+      } else {
+        // Si está fuera del rango, resetear a 100%
+        setFontSize(100);
+        applyFontSize(100);
+        localStorage.setItem("fontSizePreference", "100");
+      }
     }
   }, []);
 
@@ -79,6 +87,23 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
   const resetFont = () => {
     handleFontSizeChange([100]);
   };
+
+  // Función de emergencia para resetear el tamaño (accessible globally)
+  useEffect(() => {
+    const emergencyReset = () => {
+      setFontSize(100);
+      applyFontSize(100);
+      localStorage.setItem("fontSizePreference", "100");
+      setIsOpen(false);
+    };
+
+    // Agregar función global para reseteo de emergencia
+    (window as any).resetFontSize = emergencyReset;
+
+    return () => {
+      delete (window as any).resetFontSize;
+    };
+  }, []);
 
   const getFontSizeLabel = () => {
     if (fontSize <= 85) return "Pequeño";
@@ -183,13 +208,18 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
               {/* Botón reset */}
               <div className="flex justify-center pt-2">
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant={fontSize > 125 ? "default" : "ghost"}
+                  size={fontSize > 125 ? "default" : "sm"}
                   onClick={resetFont}
-                  className="flex items-center gap-2 text-gray-600"
+                  className={cn(
+                    "flex items-center gap-2",
+                    fontSize > 125
+                      ? "bg-red-500 hover:bg-red-600 text-white font-bold"
+                      : "text-gray-600"
+                  )}
                 >
                   <RotateCcw className="h-3 w-3" />
-                  Restablecer
+                  {fontSize > 125 ? "¡RESETEAR TAMAÑO!" : "Restablecer"}
                 </Button>
               </div>
             </CardContent>

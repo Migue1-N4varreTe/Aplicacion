@@ -21,6 +21,26 @@ import AccessDenied from "@/components/AccessDenied";
 import PerformanceOptimizer from "@/components/PerformanceOptimizer";
 import { Toaster } from "@/components/ui/toaster";
 
+// Emergency font reset on app load
+if (typeof window !== 'undefined') {
+  // Reset font scale immediately
+  document.documentElement.style.setProperty('--font-scale', '1');
+  // Clear any problematic localStorage values
+  try {
+    const savedFontSize = localStorage.getItem("fontSizePreference");
+    if (savedFontSize) {
+      const size = parseInt(savedFontSize);
+      if (size < 75 || size > 150) {
+        localStorage.removeItem("fontSizePreference");
+      }
+    }
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+  // Remove font size classes
+  document.body.classList.remove("font-size-small", "font-size-normal", "font-size-large", "font-size-xl");
+}
+
 // Core pages (loaded immediately)
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -113,12 +133,14 @@ const DatabaseTest = lazyWithErrorBoundary(() => import("./pages/DatabaseTest"),
 const WeightAwarePOS = lazyWithErrorBoundary(() => import("./pages/WeightAwarePOS"), "WeightAwarePOS");
 const CategoriesMigration = lazyWithErrorBoundary(() => import("./pages/CategoriesMigration"), "CategoriesMigration");
 const CategoriesAdmin = lazyWithErrorBoundary(() => import("./pages/CategoriesAdmin"), "CategoriesAdmin");
+const AppTest = lazyWithErrorBoundary(() => import("./pages/AppTest"), "AppTest");
 
 // User onboarding pages (lazy loaded)
 const TutorialPrimerPedido = lazyWithErrorBoundary(() => import("./pages/TutorialPrimerPedido"), "TutorialPrimerPedido");
 const GestionarPerfil = lazyWithErrorBoundary(() => import("./pages/GestionarPerfil"), "GestionarPerfil");
 const SeguimientoPedidos = lazyWithErrorBoundary(() => import("./pages/SeguimientoPedidos"), "SeguimientoPedidos");
 const ProgramaLealtad = lazyWithErrorBoundary(() => import("./pages/ProgramaLealtad"), "ProgramaLealtad");
+const Addresses = lazyWithErrorBoundary(() => import("./pages/Addresses"), "Addresses");
 
 const queryClient = new QueryClient();
 
@@ -165,6 +187,8 @@ const App = () => (
                                       <Route path="/programa-lealtad" element={<ProgramaLealtad />} />
                                       <Route path="/terms" element={<Terms />} />
                                       <Route path="/privacy" element={<Privacy />} />
+                                      <Route path="/addresses" element={<Addresses />} />
+                                      <Route path="/app-test" element={<AppTest />} />
                                       
                                       {/* Admin routes with permission guards */}
                                       <Route

@@ -16,6 +16,7 @@ export const useCartActions = () => {
     productId: string,
     quantity: number = 1,
     productName?: string,
+    weight?: number,
   ) => {
     // Find the product to validate before adding
     const product = allProducts.find((p) => p.id === productId);
@@ -54,11 +55,15 @@ export const useCartActions = () => {
     }
 
     // Add to cart if all validations pass
-    addToCart(productId, quantity);
+    addToCart(productId, quantity, weight);
+
+    const description = product.sellByWeight && weight
+      ? `${productName || product.name} (${weight} ${product.unit}) se agregó al carrito`
+      : `${productName || product.name} se agregó al carrito`;
 
     toast({
       title: "Producto agregado",
-      description: `${productName || product.name} se agregó al carrito`,
+      description,
       duration: 2000,
     });
 
@@ -90,6 +95,7 @@ export const useCartActions = () => {
     productId: string,
     quantity: number,
     maxStock?: number,
+    weight?: number,
   ) => {
     if (quantity < 1) {
       removeFromCart(productId);
@@ -106,7 +112,7 @@ export const useCartActions = () => {
       return;
     }
 
-    updateQuantity(productId, quantity);
+    updateQuantity(productId, quantity, weight);
   };
 
   return {

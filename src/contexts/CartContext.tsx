@@ -4,13 +4,16 @@ import { Product, allProducts } from "@/lib/data";
 export interface CartItem {
   id: string;
   quantity: number;
+  weight?: number; // For weight-based products
   addedAt: Date;
 }
 
 export interface CartItemWithProduct extends Omit<Product, "id"> {
   id: string;
   quantity: number;
+  weight?: number; // For weight-based products
   addedAt: Date;
+  calculatedPrice?: number; // Price calculated based on weight or quantity
 }
 
 interface CartContextType {
@@ -19,9 +22,9 @@ interface CartContextType {
   cartCount: number;
   cartTotal: number;
   cartSubtotal: number;
-  addToCart: (productId: string, quantity?: number) => void;
+  addToCart: (productId: string, quantity?: number, weight?: number) => void;
   removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  updateQuantity: (productId: string, quantity: number, weight?: number) => void;
   clearCart: () => void;
   isInCart: (productId: string) => boolean;
   getItemQuantity: (productId: string) => number;
@@ -70,21 +73,35 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const cartProducts: CartItemWithProduct[] = cartItems
     .map((item) => {
       const product = allProducts.find((p) => p.id === item.id);
-      return product
-        ? { ...product, quantity: item.quantity, addedAt: item.addedAt }
-        : null;
+      if (!product) return null;
+
+      // Calculate price based on weight or quantity
+      let calculatedPrice = product.price;
+      if (product.sellByWeight && item.weight) {
+        calculatedPrice = product.price * item.weight;
+      } else {
+        calculatedPrice = product.price * item.quantity;
+      }
+
+      return {
+        ...product,
+        quantity: item.quantity,
+        weight: item.weight,
+        addedAt: item.addedAt,
+        calculatedPrice
+      };
     })
     .filter(Boolean) as CartItemWithProduct[];
 
   // Calculate cart metrics
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartSubtotal = cartProducts.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + (item.calculatedPrice || item.price * item.quantity),
     0,
   );
   const cartTotal = cartSubtotal; // Can add taxes, delivery, etc. later
 
-  const addToCart = (productId: string, quantity: number = 1) => {
+  const addToCart = (productId: string, quantity: number = 1, weight?: number) => {
     // Find the product to validate stock
     const product = allProducts.find((p) => p.id === productId);
 
@@ -131,6 +148,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           {
             id: productId,
             quantity,
+            weight,
             addedAt: new Date(),
           },
         ];
@@ -142,7 +160,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number, weight?: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
@@ -150,7 +168,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === productId ? { ...item, quantity } : item,
+        item.id === productId ? { ...item, quantity, weight } : item,
       ),
     );
   };
