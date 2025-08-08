@@ -139,6 +139,7 @@ const TutorialPrimerPedido = lazyWithErrorBoundary(() => import("./pages/Tutoria
 const GestionarPerfil = lazyWithErrorBoundary(() => import("./pages/GestionarPerfil"), "GestionarPerfil");
 const SeguimientoPedidos = lazyWithErrorBoundary(() => import("./pages/SeguimientoPedidos"), "SeguimientoPedidos");
 const ProgramaLealtad = lazyWithErrorBoundary(() => import("./pages/ProgramaLealtad"), "ProgramaLealtad");
+const Addresses = lazyWithErrorBoundary(() => import("./pages/Addresses"), "Addresses");
 
 const queryClient = new QueryClient();
 
