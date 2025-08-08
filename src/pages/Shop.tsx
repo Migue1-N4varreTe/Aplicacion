@@ -29,7 +29,7 @@ import { cn } from '@/lib/utils';
 
 const Shop = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [priceRange, setPriceRange] = useState<'all' | 'under-20' | 'under-50' | 'under-100'>('all');
@@ -322,7 +322,7 @@ const Shop = () => {
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="text-center text-sm text-gray-500">
             <p>
-              ✅ Base de datos conectada • {allProducts.length} productos cargados • {categories.length} categorías disponibles
+              ✅ Base de datos conectada • {allProducts.length} productos cargados • {categories.length} categor��as disponibles
             </p>
           </div>
         </div>
