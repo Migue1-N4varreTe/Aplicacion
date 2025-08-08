@@ -235,7 +235,12 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                 ${product.price}
               </span>
               {product.unit && (
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                <span className={cn(
+                  "text-xs px-2 py-1 rounded font-medium",
+                  product.sellByWeight
+                    ? "bg-green-100 text-green-700 border border-green-200"
+                    : "bg-gray-100 text-gray-500"
+                )}>
                   /{product.unit}
                 </span>
               )}
@@ -246,6 +251,21 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
               )}
             </div>
           </div>
+
+          {/* Weight/Piece Indicator */}
+          {product.sellByWeight && (
+            <div className="mb-3 p-2 bg-green-50 border border-green-200 rounded-md">
+              <div className="flex items-center gap-2">
+                <Scale className="h-4 w-4 text-green-600" />
+                <span className="text-sm font-medium text-green-700">
+                  Venta por {product.unit === "kg" ? "kilogramo" : "gramos"}
+                </span>
+              </div>
+              <p className="text-xs text-green-600 mt-1">
+                Selecciona la cantidad exacta que necesitas
+              </p>
+            </div>
+          )}
 
           {/* Add to Cart Button */}
           {product.sellByWeight || isInCart(product.id) ? (
