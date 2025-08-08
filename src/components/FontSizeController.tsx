@@ -208,13 +208,18 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
               {/* Botón reset */}
               <div className="flex justify-center pt-2">
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant={fontSize > 125 ? "default" : "ghost"}
+                  size={fontSize > 125 ? "default" : "sm"}
                   onClick={resetFont}
-                  className="flex items-center gap-2 text-gray-600"
+                  className={cn(
+                    "flex items-center gap-2",
+                    fontSize > 125
+                      ? "bg-red-500 hover:bg-red-600 text-white font-bold"
+                      : "text-gray-600"
+                  )}
                 >
                   <RotateCcw className="h-3 w-3" />
-                  Restablecer
+                  {fontSize > 125 ? "¡RESETEAR TAMAÑO!" : "Restablecer"}
                 </Button>
               </div>
             </CardContent>
