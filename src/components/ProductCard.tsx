@@ -543,13 +543,13 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2 pt-2">
+                  <div className="flex gap-3 pt-4 border-t-2 border-gray-200">
                     <Button
                       variant="outline"
                       onClick={() => setShowQuantityDialog(false)}
-                      className="flex-1"
+                      className="flex-1 h-12 font-semibold border-2 border-gray-300 hover:bg-gray-100"
                     >
-                      Cancelar
+                      ❌ Cancelar
                     </Button>
                     <Button
                       onClick={() => handleAddToCart(
@@ -557,17 +557,22 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                         product.sellByWeight ? weight : undefined
                       )}
                       disabled={isAddingToCart}
-                      className="flex-1 bg-fresh-500 hover:bg-fresh-600"
+                      className={cn(
+                        "flex-1 h-12 font-bold text-lg shadow-lg transform hover:scale-105 transition-all border-2",
+                        product.sellByWeight
+                          ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 border-green-400"
+                          : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 border-blue-400"
+                      )}
                     >
                       {isAddingToCart ? (
                         <>
-                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                           Agregando...
                         </>
                       ) : (
                         <>
-                          <ShoppingCart className="h-4 w-4 mr-2" />
-                          {isInCart(product.id) ? "Actualizar" : "Agregar al carrito"}
+                          <ShoppingCart className="h-5 w-5 mr-2" />
+                          {isInCart(product.id) ? "🔄 Actualizar Carrito" : "🛒 Agregar al Carrito"}
                         </>
                       )}
                     </Button>
