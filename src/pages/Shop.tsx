@@ -52,7 +52,7 @@ const Shop = () => {
     }
 
     // Category filter
-    if (selectedCategory) {
+    if (selectedCategory && selectedCategory !== 'all') {
       filtered = filtered.filter((product) => product.category === selectedCategory);
     }
 
@@ -322,7 +322,7 @@ const Shop = () => {
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="text-center text-sm text-gray-500">
             <p>
-              ✅ Base de datos conectada • {allProducts.length} productos cargados • {categories.length} categor��as disponibles
+              ✅ Base de datos conectada • {allProducts.length} productos cargados • {categories.length} categorías disponibles
             </p>
           </div>
         </div>
