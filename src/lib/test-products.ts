@@ -533,6 +533,59 @@ export const testProducts: Product[] = [
     reviewCount: 345,
     deliveryTime: "Hoy mismo",
   },
+
+  // PRODUCTOS ADICIONALES POR GRAMOS
+  {
+    id: "test-queso-panela-gramos",
+    name: "🧀 Queso Panela Fresco",
+    price: 0.12, // precio por gramo ($120 por kg)
+    category: "lacteos-huevos",
+    subcategory: "quesos",
+    image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=400&q=80",
+    description: "Queso panela fresco artesanal, venta por gramos",
+    inStock: true,
+    stock: 5000, // 5kg en gramos
+    unit: "gramo",
+    sellByWeight: true,
+    tags: ["queso", "panela", "fresco", "gramos"],
+    rating: 4.6,
+    reviewCount: 89,
+    deliveryTime: "Hoy mismo",
+  },
+  {
+    id: "test-jamon-serrano-gramos",
+    name: "🍖 Jamón Serrano Premium",
+    price: 0.08, // precio por gramo ($80 por kg)
+    category: "carniceria-cremeria",
+    subcategory: "carnes-frias",
+    image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=400&q=80",
+    description: "Jamón serrano curado, corte al momento",
+    inStock: true,
+    stock: 2000, // 2kg en gramos
+    unit: "gramo",
+    sellByWeight: true,
+    tags: ["jamon", "serrano", "premium", "gramos"],
+    rating: 4.8,
+    reviewCount: 156,
+    deliveryTime: "Hoy mismo",
+  },
+  {
+    id: "test-nueces-gramos",
+    name: "🥜 Nueces de Castilla",
+    price: 0.15, // precio por gramo ($150 por kg)
+    category: "snacks-dulces",
+    subcategory: "frutos-secos",
+    image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
+    description: "Nueces de castilla natural, venta por gramos",
+    inStock: true,
+    stock: 1500, // 1.5kg en gramos
+    unit: "gramo",
+    sellByWeight: true,
+    tags: ["nueces", "frutos-secos", "natural", "gramos"],
+    rating: 4.7,
+    reviewCount: 234,
+    deliveryTime: "Hoy mismo",
+  },
 ];
 
 // Función para agregar productos de prueba en desarrollo
