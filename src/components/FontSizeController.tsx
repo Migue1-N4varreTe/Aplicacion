@@ -88,6 +88,23 @@ const FontSizeController = ({ className }: FontSizeControllerProps) => {
     handleFontSizeChange([100]);
   };
 
+  // Función de emergencia para resetear el tamaño (accessible globally)
+  useEffect(() => {
+    const emergencyReset = () => {
+      setFontSize(100);
+      applyFontSize(100);
+      localStorage.setItem("fontSizePreference", "100");
+      setIsOpen(false);
+    };
+
+    // Agregar función global para reseteo de emergencia
+    (window as any).resetFontSize = emergencyReset;
+
+    return () => {
+      delete (window as any).resetFontSize;
+    };
+  }, []);
+
   const getFontSizeLabel = () => {
     if (fontSize <= 85) return "Pequeño";
     if (fontSize <= 115) return "Normal";
