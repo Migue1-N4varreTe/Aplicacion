@@ -321,26 +321,35 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                 </DialogHeader>
                 <div className="space-y-4">
                   {/* Product Info */}
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className={cn(
+                    "flex items-center gap-3 p-4 rounded-lg border-2",
+                    product.sellByWeight
+                      ? "bg-gradient-to-r from-green-50 to-green-100 border-green-200"
+                      : "bg-blue-50 border-blue-200"
+                  )}>
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-16 h-16 object-cover rounded-md"
+                      className="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-md"
                     />
-                    <div>
-                      <p className="font-medium text-gray-900">{product.name}</p>
-                      <p className="text-sm text-gray-600">
+                    <div className="flex-1">
+                      <p className="font-bold text-gray-900 text-lg">{product.name}</p>
+                      <p className="text-base text-gray-700 font-medium">
                         ${product.price} / {product.unit}
                       </p>
                       <Badge
                         className={cn(
-                          "text-xs",
+                          "text-sm px-3 py-1 font-semibold",
                           product.sellByWeight
-                            ? "text-green-700 bg-green-50"
-                            : "text-blue-700 bg-blue-50"
+                            ? "text-green-800 bg-green-200 border border-green-300"
+                            : "text-blue-800 bg-blue-200 border border-blue-300"
                         )}
                       >
-                        {product.sellByWeight ? `Venta por ${product.unit}` : `Venta por pieza`}
+                        {product.sellByWeight ? (
+                          <>⚖️ Venta por {product.unit}</>
+                        ) : (
+                          <>📦 Venta por pieza</>
+                        )}
                       </Badge>
                     </div>
                   </div>
