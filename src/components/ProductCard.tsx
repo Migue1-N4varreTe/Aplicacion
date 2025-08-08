@@ -434,77 +434,110 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
 
                     {/* Quick quantity buttons for weight products */}
                     {product.sellByWeight && (
-                      <div className="flex gap-2 flex-wrap">
-                        {product.unit === "kg" ? (
-                          <>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setWeight(0.25)}
-                              className="text-xs"
-                            >
-                              250g
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setWeight(0.5)}
-                              className="text-xs"
-                            >
-                              500g
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setWeight(1)}
-                              className="text-xs"
-                            >
-                              1kg
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setWeight(2)}
-                              className="text-xs"
-                            >
-                              2kg
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setWeight(0.1)}
-                              className="text-xs"
-                            >
-                              100g
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setWeight(0.25)}
-                              className="text-xs"
-                            >
-                              250g
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setWeight(0.5)}
-                              className="text-xs"
-                            >
-                              500g
-                            </Button>
-                          </>
-                        )}
+                      <div className="space-y-2">
+                        <Label className="text-sm font-semibold text-gray-700">
+                          ⚡ Selección rápida:
+                        </Label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {product.unit === "kg" ? (
+                            <>
+                              <Button
+                                variant="outline"
+                                onClick={() => setWeight(0.25)}
+                                className={cn(
+                                  "h-12 font-bold border-2 transition-all transform hover:scale-105",
+                                  weight === 0.25
+                                    ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                    : "border-green-300 hover:bg-green-100 text-green-700"
+                                )}
+                              >
+                                🎯 250g
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => setWeight(0.5)}
+                                className={cn(
+                                  "h-12 font-bold border-2 transition-all transform hover:scale-105",
+                                  weight === 0.5
+                                    ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                    : "border-green-300 hover:bg-green-100 text-green-700"
+                                )}
+                              >
+                                🎯 500g
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => setWeight(1)}
+                                className={cn(
+                                  "h-12 font-bold border-2 transition-all transform hover:scale-105",
+                                  weight === 1
+                                    ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                    : "border-green-300 hover:bg-green-100 text-green-700"
+                                )}
+                              >
+                                🎯 1kg
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => setWeight(2)}
+                                className={cn(
+                                  "h-12 font-bold border-2 transition-all transform hover:scale-105",
+                                  weight === 2
+                                    ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                    : "border-green-300 hover:bg-green-100 text-green-700"
+                                )}
+                              >
+                                🎯 2kg
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                variant="outline"
+                                onClick={() => setWeight(0.1)}
+                                className={cn(
+                                  "h-12 font-bold border-2 transition-all transform hover:scale-105",
+                                  weight === 0.1
+                                    ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                    : "border-green-300 hover:bg-green-100 text-green-700"
+                                )}
+                              >
+                                🎯 100g
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => setWeight(0.25)}
+                                className={cn(
+                                  "h-12 font-bold border-2 transition-all transform hover:scale-105",
+                                  weight === 0.25
+                                    ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                    : "border-green-300 hover:bg-green-100 text-green-700"
+                                )}
+                              >
+                                🎯 250g
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => setWeight(0.5)}
+                                className={cn(
+                                  "h-12 font-bold border-2 transition-all transform hover:scale-105 col-span-2",
+                                  weight === 0.5
+                                    ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                    : "border-green-300 hover:bg-green-100 text-green-700"
+                                )}
+                              >
+                                🎯 500g
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     )}
 
                     {/* Stock info */}
                     {product.stock && product.stock <= 5 && (
                       <p className="text-sm text-orange-600">
-                        ⚠️ Solo quedan {product.stock} unidades
+                        ���️ Solo quedan {product.stock} unidades
                       </p>
                     )}
                   </div>
