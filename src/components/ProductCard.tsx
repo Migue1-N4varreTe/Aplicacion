@@ -298,11 +298,25 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
                   )}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2">
-                    {product.sellByWeight && <Scale className="h-5 w-5 text-green-600" />}
-                    {product.name}
+              <DialogContent className="sm:max-w-lg border-2 border-green-200">
+                <DialogHeader className={cn(
+                  "p-4 rounded-t-lg",
+                  product.sellByWeight ? "bg-gradient-to-r from-green-50 to-green-100 border-b-2 border-green-200" : "bg-blue-50"
+                )}>
+                  <DialogTitle className="flex items-center gap-3 text-lg">
+                    {product.sellByWeight && (
+                      <div className="flex items-center justify-center w-10 h-10 bg-green-500 rounded-full">
+                        <Scale className="h-6 w-6 text-white" />
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-bold text-gray-900">{product.name}</div>
+                      {product.sellByWeight && (
+                        <div className="text-sm text-green-700 font-medium">
+                          🎯 Selección por {product.unit === "kg" ? "kilogramos" : "gramos"}
+                        </div>
+                      )}
+                    </div>
                   </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
