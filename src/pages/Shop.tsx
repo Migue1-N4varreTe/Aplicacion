@@ -242,7 +242,7 @@ const Shop = () => {
                 <Badge variant="secondary" className="gap-1">
                   {categories.find(c => c.id === selectedCategory)?.name}
                   <button
-                    onClick={() => setSelectedCategory('')}
+                    onClick={() => setSelectedCategory('all')}
                     className="ml-1 hover:bg-gray-300 rounded-full w-4 h-4 flex items-center justify-center text-xs"
                   >
                     ×
