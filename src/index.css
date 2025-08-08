@@ -69,10 +69,10 @@
   --font-scale: 1.5;
 }
 
-/* Apply font scaling to all text elements */
-body, body * {
+/* Apply font scaling to all text elements - DISABLED FOR RESET */
+/* body, body * {
   font-size: calc(1em * var(--font-scale)) !important;
-}
+} */
 
 /* Exceptions for elements that shouldn't scale */
 .no-font-scale,
