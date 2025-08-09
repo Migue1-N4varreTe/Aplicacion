@@ -4,7 +4,7 @@ import path from "path";
 
 // Your Supabase credentials
 const supabaseUrl = "https://evyslzzekjrskeyparqn.supabase.co";
-const supabaseServiceKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2eXNsenpla2pyc2tleXBhcnFuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTkwNDMyNSwiZXhwIjoyMDY3NDgwMzI1fQ.Cc52cqa4wLwUhNujDFiN4u8fR9s6_B3UEmhQkBjOKAg";
+const supabaseServiceKey = "";
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
